@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const SocialLoginContainer = styled.div`
+position: relative;
   margin-top : 10px;
   border-radius: 10px;
   width: 340px;
@@ -8,7 +9,7 @@ export const SocialLoginContainer = styled.div`
   background: ${(props) => props.backgroundColor || "#03c75a"};
   border: 1px solid ${(props) => props.borderColor || "#E5E7EB"};
   display: flex;
-  justify-content: start;
+  justify-content: center;
   gap: ${(props) => props.gapSize || "28px"};
   align-items: center;
   cursor: pointer;
@@ -16,8 +17,8 @@ export const SocialLoginContainer = styled.div`
 
 export const SocialLoginIcon = styled.img`
     width: ${(props) => props.imgWidth || "25px"};
-    margin-left: 40px;
-    margin-bottom: 3px;
+    position: absolute;
+    left: 50px;
 `
 
 export const Button = styled.button`
