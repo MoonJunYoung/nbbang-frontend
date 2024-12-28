@@ -4,8 +4,8 @@ import axios from "axios";
 export let Token = () => Cookies.get("authToken");
 const axiosData = () =>
   axios.create({
-    // baseURL: "https://api.nbbang.life",
-    baseURL: "http://0.0.0.0:8000/api",
+    baseURL: "https://api.nbbang.life",
+    // baseURL: "http://0.0.0.0:8000/api",
     headers: {
       Authorization: Token(),
     },
