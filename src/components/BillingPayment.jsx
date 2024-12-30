@@ -106,7 +106,7 @@ const DraggableContainer = styled.div`
   margin-bottom: 12px;
 `;
 
-const DraggableButton = styled.div`
+const DraggableHandle = styled.div`
   z-index: 10;
   top: 9%;
   left: 30%;
@@ -228,29 +228,6 @@ const PaymentDelete = styled.button`
   }
 `;
 
-const PaymentHistory = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  color: #191f28;
-  text-align: center;
-
-  &:nth-child(2) {
-    color: #3182f6;
-    font-size: 13px;
-  }
-`;
-
-const AttendBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const Attend = styled.span`
-  font-size: 14px;
-  color: #8b95a1;
-`;
-
 const StyledCheckboxDiv = styled.div`
   display: grid;
   grid-template-columns: repeat(5, minmax(80px, 1fr));
@@ -315,10 +292,6 @@ const BillingMemberTopLine = styled.div`
   z-index: 10;
 `;
 
-const BillingPaymentLine = styled.div`
-  width: 100%;
-`;
-
 const Title = styled.h2`
   text-align: left;
   font-size: 22px;
@@ -343,10 +316,6 @@ const PaymentContainer = styled(BillingPaymentContainer)`
   position: relative;
 `;
 
-const BillingPaymentTopLine = styled(BillingMemberTopLine)``;
-
-const BillingPaymentTopLineComent = styled(BillingMemberTopLineComent)``;
-
 const LottieContainer = styled.div`
   display: flex;
   justify-content: start;
@@ -360,15 +329,6 @@ const PaymentLine = styled.div`
   gap: 8px;
   @media (max-width: 400px) {
   }
-`;
-
-const PaymentDeleteContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
-  position: absolute;
-  top: 12px;
-  right: 18px;
 `;
 
 const PaymentFixComent = styled.div`
@@ -610,6 +570,28 @@ const BillingPayment = ({ member, payment, setPayment }) => {
     }
   };
 
+  const getItemStyle = (isDragging, draggableStyle) => {
+    if (!draggableStyle?.transform) return draggableStyle;
+
+    // 예: transform: translate(10px, 52px) 형태로 나오는 것을 파싱
+    const regex = /translate\(([^)]+)\)/;
+    const match = draggableStyle.transform.match(regex);
+
+    if (!match) {
+      return draggableStyle;
+    }
+
+    const [x, y] = match[1].split(",").map((val) => parseFloat(val));
+
+    // x를 0으로, y는 원래 값 유지
+    const lockedTransform = `translate(0px, ${y}px)`;
+
+    return {
+      ...draggableStyle,
+      transform: lockedTransform,
+    };
+  };
+
   return (
     <>
       {/* ============ 결제 정보 등록 부분 ============ */}
@@ -683,7 +665,7 @@ const BillingPayment = ({ member, payment, setPayment }) => {
       <PaymentContainer payment={payment && payment.length > 0}>
         <PaymentLine>
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
+            <Droppable droppableId="droppable" direction="vertical">
               {(droppableProvided) => (
                 <div
                   ref={droppableProvided.innerRef}
@@ -695,13 +677,17 @@ const BillingPayment = ({ member, payment, setPayment }) => {
                       draggableId={String(paymentdata.id)}
                       index={index}
                     >
-                      {(draggableProvided) => (
+                      {(draggableProvided, snapshot) => (
                         <DraggableContainer
                           ref={draggableProvided.innerRef}
                           {...draggableProvided.draggableProps}
+                          style={getItemStyle(
+                            snapshot.isDragging,
+                            draggableProvided.draggableProps.style
+                          )}
                         >
                           {/* 드래그 핸들 파트 */}
-                          <DraggableButton
+                          <DraggableHandle
                             {...draggableProvided.dragHandleProps}
                           />
                           {/* 드래그 될 영역(실제 카드 부분) */}
