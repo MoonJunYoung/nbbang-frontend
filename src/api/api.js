@@ -5,11 +5,10 @@ export let Token = () => Cookies.get("authToken");
 const axiosData = () =>
   axios.create({
     // baseURL: "https://api.nbbang.life",
-    baseURL: "http://0.0.0.0:8000/api",
+    baseURL: "http://localhost:8000",
     headers: {
       Authorization: Token(),
     },
-
   });
 
 // loging
@@ -98,6 +97,9 @@ export const putPaymentData = (meetingId, paymentId, data) => {
   return axiosData().put(`/meeting/${meetingId}/payment/${paymentId}`, data);
 };
 
+export const putPaymentOrderData = (meetingId, order_data) => {
+  return axiosData().put(`/meeting/${meetingId}/payment/order`, order_data);
+};
 //Billing
 
 export const getBillingData = (meetingId) => {
