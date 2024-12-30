@@ -102,7 +102,20 @@ const DraggableContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  position: relative;
   margin-bottom: 12px;
+`;
+
+const DraggableButton = styled.div`
+  z-index: 10;
+  top: 9%;
+  left: 30%;
+  position: absolute;
+  width: 40%;
+  height: 0px;
+  background-color: #fff;
+  border: 3px solid #e5e8eb;
+  border-radius: 5px;
 `;
 
 const PaymentContainers = styled.div`
@@ -342,12 +355,10 @@ const LottieContainer = styled.div`
 `;
 
 const PaymentLine = styled.div`
-  padding-right: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   @media (max-width: 400px) {
-    padding-right: 16px;
   }
 `;
 
@@ -690,10 +701,7 @@ const BillingPayment = ({ member, payment, setPayment }) => {
                           {...draggableProvided.draggableProps}
                         >
                           {/* 드래그 핸들 파트 */}
-                          <img
-                            style={{ width: "30px", height: "30px" }}
-                            src="/images/droganddrop.png"
-                            alt="Drag and Drop"
+                          <DraggableButton
                             {...draggableProvided.dragHandleProps}
                           />
                           {/* 드래그 될 영역(실제 카드 부분) */}
