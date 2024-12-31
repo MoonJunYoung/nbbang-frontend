@@ -12,6 +12,9 @@ const KakaoLogin = () => {
       backgroundColor: "#FEE500",
       borderColor: "#FEE500",
     },
+    imgStyle : {
+      imgWidth: "22px"
+    },
 
     buttonStyle: {
       textColor: "black",
@@ -31,6 +34,9 @@ const NaverLogin = () => {
     socialLoginUrl:
       "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=QND4X2NgUTIuoNUvS2uz&redirect_uri=https://nbbang.life/naver-redirect",
     containerStyle: {},
+    imgStyle : {
+      imgWidth: "25px"
+    },
     buttonStyle: {},
   };
 
@@ -49,7 +55,7 @@ const GoogleLogin = () => {
       gapSize: "38px",
     },
     imgStyle: {
-      imgWidth: "18px",
+      imgWidth: "15px",
     },
 
     buttonStyle: {
