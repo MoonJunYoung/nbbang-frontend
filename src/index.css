@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 body {
-  margin: 0;
-  font-family: 'Noto Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  max-width: 450px;
-  text-align: center;
-  margin: 0 auto;
+    margin: 0;
+    font-family: 'Noto Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-width: 450px;
+    text-align: center;
+    margin: 0 auto;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
 }

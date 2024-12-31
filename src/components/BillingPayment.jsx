@@ -41,11 +41,11 @@ const BillingPaymentContainer = styled.section`
 `;
 
 const FormContainer = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 `;
 
 const BillingAddPayment = styled.button`
@@ -119,10 +119,10 @@ const DraggableHandle = styled.div`
 `;
 
 const PaymentContainers = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 `;
 
 const Payment = styled.div`
@@ -162,18 +162,18 @@ const PaymentPayer = styled.span`
 `;
 
 const PaymentPrice = styled.span`
-  font-size: 22px;
-  font-weight: 700;
-  color: black;
-  text-align: right;
+    font-size: 22px;
+    font-weight: 700;
+    color: black;
+    text-align: right;
 `;
 
 const PaymentSplitPrice = styled.span`
-  font-size: 15px;
-  font-weight: 600;
-  color: black;
-  opacity: 0.8;
-  text-align: right;
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+    opacity: 0.8;
+    text-align: right;
 
   &::before {
     content: "인당 ";
@@ -183,19 +183,19 @@ const PaymentSplitPrice = styled.span`
 `;
 
 const PaymentMembers = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 8px;
-  margin-top: 4px;
-  width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 4px;
+    width: 100%;
 
-  div {
-    background: rgba(49, 130, 246, 0.06);
-    border-radius: 10px;
-    padding: 8px 14px;
-    transition: all 0.2s;
-  }
+    div {
+        background: rgba(49, 130, 246, 0.06);
+        border-radius: 10px;
+        padding: 8px 14px;
+        transition: all 0.2s;
+    }
 
   span {
     font-size: 14px;
@@ -239,31 +239,31 @@ const StyledCheckboxDiv = styled.div`
 `;
 
 const StyledCheckboxLabel = styled.label`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 40px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  span {
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    z-index: 1;
-  }
-
-  input[type="checkbox"] {
-    position: absolute;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: 100%;
-    appearance: none;
+    height: 40px;
     border-radius: 8px;
-    transition: all 0.2s;
     cursor: pointer;
+    transition: all 0.2s;
+
+    span {
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        z-index: 1;
+    }
+
+    input[type='checkbox'] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        appearance: none;
+        border-radius: 8px;
+        transition: all 0.2s;
+        cursor: pointer;
 
     &:not(:checked) {
       background: #f2f4f6;
@@ -317,10 +317,10 @@ const PaymentContainer = styled(BillingPaymentContainer)`
 `;
 
 const LottieContainer = styled.div`
-  display: flex;
-  justify-content: start;
-  width: 60px;
-  height: 60px;
+    display: flex;
+    justify-content: start;
+    width: 60px;
+    height: 60px;
 `;
 
 const PaymentLine = styled.div`
@@ -346,15 +346,15 @@ const PaymentFixComent = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  display: flex;
-  justify-content: start;
-  margin-bottom: 16px;
+    display: flex;
+    justify-content: start;
+    margin-bottom: 16px;
 `;
 
 const SelectContainer = styled.div`
-  width: 80px;
-  display: flex;
-  justify-content: center;
+    width: 80px;
+    display: flex;
+    justify-content: center;
 `;
 
 const StyledSelect = styled.select`
@@ -387,16 +387,16 @@ const StyledSelect = styled.select`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 40px;
-  margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 40px;
+    margin: 20px 0px;
 `;
 
 const PaymentUserContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 `;
 
 // =================== Component Start =================== //
@@ -780,3 +780,4 @@ const BillingPayment = ({ member, payment, setPayment }) => {
 };
 
 export default BillingPayment;
+

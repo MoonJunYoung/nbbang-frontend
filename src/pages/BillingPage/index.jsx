@@ -5,9 +5,9 @@ import BillingName from "../../components/BillingName";
 import BillingPayment from "../../components/BillingPayment";
 
 const BillingPage = () => {
-  const [member, setMember] = useState([]);
-  const [payment, setPayment] = useState([]);
-  const [meetingName, setMeetingName] = useState([]);
+    const [member, setMember] = useState([]);
+    const [payment, setPayment] = useState([]);
+    const [meetingName, setMeetingName] = useState([]);
 
   return (
     <div>
