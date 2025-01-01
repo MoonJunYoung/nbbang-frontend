@@ -272,6 +272,7 @@ const StyledCheckboxLabel = styled.div`
 const ToastMessage = styled.div`
     opacity: 0;
     position: fixed;
+    z-index: 9999;
     bottom: -100px;
     left: 50%;
     transform: translate(-50%, 0);
@@ -364,7 +365,7 @@ function SharePage() {
                 if (responseGetData.status === 200) {
                     setMembers(responseGetData.data.members);
                     setPayments(responseGetData.data.payments);
-                    setMeetings(responseGetData.data.payments);
+                    setMeetings(responseGetData.data.meeting);
                 } else if (responseGetData.status === 204) {
                     setBillingRequestFailed(true);
                     console.log('데이터 값이 없습니다');
@@ -574,7 +575,7 @@ function SharePage() {
                                                 </Amount>
                                             ) : (
                                                 <Amount>
-                                                    {`총무에게 받야 할 돈 : ${Math.abs(
+                                                    {`총무에게 받아야 할 돈 : ${Math.abs(
                                                         data.amount,
                                                     )
                                                         .toLocaleString({
@@ -642,22 +643,31 @@ function SharePage() {
                                                             </RemittanceContainer>
                                                             {data.tipped_deposit_copy_text && (
                                                                 <DepositCopyContaner
-                                                                    onClick={() =>
-                                                                        DepositInformationCopy(
-                                                                            data.tipped_deposit_copy_text,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    계좌&금액
-                                                                    복사하기
-                                                                </DepositCopyContaner>
+                                                                        onClick={() =>
+                                                                            DepositInformationCopy(
+                                                                                data.deposit_copy_text,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <span>
+                                                                            계좌&금액
+                                                                            복사하기
+                                                                        </span>
+                                                                        <img
+                                                                            src="/images/copy.png"
+                                                                            alt="copy"
+                                                                        />
+                                                                    </DepositCopyContaner>
                                                             )}
                                                         </Remittance>
                                                     ) : (
                                                         <Remittance>
-                                                            <RemittanceTitle>
-                                                                송금
-                                                            </RemittanceTitle>
+                                                            {data.amount >
+                                                                0 && (
+                                                                <RemittanceTitle>
+                                                                    송금
+                                                                </RemittanceTitle>
+                                                            )}
                                                             <RemittanceContainer>
                                                                 {data.amount >
                                                                     0 &&
