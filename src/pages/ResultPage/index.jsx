@@ -75,7 +75,7 @@ const PaymentMembers = styled.div`
     grid-template-columns: repeat(4, 1fr);
     place-items: center;
     justify-content: end;
-    margin: 8px 0px 0px 5px;
+    margin: 8px 5px 0px 5px;
     gap: 12px;
     div {
         color: #191f28;
