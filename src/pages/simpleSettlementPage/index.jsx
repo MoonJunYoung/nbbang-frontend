@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/simpleSettlement/Header';
 import MeetingDetailsInput from '@/components/simpleSettlement/MeetingDetailsInput';
-import MemberCount from '@/components/SimpleSettlement/MemberCount';
+import MemberCount from '@/components/simpleSettlement/MemberCount';
 import { useParams } from 'react-router-dom';
 import TossRemittance from '@/components/remittance/TossRemittance';
 import KakaoRemittance from '@/components/remittance/KakaoRemittance';
