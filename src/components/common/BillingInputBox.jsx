@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const InputWrapper = styled.div`
@@ -12,9 +12,10 @@ const Input = styled.input`
     width: 100%;
     padding: 8px 36px 8px 0;
     border: none;
+    border-radius: 0px;
     border-bottom: 2px solid #3182f6;
     outline: none;
-    font-size: 16px;
+    font-size: 14px;
 
     &::placeholder {
         color: #aeb5bc;
@@ -22,6 +23,15 @@ const Input = styled.input`
 `;
 
 const BillingInputBox = ({ type, name, value, onChange, placeholder }) => {
+    const [isDelete, setIsDelete] = useState(false);
+
+    useEffect(() => {
+        if (isDelete) {
+            onChange({ target: { name, value: '' } });
+            setIsDelete(false);
+        }
+    }, [isDelete, name, onChange]);
+
     return (
         <InputWrapper>
             <Input
@@ -33,6 +43,12 @@ const BillingInputBox = ({ type, name, value, onChange, placeholder }) => {
                 autoComplete="off"
                 maxLength="22"
             />
+            <span
+                className="absolute right-0 font-bold text-gray-500"
+                onClick={() => setIsDelete(true)}
+            >
+                X
+            </span>
         </InputWrapper>
     );
 };

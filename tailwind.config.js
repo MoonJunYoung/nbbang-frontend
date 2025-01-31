@@ -13,7 +13,7 @@ export default {
             },
             colors: {
                 main: {
-                    900: '#ff3390',
+                    blue: '#0066FF',
                 },
                 borderRadius: {
                     lg: 'var(--radius)',

@@ -3,18 +3,24 @@ import { getBillingResultPage } from '../../api/api';
 import React, { useEffect, useState } from 'react';
 import { truncate } from '../../components/Meeting';
 import styled, { css } from 'styled-components';
-import SlideCheckbox from '../../components/SlideCheckBox';
+import SlideCheckbox from '../../components/common/SlideCheckBox';
 import Lottie from 'lottie-react';
-import animationData from '../../assets/animations/money.json';
-import animationData2 from '../../assets/animations/start.json';
+import animationMoney from '../../assets/animations/money.json';
+import animationStart from '../../assets/animations/start.json';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+    PaymentSkeleton,
+    BillingSkeleton,
+} from '../../components/result/Skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
+import ToastPopUp from '@/components/common/ToastPopUp';
 
 const ResultContaner = styled.div``;
 
 const MeetingContaner = styled.div`
     text-align: center;
     position: relative;
-    margin-bottom: 20px;
+
     border-bottom: 1px solid #e8e8e8;
     margin-top: 20px;
 `;
@@ -37,8 +43,7 @@ const MeetingDate = styled.div`
 const PaymentList = styled.div`
     background-color: #ffffff;
     border-bottom: 1px solid #f1e8e8bc;
-    padding: 5px 20px;
-    margin-bottom: 15px;
+    padding: 15px 30px;
 `;
 
 const LottieContainer = styled.div`
@@ -105,7 +110,7 @@ const PaymentMembers = styled.div`
         grid-template-columns: repeat(3, 1fr);
     }
     @media (min-width: 800px) {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(5, 1fr);
     }
 `;
 
@@ -115,16 +120,22 @@ const BillingContainer = styled.div`
 `;
 
 const Member = styled.p`
-    font-size: 16px;
+    font-size: 15px;
     margin: 8px 0px;
     color: #0044fe;
     font-weight: 800;
+    @media (max-width: 390px) {
+        font-size: 13px;
+    }
 `;
 
 const Amount = styled(Member)`
     color: black;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
+    @media (max-width: 390px) {
+        font-size: 13px;
+    }
 `;
 
 const LeaderBillingContainer = styled.div`
@@ -138,6 +149,9 @@ const LeaderAmount = styled(Member)`
     color: black;
     font-weight: 500;
     font-size: 14px;
+    @media (max-width: 390px) {
+        font-size: 13px;
+    }
 `;
 
 const LeaderBilling = styled.div`
@@ -167,7 +181,6 @@ const BillingLine = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
 `;
 
 const BillingLeader = styled.div``;
@@ -188,8 +201,10 @@ const Billings = styled.div`
 const Remittance = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: end;
+    justify-content: center;
+    align-items: center;
     gap: 18px;
+    text-align: center;
 `;
 
 const MemberContainer = styled.div`
@@ -239,9 +254,10 @@ const KakaoContaner = styled.div`
         text-decoration: none;
     }
     img {
-        height: 20px;
-        padding: 7px;
+        width: 28px;
+        height: 28px;
         border-radius: 100%;
+        padding: 3px;
         background-color: #fee500;
     }
     span {
@@ -263,35 +279,10 @@ const StyledCheckboxLabel = styled.div`
 
     span {
         margin-left: 8px;
-        font-size: 14px;
+        font-size: 13px;
         color: #191f28;
         font-weight: 600;
     }
-`;
-
-const ToastMessage = styled.div`
-    opacity: 0;
-    position: fixed;
-    z-index: 9999;
-    bottom: -100px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    padding: 16px 40px;
-    background: rgba(25, 31, 40, 0.95);
-    border-radius: 16px;
-    color: #fff;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.5s;
-    font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;
-
-    ${({ active }) =>
-        active &&
-        css`
-            opacity: 1;
-            bottom: 60px;
-        `}
 `;
 
 const TitleContainer = styled.div`
@@ -312,7 +303,6 @@ const RemittanceTitle = styled.span`
     font-size: 14px;
     color: #191f28;
     font-weight: 700;
-    margin: 0px 25px 0px 0px;
 `;
 
 const RemittanceContainer = styled.div`
@@ -341,6 +331,8 @@ const NbbangButton = styled.div`
     }
 `;
 
+const SkeletonCount = 3;
+
 function SharePage() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -348,14 +340,18 @@ function SharePage() {
     const navigate = useNavigate();
     const [apiRequestFailed, setApiRequestFailed] = useState(false);
     const [billingRequestFailed, setBillingRequestFailed] = useState(false);
+    const [openToast, setOpenToast] = useState(false);
     const [members, setMembers] = useState([]);
     const [payments, setPayments] = useState([]);
     const [meetings, setMeetings] = useState([]);
+    const [tipChack, setTipChack] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const isMobile =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
             navigator.userAgent,
         );
+
     const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     useEffect(() => {
@@ -372,6 +368,14 @@ function SharePage() {
                 }
             } catch (error) {
                 console.error(error);
+                if (
+                    members.length === 0 &&
+                    payments.length === 0 &&
+                    retryCount < 3
+                ) {
+                    console.log(`재요청 중... 시도 횟수: ${retryCount + 1}`);
+                    setTimeout(() => handleGetData(retryCount + 1), 1000);
+                }
 
                 if (error.response && error.response.status === 404) {
                     setApiRequestFailed(true);
@@ -382,15 +386,7 @@ function SharePage() {
                     console.log('API 데이터 불러오기 실패');
                 }
             }
-
-            if (
-                members.length === 0 &&
-                payments.length === 0 &&
-                retryCount < 3
-            ) {
-                console.log(`재요청 중... 시도 횟수: ${retryCount + 1}`);
-                setTimeout(() => handleGetData(retryCount + 1), 1000);
-            }
+            setLoading(false);
         };
 
         handleGetData();
@@ -418,6 +414,7 @@ function SharePage() {
     }
 
     const handleCheckboxChange = (memberId) => {
+        setTipChack(!tipChack);
         setMembers((prevMembers) =>
             prevMembers.map((member) =>
                 member.id === memberId
@@ -427,328 +424,251 @@ function SharePage() {
         );
     };
 
-    const [active, setActive] = useState(false);
-
-    const showToast = () => {
-        setActive(true);
-        setTimeout(() => {
-            setActive(false);
-        }, 1500);
-    };
-
     const DepositInformationCopy = async (deposit_copy_text) => {
         await navigator.clipboard.writeText(deposit_copy_text);
         if (isApple) {
-            showToast();
+            setOpenToast(true);
         }
     };
 
     return (
         <ResultContaner>
-            <MeetingContaner>
-                <TitleContainer>
-                    <LottieContainer>
-                        <Lottie
-                            animationData={animationData}
-                            loop={true}
-                            autoplay={true}
-                        />
-                    </LottieContainer>
-                    <MeetingName>{meetings.name}의 정산결과</MeetingName>
-                </TitleContainer>
-                <MeetingDate>
-                    {meetings?.date?.replace(
-                        /(\d{4})-(\d{2})-(\d{2})/,
-                        '$1년 $2월 $3일',
-                    ) || ''}
-                </MeetingDate>
-            </MeetingContaner>
+            {loading ? (
+                <div className="flex justify-center border-b border-gray-100 py-4">
+                    <Skeleton className="w-[250px] h-7 bg-gray-100 text-center" />
+                </div>
+            ) : (
+                <MeetingContaner>
+                    <TitleContainer>
+                        <LottieContainer>
+                            <Lottie
+                                animationData={animationMoney}
+                                loop={true}
+                                autoplay={true}
+                            />
+                        </LottieContainer>
+                        <MeetingName>{meetings.name}의 정산결과</MeetingName>
+                    </TitleContainer>
+                    <MeetingDate>
+                        {meetings?.date?.replace(
+                            /(\d{4})-(\d{2})-(\d{2})/,
+                            '$1년 $2월 $3일',
+                        ) || ''}
+                    </MeetingDate>
+                </MeetingContaner>
+            )}
             <BillingLine>
-                {payments.map((paymentdata) => (
-                    <PaymentList key={paymentdata.id}>
-                        <PaymentContainers>
-                            <Payment onClick={() => handleClick(paymentdata)}>
-                                <PaymentHistory paymentdata={paymentdata}>
-                                    {truncate(paymentdata.place, 10)}
-                                </PaymentHistory>
-                                <PaymentHistory paymentdata={paymentdata}>
-                                    결제자 {paymentdata.pay_member}
-                                </PaymentHistory>
-                            </Payment>
-                            <Payment onClick={() => handleClick(paymentdata)}>
-                                <PaymentHistory>
-                                    {truncate(
-                                        paymentdata.price
-                                            .toLocaleString()
-                                            .toString() + '원',
-                                        12,
-                                    )}
-                                </PaymentHistory>
-                                <PaymentHistory>
-                                    인당{' '}
-                                    {paymentdata.split_price.toLocaleString()}원
-                                </PaymentHistory>
-                            </Payment>
-                            <PaymentMembers>
-                                {paymentdata.attend_member.map(
-                                    (attendMemberdata, index) => (
-                                        <div key={index}>
-                                            <span>
-                                                {truncate(attendMemberdata, 4)}
-                                            </span>
-                                        </div>
-                                    ),
-                                )}
-                            </PaymentMembers>
-                        </PaymentContainers>
-                    </PaymentList>
-                ))}
+                {loading
+                    ? Array.from({ length: SkeletonCount }).map((_, index) => (
+                          <PaymentSkeleton key={index} />
+                      ))
+                    : payments.map((paymentdata) => (
+                          <PaymentList key={paymentdata.id}>
+                              <PaymentContainers>
+                                  <Payment
+                                      onClick={() => handleClick(paymentdata)}
+                                  >
+                                      <PaymentHistory paymentdata={paymentdata}>
+                                          {truncate(paymentdata.place, 10)}
+                                      </PaymentHistory>
+                                      <PaymentHistory paymentdata={paymentdata}>
+                                          결제자 {paymentdata.pay_member}
+                                      </PaymentHistory>
+                                  </Payment>
+                                  <Payment
+                                      onClick={() => handleClick(paymentdata)}
+                                  >
+                                      <PaymentHistory>
+                                          {truncate(
+                                              paymentdata.price.toLocaleString() +
+                                                  '원',
+                                              12,
+                                          )}
+                                      </PaymentHistory>
+                                      <PaymentHistory>
+                                          인당{' '}
+                                          {paymentdata.split_price.toLocaleString()}{' '}
+                                          원
+                                      </PaymentHistory>
+                                  </Payment>
+                                  <PaymentMembers>
+                                      {paymentdata.attend_member.map(
+                                          (attendMemberdata, index) => (
+                                              <div key={index}>
+                                                  <span>
+                                                      {truncate(
+                                                          attendMemberdata,
+                                                          4,
+                                                      )}
+                                                  </span>
+                                              </div>
+                                          ),
+                                      )}
+                                  </PaymentMembers>
+                              </PaymentContainers>
+                          </PaymentList>
+                      ))}
                 <Line />
                 <BillingContainer>
-                    {members.map((data) => (
-                        <BillingHistory key={data.id}>
-                            {data.leader ? (
-                                <>
-                                    <BillingLeader>
-                                        <LeaderContainer>
-                                            <Member>총무 {data.name}</Member>
-                                            <LeaderAmount>
-                                                {data.amount > 0
-                                                    ? `보내야 할 돈 : ${data.amount
-                                                          .toLocaleString()
-                                                          .toString()} 원`
-                                                    : `받아야 할 돈 : ${Math.abs(
-                                                          data.amount,
-                                                      )
-                                                          .toLocaleString({
-                                                              style: 'currency',
-                                                              currency: 'USD',
-                                                          })
-                                                          .toString()} 원`}
-                                            </LeaderAmount>
-                                        </LeaderContainer>
-                                        <LeaderBillingContainer>
-                                            {members.map((value) =>
-                                                value.amount < 0 &&
-                                                value.leader === false ? (
-                                                    <LeaderBilling
-                                                        key={value.id}
-                                                    >
-                                                        <LeaderBillingMoney>{`${
-                                                            value.name
-                                                        }님 한테 ${Math.abs(
-                                                            value.amount,
-                                                        )
-                                                            .toLocaleString({
-                                                                style: 'currency',
-                                                                currency: 'USD',
-                                                            })
-                                                            .toString()}원을 보내주세요`}</LeaderBillingMoney>
-                                                    </LeaderBilling>
-                                                ) : null,
-                                            )}
-                                        </LeaderBillingContainer>
-                                    </BillingLeader>
-                                </>
-                            ) : (
-                                <>
-                                    <BillingMemberContainer>
-                                        <Billings>
-                                            <Member>{data.name}</Member>
-                                            {data.amount >= 0 ? (
-                                                <Amount>
-                                                    {data.tipCheck
-                                                        ? `총무에게 보내야 할 돈 : ${data.tipped_amount
-                                                              .toLocaleString({
-                                                                  style: 'currency',
-                                                                  currency:
-                                                                      'USD',
-                                                              })
-                                                              .toString()} 원`
-                                                        : `총무에게 보내야 할 돈 : ${data.amount
-                                                              .toLocaleString({
-                                                                  style: 'currency',
-                                                                  currency:
-                                                                      'USD',
-                                                              })
-                                                              .toString()} 원`}
-                                                </Amount>
-                                            ) : (
-                                                <Amount>
-                                                    {`총무에게 받아야 할 돈 : ${Math.abs(
-                                                        data.amount,
-                                                    )
-                                                        .toLocaleString({
-                                                            style: 'currency',
-                                                            currency: 'USD',
-                                                        })
-                                                        .toString()} 원`}
-                                                </Amount>
-                                            )}
-                                            {isMobile && data.amount >= 0 && (
-                                                <StyledCheckboxLabel>
-                                                    <SlideCheckbox
-                                                        type="checkbox"
-                                                        checked={data.tipCheck}
-                                                        onChange={() =>
-                                                            handleCheckboxChange(
-                                                                data.id,
-                                                            )
-                                                        }
-                                                    />
-                                                    <span>
-                                                        십원단위 올림해서 보내기
-                                                    </span>
-                                                </StyledCheckboxLabel>
-                                            )}
-                                        </Billings>
-                                        <MemberContainer>
-                                            {isMobile ? (
-                                                <>
-                                                    {data.amount > 0 &&
-                                                    data.tipCheck ? (
-                                                        <Remittance>
-                                                            <RemittanceTitle>
-                                                                송금
-                                                            </RemittanceTitle>
-                                                            <RemittanceContainer>
-                                                                {data.tipped_kakao_deposit_link && (
-                                                                    <KakaoContaner>
-                                                                        <a
-                                                                            href={
-                                                                                data.tipped_kakao_deposit_link
-                                                                            }
-                                                                        >
-                                                                            <img
-                                                                                alt="kakao"
-                                                                                src="/images/kakao 2.png"
-                                                                            />
-                                                                        </a>
-                                                                    </KakaoContaner>
-                                                                )}
-                                                                {data.tipped_toss_deposit_link && (
-                                                                    <TossPayContaner>
-                                                                        <a
-                                                                            href={
-                                                                                data.tipped_toss_deposit_link
-                                                                            }
-                                                                        >
-                                                                            <img
-                                                                                alt="Toss"
-                                                                                src="/images/result_toss.png"
-                                                                            />
-                                                                        </a>
-                                                                    </TossPayContaner>
-                                                                )}
-                                                            </RemittanceContainer>
-                                                            {data.tipped_deposit_copy_text && (
-                                                                <DepositCopyContaner
-                                                                        onClick={() =>
-                                                                            DepositInformationCopy(
-                                                                                data.deposit_copy_text,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <span>
-                                                                            계좌&금액
-                                                                            복사하기
-                                                                        </span>
-                                                                        <img
-                                                                            src="/images/copy.png"
-                                                                            alt="copy"
-                                                                        />
-                                                                    </DepositCopyContaner>
-                                                            )}
-                                                        </Remittance>
-                                                    ) : (
-                                                        <Remittance>
-                                                            {data.amount >
-                                                                0 && (
-                                                                <RemittanceTitle>
-                                                                    송금
-                                                                </RemittanceTitle>
-                                                            )}
-                                                            <RemittanceContainer>
-                                                                {data.amount >
-                                                                    0 &&
-                                                                    data.kakao_deposit_link && (
-                                                                        <KakaoContaner>
-                                                                            <a
-                                                                                href={
-                                                                                    data.kakao_deposit_link
-                                                                                }
-                                                                            >
-                                                                                <img
-                                                                                    alt="kakao"
-                                                                                    src="/images/kakao 2.png"
-                                                                                />
-                                                                            </a>
-                                                                        </KakaoContaner>
-                                                                    )}
-
-                                                                {data.amount >
-                                                                    0 &&
-                                                                    data.toss_deposit_link && (
-                                                                        <TossPayContaner>
-                                                                            <a
-                                                                                href={
-                                                                                    data.toss_deposit_link
-                                                                                }
-                                                                            >
-                                                                                <img
-                                                                                    alt="Toss"
-                                                                                    src="/images/result_toss.png"
-                                                                                />
-                                                                            </a>
-                                                                        </TossPayContaner>
-                                                                    )}
-                                                            </RemittanceContainer>
-                                                            {data.amount > 0 &&
-                                                                data.deposit_copy_text && (
-                                                                    <DepositCopyContaner
-                                                                        onClick={() =>
-                                                                            DepositInformationCopy(
-                                                                                data.deposit_copy_text,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <span>
-                                                                            계좌&금액
-                                                                            복사하기
-                                                                        </span>
-                                                                        <img
-                                                                            src="/images/copy.png"
-                                                                            alt="copy"
-                                                                        />
-                                                                    </DepositCopyContaner>
-                                                                )}
-                                                        </Remittance>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                ''
-                                            )}
-                                        </MemberContainer>
-                                    </BillingMemberContainer>
-                                </>
-                            )}
-                        </BillingHistory>
-                    ))}
+                    {loading
+                        ? Array.from({ length: SkeletonCount }).map(
+                              (_, index) => <BillingSkeleton key={index} />,
+                          )
+                        : members.map((data) => (
+                              <BillingHistory key={data.id}>
+                                  {data.leader ? (
+                                      <BillingLeader>
+                                          <LeaderContainer>
+                                              <Member>총무 {data.name}</Member>
+                                              <LeaderAmount>
+                                                  {data.amount > 0
+                                                      ? `보내야 할 돈 : ${data.amount.toLocaleString()} 원`
+                                                      : `받아야 할 돈 : ${Math.abs(data.amount).toLocaleString()} 원`}
+                                              </LeaderAmount>
+                                          </LeaderContainer>
+                                          <LeaderBillingContainer>
+                                              {members.map((value) =>
+                                                  value.amount < 0 &&
+                                                  !value.leader ? (
+                                                      <LeaderBilling
+                                                          key={value.id}
+                                                      >
+                                                          <LeaderBillingMoney>
+                                                              {`${value.name}님 한테 ${Math.abs(value.amount).toLocaleString()}원을 보내주세요`}
+                                                          </LeaderBillingMoney>
+                                                      </LeaderBilling>
+                                                  ) : null,
+                                              )}
+                                          </LeaderBillingContainer>
+                                      </BillingLeader>
+                                  ) : (
+                                      <BillingMemberContainer>
+                                          <Billings>
+                                              <Member>{data.name}</Member>
+                                              {data.amount >= 0 ? (
+                                                  <Amount>
+                                                      총무에게 보내야 할 돈
+                                                      :&nbsp;
+                                                      {data.tipCheck
+                                                          ? data.tipped_amount.toLocaleString() +
+                                                            ' 원'
+                                                          : data.amount.toLocaleString() +
+                                                            ' 원'}
+                                                  </Amount>
+                                              ) : (
+                                                  <Amount>
+                                                      {`총무에게 받아야 할 돈 : ${Math.abs(data.amount).toLocaleString()} 원`}
+                                                  </Amount>
+                                              )}
+                                              {isMobile && data.amount >= 0 && (
+                                                  <StyledCheckboxLabel>
+                                                      <SlideCheckbox
+                                                          type="checkbox"
+                                                          checked={
+                                                              data.tipCheck
+                                                          }
+                                                          onChange={() =>
+                                                              handleCheckboxChange(
+                                                                  data.id,
+                                                              )
+                                                          }
+                                                      />
+                                                      <span>
+                                                          십원단위 올림해서
+                                                          보내기
+                                                      </span>
+                                                  </StyledCheckboxLabel>
+                                              )}
+                                          </Billings>
+                                          <MemberContainer>
+                                              {isMobile && data.amount > 0 && (
+                                                  <>
+                                                      {(data.toss_deposit_link ||
+                                                          data.kakao_deposit_link) && (
+                                                          <Remittance>
+                                                              <RemittanceTitle>
+                                                                  송금
+                                                              </RemittanceTitle>
+                                                              <RemittanceContainer>
+                                                                  {data.kakao_deposit_link && (
+                                                                      <KakaoContaner>
+                                                                          <a
+                                                                              href={
+                                                                                  tipChack
+                                                                                      ? data.tipped_kakao_deposit_link
+                                                                                      : data.kakao_deposit_link
+                                                                              }
+                                                                          >
+                                                                              <img
+                                                                                  alt="kakao"
+                                                                                  src="/images/kakao 2.png"
+                                                                              />
+                                                                          </a>
+                                                                      </KakaoContaner>
+                                                                  )}
+                                                                  {data.toss_deposit_link && (
+                                                                      <TossPayContaner>
+                                                                          <a
+                                                                              href={
+                                                                                  tipChack
+                                                                                      ? data.tipped_toss_deposit_link
+                                                                                      : data.toss_deposit_link
+                                                                              }
+                                                                          >
+                                                                              <img
+                                                                                  alt="Toss"
+                                                                                  src="/images/result_toss.png"
+                                                                              />
+                                                                          </a>
+                                                                      </TossPayContaner>
+                                                                  )}
+                                                              </RemittanceContainer>
+                                                              {data.toss_deposit_link && (
+                                                                  <DepositCopyContaner
+                                                                      onClick={() =>
+                                                                          DepositInformationCopy(
+                                                                              tipChack
+                                                                                  ? data.tipped_deposit_copy_text
+                                                                                  : data.deposit_copy_text,
+                                                                          )
+                                                                      }
+                                                                  >
+                                                                      <span>
+                                                                          계좌&금액
+                                                                      </span>
+                                                                      <img
+                                                                          src="/images/copy.png"
+                                                                          alt="copy"
+                                                                      />
+                                                                  </DepositCopyContaner>
+                                                              )}
+                                                          </Remittance>
+                                                      )}
+                                                  </>
+                                              )}
+                                          </MemberContainer>
+                                      </BillingMemberContainer>
+                                  )}
+                              </BillingHistory>
+                          ))}
                 </BillingContainer>
             </BillingLine>
+            {openToast && (
+                <ToastPopUp
+                    setToastPopUp={setOpenToast}
+                    message={'클립보드에 복사되었어요.'}
+                />
+            )}
             <NbbangButton>
                 <Link to="/signd">복잡한 정산, 원클릭으로 해결하러가기</Link>
                 <StartAnimation>
                     <Lottie
-                        animationData={animationData2}
+                        animationData={animationStart}
                         loop={true}
                         autoplay={true}
                     />
                 </StartAnimation>
             </NbbangButton>
-            <ToastMessage active={active}>
-                클립보드에 복사되었어요.
-            </ToastMessage>
         </ResultContaner>
     );
 }

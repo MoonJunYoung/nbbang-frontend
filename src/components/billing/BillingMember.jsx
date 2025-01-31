@@ -6,12 +6,12 @@ import {
     postMemberData,
     deleteMemberData,
     getPaymentData,
-} from '../api/api';
-import BillingInputBox from './BillingInputBox';
-import BillingMemberFix from './Modal/BillingMemberFixModal';
+} from '../../api/api';
+import BillingInputBox from '../common/BillingInputBox';
+import BillingMemberFix from '../modal/BillingMemberFixModal';
 import Lottie from 'lottie-react';
-import animationData from '../assets/animations/time.json';
-import TostPopUp from './TostPopUp';
+import animationData from '../../assets/animations/time.json';
+import ToastPopUp from '../common/ToastPopUp';
 
 const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n - 1) + '...' : str;
@@ -33,7 +33,7 @@ const BillingAddMember = styled.button`
     height: 48px;
     padding: 0 16px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     transition: background-color 0.2s;
     border: none;
@@ -68,11 +68,6 @@ const MemberList = styled.div`
     border-radius: 20px;
     border: 1px solid #f2f4f6;
     padding: 12px 16px;
-    transition: all 0.2s;
-    &:hover {
-        border-color: #3182f6;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    }
 `;
 
 const Leader = styled.span`
@@ -83,7 +78,7 @@ const Leader = styled.span`
 const Members = styled.p`
     white-space: nowrap;
     max-width: 70px;
-    font-size: 15px;
+    font-size: 14px;
     margin: 0;
     font-weight: 500;
     color: #191f28;
@@ -108,15 +103,15 @@ const MemberDelete = styled.p`
 
 const Title = styled.h2`
     text-align: left;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 800;
     color: #191f28;
     margin-bottom: 8px;
 `;
 
 const SubTitle = styled.p`
-    text-align: left;
-    font-size: 15px;
+    text-align: center;
+    font-size: 14px;
     color: #8b95a1;
     margin-bottom: 24px;
 `;
@@ -130,9 +125,10 @@ const InputWrapper = styled.div`
         width: 100%;
         padding: 8px 36px 8px 0;
         border: none;
+        border-radius: 0px;
         border-bottom: 2px solid #3182f6;
         outline: none;
-        font-size: 16px;
+        font-size: 14px;
 
         &::placeholder {
             color: #aeb5bc;
@@ -156,8 +152,8 @@ const ClearButton = styled.button`
 `;
 
 const LottieContainer = styled.div`
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
 `;
 
 const TitleContainer = styled.div`
@@ -170,6 +166,7 @@ const BillingMember = ({ member, setMember }) => {
     const { meetingId } = useParams();
     const [openModal, setOpenModal] = useState(false);
     const [memberSelected, setMemberSelected] = useState({});
+    const [toastPopUp, setToastPopUp] = useState(false);
     const [notAllow, setNotAllow] = useState(true);
     const [formData, setFormData] = useState({
         name: '',
@@ -227,12 +224,12 @@ const BillingMember = ({ member, setMember }) => {
                 error.response?.data?.detail ===
                 'the leader member cannot be deleted.'
             ) {
-                setTostPopUp(true);
+                setToastPopUp(true);
             } else if (
                 error.response?.data?.detail ===
                 'it is not possible to delete the member you want to delete because it is included in the payment.'
             ) {
-                setTostPopUp(true);
+                setToastPopUp(true);
             }
         }
     };
@@ -264,7 +261,7 @@ const BillingMember = ({ member, setMember }) => {
             </TitleContainer>
             <FormContainer onSubmit={handleAddMember}>
                 <InputWrapper>
-                    <input
+                    <BillingInputBox
                         type="text"
                         name="name"
                         value={formData.name}
@@ -316,6 +313,12 @@ const BillingMember = ({ member, setMember }) => {
             >
                 멤버 추가하기
             </BillingAddMember>
+            {toastPopUp && (
+                <ToastPopUp
+                    setToastPopUp={setToastPopUp}
+                    message={'총무는 삭제할 수 없습니다.'}
+                />
+            )}
         </BillingMemberContainer>
     );
 };

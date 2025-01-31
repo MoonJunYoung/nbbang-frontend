@@ -3,13 +3,13 @@ import axios from 'axios';
 
 export let Token = () => Cookies.get('authToken');
 const axiosData = () =>
-  axios.create({
-    baseURL: "https://api.nbbang.life",
-    // baseURL: "http://localhost:8000",
-    headers: {
-      Authorization: Token(),
-    },
-  });
+    axios.create({
+        baseURL: 'http://testapi.nbbang.life',
+        // baseURL: "http://localhost:8000",
+        headers: {
+            Authorization: `Bearer ${Token()}`,
+        },
+    });
 
 // loging
 export const PostLogData = (logData) => {
@@ -49,6 +49,14 @@ export const deleteMeetingData = (meetingId) => {
     return axiosData().delete(`/meeting/${meetingId}`);
 };
 
+export const PostSimpleSettlementData = () => {
+    return axiosData().post('/meeting/simple');
+};
+
+export const getSimpleSettlementData = (meetingId) => {
+    return axiosData().get(`/meeting/simple/${meetingId}`);
+};
+
 //meeting Fix
 
 export const PutMeetingNameData = (meetingId, data) => {
@@ -57,6 +65,10 @@ export const PutMeetingNameData = (meetingId, data) => {
 
 export const GetMeetingNameData = (meetingId) => {
     return axiosData().get(`meeting/${meetingId}`);
+};
+
+export const PatchSimpleSettlementData = (meetingId, data) => {
+    return axiosData().patch(`/meeting/simple/${meetingId}`, data);
 };
 
 // member
@@ -98,7 +110,7 @@ export const putPaymentData = (meetingId, paymentId, data) => {
 };
 
 export const putPaymentOrderData = (meetingId, order_data) => {
-  return axiosData().put(`/meeting/${meetingId}/payment/order`, order_data);
+    return axiosData().put(`/meeting/${meetingId}/payment/order`, order_data);
 };
 //Billing
 

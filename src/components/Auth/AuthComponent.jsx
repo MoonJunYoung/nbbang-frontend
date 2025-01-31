@@ -21,7 +21,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import TostPopUp from '../TostPopUp';
+import ToastPopUp from '../common/ToastPopUp';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AuthComponent = ({
@@ -36,7 +36,7 @@ const AuthComponent = ({
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [SingUpLink] = useState(false);
     const [SginAgreement, setSginAgreement] = useState(false);
-    const [tostPopUp, setTostPopUp] = useState(false);
+    const [toastPopUp, setToastPopUp] = useState(false);
     const navigate = useNavigate();
 
     const containerVariants = {
@@ -101,7 +101,7 @@ const AuthComponent = ({
             }
         } catch (error) {
             console.error('Auth error:', error.response);
-            setTostPopUp(true);
+            setToastPopUp(true);
         }
     };
 
@@ -150,7 +150,7 @@ const AuthComponent = ({
                         style={{
                             position: 'absolute',
                             top: '14px',
-                            left: '0',
+                            left: '10px',
                         }}
                     >
                         <NavIcon alt="beck" src="/images/beck.png" />
@@ -321,10 +321,10 @@ const AuthComponent = ({
                     </SigndBox>
                 </SigndContainer>
                 <AnimatePresence>
-                    {tostPopUp && (
-                        <TostPopUp
+                    {toastPopUp && (
+                        <ToastPopUp
                             message={'아이디와 비밀번호를 확인해 주세요.'}
-                            setTostPopUp={setTostPopUp}
+                            setToastPopUp={setToastPopUp}
                         />
                     )}
                 </AnimatePresence>

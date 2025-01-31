@@ -46,22 +46,45 @@ const KakaoShare = ({ meetingName }) => {
             objectType: 'feed',
             content: {
                 title: 'Nbbang',
-                description: `${meetingName.name}의 정산결과 입니다.`,
+                description: meetingName.is_simple
+                    ? `${meetingName.name}의 정산결과 입니다.\n
+                        사용 금액 : ${meetingName.simple_price}\n
+                        참석 인원 : ${meetingName.simple_member_count}명 \n
+                        인 당 : ${meetingName.simple_member_amount}
+                    `
+                    : `${meetingName.name}의 정산결과 입니다.`,
                 imageUrl: '',
                 link: {
                     webUrl: meetingName.share_link,
                     mobileWebUrl: meetingName.share_link,
                 },
             },
-            buttons: [
-                {
-                    title: '정산 내역 확인하러가기',
-                    link: {
-                        webUrl: meetingName.share_link,
-                        mobileWebUrl: meetingName.share_link,
-                    },
-                },
-            ],
+            buttons: meetingName.is_simple
+                ? [
+                      meetingName.kakao_deposit_link && {
+                          title: '카카오 송금',
+                          link: {
+                              webUrl: meetingName.kakao_deposit_link,
+                              mobileWebUrl: meetingName.kakao_deposit_link,
+                          },
+                      },
+                      meetingName.toss_deposit_link && {
+                          title: '토스 송금',
+                          link: {
+                              webUrl: meetingName.toss_deposit_link,
+                              mobileWebUrl: meetingName.toss_deposit_link,
+                          },
+                      },
+                  ].filter(Boolean)
+                : [
+                      {
+                          title: '정산 내역 확인하러가기',
+                          link: {
+                              webUrl: meetingName.share_link,
+                              mobileWebUrl: meetingName.share_link,
+                          },
+                      },
+                  ],
             installTalk: true,
         });
     };

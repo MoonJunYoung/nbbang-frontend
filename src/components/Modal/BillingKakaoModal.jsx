@@ -8,7 +8,6 @@ import {
 } from '../../api/api';
 import KakaoIdExplain from './KakaoIdExplain';
 import { motion } from 'framer-motion';
-import TostPopUp from '../TostPopUp';
 
 const BillingResultContainer = styled.div`
     z-index: 10;
@@ -31,13 +30,12 @@ const Modal = styled(motion.div)`
     justify-content: center;
     align-items: center;
     gap: 15px;
-    height: 290px;
-    width: 300px;
+    width: 330px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    padding: 20px;
+    padding: 35px;
 
     animation: scaleIn 0.2s ease-out;
 
@@ -56,18 +54,11 @@ const Modal = styled(motion.div)`
 const ModalClose = styled.button`
     cursor: pointer;
     position: absolute;
-    top: 10px;
-    right: 12px;
-    background: none;
-    border: none;
+    top: 0px;
+    right: 8px;
     font-size: 20px;
     color: #666;
-    transition: all 0.2s ease;
-
-    &:hover {
-        color: #000;
-        transform: rotate(90deg);
-    }
+    z-index: 10;
 `;
 const Form = styled.form`
     display: flex;
@@ -89,6 +80,10 @@ const InputBox = styled.div`
 const Input = styled.input`
     border: none;
     width: 150px;
+
+    &::placeholder {
+        font-size: 13px;
+    }
 `;
 
 const Button = styled.button`
@@ -97,15 +92,10 @@ const Button = styled.button`
     background-color: #fdef72;
     color: #333;
     border-radius: 8px;
+    font-size: 13px;
     height: 35px;
     width: 100%;
     font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #e0d56b;
-    }
 `;
 const Message = styled.p`
     font-size: 14px;
@@ -156,7 +146,6 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
     const ref = useRef();
     const { meetingId } = useParams();
     const [modalOpen, setModalOpen] = useState(false);
-    const [tostPopUp, setTostPopUp] = useState(false);
     const [formData, setFormData] = useState({
         kakao_deposit_id:
             meetingName.kakao_deposit_information.kakao_deposit_id,
@@ -171,7 +160,6 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                     formData,
                 );
                 if (responsePostData.status === 200) {
-                    setTostPopUp(true);
                     setKakaoModalOpen(false);
                 }
             } else if (action === '계속해서 사용하기') {
@@ -181,7 +169,6 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                     formData,
                 );
                 if (responsePostData.status === 200) {
-                    setTostPopUp(true);
                     setKakaoModalOpen(false);
                 }
             }
@@ -213,7 +200,7 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
         }));
     };
 
-    const handleModalOpen = () => {
+    const handleModalOpen = (e) => {
         setModalOpen(true);
     };
 
@@ -221,17 +208,17 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
         setKakaoModalOpen(false);
     });
 
+    const handleKakaoModalClose = (e) => {
+        e.stopPropagation();
+        setKakaoModalOpen(false);
+    };
+
     return (
         <BillingResultContainer>
             <WrapperModal>
                 <Modal ref={ref}>
-                    <ModalClose onClick={() => setKakaoModalOpen(false)}>
-                        ×
-                    </ModalClose>
-                    {/* <Message>
-            <PopUp>?</PopUp>텍스트로 공유할떄 하단에 계좌번호도 같이 공유 돼요!
-          </Message> */}
-                    <Message>
+                    <ModalClose onClick={handleKakaoModalClose}>×</ModalClose>
+                    <Message onClick={handleKakaoModalClose}>
                         <PopUp>?</PopUp>링크로 공유할때 해당 아이디로 카카오
                         송금하기 기능이 추가 돼요!
                     </Message>
@@ -279,12 +266,6 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                     </Form>
                 </Modal>
             </WrapperModal>
-            {tostPopUp && (
-                <TostPopUp
-                    message="입금정보가 수정 되었습니다!"
-                    setTostPopUp={setTostPopUp}
-                />
-            )}
         </BillingResultContainer>
     );
 };

@@ -41,20 +41,20 @@ const PopUpMessage = styled.span`
     color: white;
 `;
 
-const TostPopUp = ({ message, setTostPopUp }) => {
+const ToastPopUp = ({ message, setToastPopUp }) => {
     const [isLeaving, setIsLeaving] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLeaving(true);
             setTimeout(() => {
-                setTostPopUp(false);
+                setToastPopUp(false);
             }, 500);
         }, 1700);
         return () => {
             clearTimeout(timer);
         };
-    }, [setTostPopUp]);
+    }, [setToastPopUp]);
 
     return (
         <PopUpContainer isLeaving={isLeaving} {...{ isLeaving: undefined }}>
@@ -63,4 +63,4 @@ const TostPopUp = ({ message, setTostPopUp }) => {
     );
 };
 
-export default TostPopUp;
+export default ToastPopUp;

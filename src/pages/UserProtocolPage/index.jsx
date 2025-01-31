@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Logo from '../../components/Logo';
+import Logo from '../../components/common/Logo';
 
 const UserProtocolContainer = styled.div`
     text-align: start;

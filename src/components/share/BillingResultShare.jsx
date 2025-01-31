@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
-import TostPopUp from './TostPopUp';
 import { useState } from 'react';
+import ToastPopUp from '../common/ToastPopUp';
 
 const ShareButton = styled.div`
     display: 'flex';
@@ -46,12 +46,12 @@ const CopyIcon = styled.div`
 `;
 
 const BillingResultShare = ({ meetingName }) => {
-    const [tostPopUp, setTostPopUp] = useState(false);
+    const [toastPopUp, setToastPopUp] = useState(false);
 
     const getApiDataCopy = async () => {
         try {
             await navigator.clipboard.writeText(meetingName.share_link);
-            setTostPopUp(true);
+            setToastPopUp(true);
         } catch (error) {
             console.error('클립보드 복사 실패');
         }
@@ -73,7 +73,7 @@ const BillingResultShare = ({ meetingName }) => {
                 };
                 window.ReactNativeWebView.postMessage(JSON.stringify(message));
             } else {
-                setTostPopUp(true);
+                setToastPopUp(true);
                 getApiDataCopy();
             }
         } catch (error) {
@@ -100,10 +100,10 @@ const BillingResultShare = ({ meetingName }) => {
                     <span>텍스트 복사</span>
                 </CopyIcon>
             )}
-            {tostPopUp && (
-                <TostPopUp
+            {toastPopUp && (
+                <ToastPopUp
                     message="텍스트가 클립보드에 복사되었습니다."
-                    setTostPopUp={setTostPopUp}
+                    setToastPopUp={setToastPopUp}
                 />
             )}
         </ShareButton>
