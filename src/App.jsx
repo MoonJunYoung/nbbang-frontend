@@ -11,7 +11,7 @@ import BillingPage from './pages/BillingPage';
 import ResultPage from './pages/ResultPage';
 import UserProtocolPage from './pages/UserProtocolPage';
 import SignIn from './components/Auth/SignIn';
-import SimpleSettlementPage from './pages/SimpleSettlementPage';
+import SimpleSettlementPage from './pages/simpleSettlementPage';
 import SignUp from './components/Auth/SignUp';
 import {
     KakaoRedirect,
