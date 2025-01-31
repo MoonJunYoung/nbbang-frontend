@@ -22,6 +22,7 @@ const Modal = styled.div`
     align-items: center;
     gap: 15px;
     max-height: 80%;
+    padding: 20px;
     height: auto;
     width: 300px;
     background: white;
@@ -30,6 +31,9 @@ const Modal = styled.div`
     animation: fadeIn 400ms;
     overflow-y: auto;
     overflow-x: hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @keyframes fadeIn {
         from {

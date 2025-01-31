@@ -8,7 +8,6 @@ import {
     PatchBillingUserTossDeposit,
 } from '../../api/api';
 import { motion } from 'framer-motion';
-import TostPopUp from '../TostPopUp';
 
 const BillingResultContainer = styled.div`
     z-index: 10;
@@ -32,12 +31,12 @@ const Modal = styled(motion.div)`
     align-items: center;
     gap: 15px;
     height: 300px;
-    width: 300px;
+    width: 330px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    padding: 20px;
+    padding: 25px;
 
     animation: scaleIn 0.2s ease-out;
 
@@ -56,18 +55,12 @@ const Modal = styled(motion.div)`
 const ModalClose = styled.button`
     cursor: pointer;
     position: absolute;
-    top: 10px;
-    right: 12px;
+    top: 0px;
+    right: 8px;
     background: none;
     border: none;
     font-size: 20px;
     color: #666;
-    transition: all 0.2s ease;
-
-    &:hover {
-        color: #000;
-        transform: rotate(90deg);
-    }
 `;
 
 const Form = styled.form`
@@ -95,6 +88,10 @@ const InputBox = styled.div`
 const Input = styled.input`
     border: none;
     width: 150px;
+
+    &::placeholder {
+        font-size: 13px;
+    }
 `;
 
 const Button = styled.button`
@@ -107,11 +104,7 @@ const Button = styled.button`
     width: 100%;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #153bbd;
-    }
+    font-size: 13px;
 `;
 const Message = styled.p`
     font-size: 14px;
@@ -145,7 +138,6 @@ const TossIdDelete = styled.span`
 const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
     const ref = useRef();
     const { meetingId } = useParams();
-    const [tostPopUp, setTostPopUp] = useState(false);
     const [formData, setFormData] = useState({
         account_number: meetingName.toss_deposit_information.account_number,
         bank: meetingName.toss_deposit_information.bank,
@@ -161,26 +153,21 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
     const handlePutBankData = async (e, action) => {
         e.preventDefault();
         try {
+            let responsePostData;
             if (action === '이번에만 사용하기') {
-                const responsePostData = await PatchBillingMeetingTossDeposit(
+                responsePostData = await PatchBillingMeetingTossDeposit(
                     meetingId,
                     formData,
                 );
-                if (responsePostData.status === 200) {
-                    setTostPopUp(true);
-                    setTossModalOpen(false);
-                }
             } else if (action === '계속해서 사용하기') {
                 await PatchBillingMeetingTossDeposit(meetingId, formData);
-                const responsePostData =
-                    await PatchBillingUserTossDeposit(formData);
-                if (responsePostData.status === 200) {
-                    setTostPopUp(true);
-                    setTossModalOpen(false);
-                }
+                responsePostData = await PatchBillingUserTossDeposit(formData);
+            }
+            if (responsePostData && responsePostData.status === 200) {
+                setTossModalOpen(false);
             }
         } catch (error) {
-            console.log('Api 데이터 수정 실패');
+            console.error('Api 데이터 수정 실패', error);
         }
     };
 
@@ -224,13 +211,16 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
         setTossModalOpen(false);
     });
 
+    const handleTossModalClose = (e) => {
+        e.stopPropagation();
+        setTossModalOpen(false);
+    };
+
     return (
         <BillingResultContainer>
             <WrapperModal>
                 <Modal ref={ref}>
-                    <ModalClose onClick={() => setTossModalOpen(false)}>
-                        ×
-                    </ModalClose>
+                    <ModalClose onClick={handleTossModalClose}>×</ModalClose>
                     <Message>
                         <PopUp>?</PopUp>링크로 공유할때 해당 계좌로 토스
                         송금하기 기능이 추가 돼요!
@@ -286,12 +276,6 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
                         </Button>
                     </Form>
                 </Modal>
-                {tostPopUp && (
-                    <TostPopUp
-                        message="입금정보가 수정 되었습니다!"
-                        setTostPopUp={setTostPopUp}
-                    />
-                )}
             </WrapperModal>
         </BillingResultContainer>
     );

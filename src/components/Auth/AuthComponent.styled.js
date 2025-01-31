@@ -37,8 +37,10 @@ export const Input = styled(motion.input)`
     left: 0px;
     top: 6px;
     width: 100%;
+    padding: 20px 0px;
+    border-bottom: 2px solid #0066FF;
+    border-radius: 0px;
     height: 30px;
-    border: none;
     font-size: 18px;
     font-weight: 700;
     @media (max-width: 768px) {
@@ -47,7 +49,6 @@ export const Input = styled(motion.input)`
 `;
 
 export const InputBox = styled(motion.div)`
-    border-bottom: 1px solid #0044fe;
     position: relative;
     width: 100%;
     margin-top: 30px;

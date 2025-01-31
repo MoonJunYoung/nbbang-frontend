@@ -6,7 +6,7 @@ import {
     getMeetingData,
     postMeetingrData,
     deleteMeetingData,
-    GetMeetingNameData,
+    PostSimpleSettlementData,
 } from '../api/api';
 import Cookies from 'js-cookie';
 import BillingNameModal from './Modal/BillingNameModal';
@@ -24,14 +24,14 @@ const Container = styled.div`
 `;
 
 const Header = styled(motion.header)`
-    padding: 24px 0;
+    padding-top: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 `;
 
 const UserName = styled(motion.h1)`
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #191f28;
     letter-spacing: -0.3px;
@@ -52,8 +52,15 @@ const SettingButton = styled(motion.button)`
 const MeetingList = styled(motion.div)`
     display: flex;
     flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     gap: 16px;
     margin-top: 32px;
+    margin-bottom: 100px;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const MeetingCard = styled(motion(Link))`
@@ -82,7 +89,7 @@ const MeetingDate = styled.span`
 `;
 
 const MeetingName = styled.span`
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
     color: #191f28;
     letter-spacing: -0.3px;
@@ -91,6 +98,9 @@ const MeetingName = styled.span`
 const ActionButtons = styled.div`
     display: flex;
     gap: 8px;
+    @media (max-width: 350px) {
+        flex-direction: column;
+    }
 `;
 
 const IconButton = styled(motion.button)`
@@ -104,37 +114,26 @@ const IconButton = styled(motion.button)`
     justify-content: center;
     cursor: pointer;
 `;
-const AddButton = styled(motion.button)`
+const AddButton = styled.div`
     position: fixed;
-    bottom: 32px;
+    bottom: 25px;
     left: 0;
     right: 0;
     margin: 0 auto;
     width: calc(100% - 40px);
     max-width: 420px;
-    height: 56px;
-    border-radius: 30px;
-    border: none;
-    background: linear-gradient(91.49deg, #3182f6 0%, #4f9bff 100%);
-    color: white;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: -0.3px;
-    box-shadow: 0 8px 16px rgba(49, 130, 246, 0.24);
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 18px;
+    justify-content: space-between;
 `;
 
 const EmptyState = styled(motion.div)`
-    margin-top: 40%;
-    text-align: center;
+    margin: 20% 0;
     color: #8b95a1;
     font-size: 17px;
     font-weight: 500;
-    letter-spacing: -0.3px;
-    line-height: 1.6;
 `;
 
 export const truncate = (str, n) => {
@@ -167,13 +166,25 @@ const Meeting = ({ user }) => {
         }
     }, [openMenuModal]);
 
-    const handleAddBilling = async () => {
+    const handleAddBilling = async (meetingType) => {
         try {
-            const response = await postMeetingrData('meeting');
-            if (response.status === 201) {
-                handleGetData();
-                const responseHeaders = response.headers.get('Location');
-                navigate(`/${responseHeaders}`);
+            if (meetingType === 'simple') {
+                const responseSimple = await PostSimpleSettlementData();
+                if (responseSimple.status === 201) {
+                    handleGetData();
+                    const responseHeaders =
+                        responseSimple.headers.get('Location');
+                    const meetingId = responseHeaders.split('/').pop();
+                    navigate(`/simple-settlement/${meetingId}`);
+                }
+            } else if (meetingType === 'billing') {
+                const responseMeeting = await postMeetingrData('meeting');
+                if (responseMeeting.status === 201) {
+                    handleGetData();
+                    const responseHeaders =
+                        responseMeeting.headers.get('Location');
+                    navigate(`/${responseHeaders}`);
+                }
             }
         } catch (error) {
             console.log('Api 데이터 보내기 실패');
@@ -215,7 +226,6 @@ const Meeting = ({ user }) => {
                     />
                 )}
             </Header>
-
             <MeetingList
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -226,22 +236,42 @@ const Meeting = ({ user }) => {
                         meetings.map((meeting) => (
                             <MeetingCard
                                 key={meeting.id}
-                                to={`meeting/${meeting.id}`}
+                                to={
+                                    meeting.is_simple
+                                        ? `/simple-settlement/${meeting.id}`
+                                        : `/meeting/${meeting.id}`
+                                }
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
-                                whileHover={{ scale: 1.02 }}
                                 transition={{ duration: 0.2 }}
                             >
                                 <MeetingInfo>
-                                    <MeetingDate>{meeting.date}</MeetingDate>
+                                    <div className="flex items-center gap-2">
+                                        {' '}
+                                        <MeetingDate>
+                                            {meeting.date}
+                                        </MeetingDate>
+                                        {meeting.is_simple === false ? (
+                                            <div className="bg-main-blue rounded-lg px-2 py-1 flex items-center">
+                                                <span className="text-white font-base text-[10px]">
+                                                    모임 목록
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-yellow-200 rounded-lg px-2 py-1 flex items-center">
+                                                <span className="text-yellow-800 font-base text-[10px]">
+                                                    간편 정산
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
                                     <MeetingName>
                                         {truncate(meeting.name, 13)}
                                     </MeetingName>
                                 </MeetingInfo>
                                 <ActionButtons>
                                     <IconButton
-                                        whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -252,7 +282,6 @@ const Meeting = ({ user }) => {
                                         <AiOutlineEdit size={20} />
                                     </IconButton>
                                     <IconButton
-                                        whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -286,16 +315,19 @@ const Meeting = ({ user }) => {
                     }
                 />
             )}
-
-            <AddButton
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleAddBilling}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                새로운 모임 만들기
+            <AddButton>
+                <button
+                    onClick={() => handleAddBilling('billing')}
+                    className="w-full shadow-sm p-3 font-medium bg-main-blue text-sm text-white rounded-3xl"
+                >
+                    새로운 모임 만들기
+                </button>
+                <button
+                    onClick={() => handleAddBilling('simple')}
+                    className="w-full shadow-sm p-3 font-medium bg-main-blue text-sm text-white rounded-3xl"
+                >
+                    간편 정산 만들기
+                </button>
             </AddButton>
         </Container>
     );

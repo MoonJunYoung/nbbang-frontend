@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import { PutMeetingNameData } from '../../api/api';
-import TostPopUp from '../TostPopUp';
+import ToastPopUp from '../common/ToastPopUp';
 
 const BillingNameModalContainer = styled.div`
     z-index: 10;
@@ -54,8 +54,8 @@ const ModalClose = styled.button`
     cursor: pointer;
     position: absolute;
     font-size: 25px;
-    top: 8px;
-    right: 12px;
+    top: -12px;
+    right: 5px;
     background: none;
     border: none;
     padding: 8px;
@@ -159,7 +159,7 @@ const Input = styled.input`
 
 const BillingName = ({ setOpenMenuModal, MainMeetingId, MainMeetingName }) => {
     const initialDate = new Date();
-    const [tostPopUp, setTostPopUp] = useState(false);
+    const [toastPopUp, setToastPopUp] = useState(false);
     const [formData, setFormData] = useState({
         name: MainMeetingName,
         date: initialDate,
@@ -190,7 +190,7 @@ const BillingName = ({ setOpenMenuModal, MainMeetingId, MainMeetingName }) => {
                         name: '',
                     }));
                     setOpenMenuModal(false);
-                    setTostPopUp(true);
+                    setToastPopUp(true);
                 }
             }
         } catch (error) {
@@ -239,10 +239,10 @@ const BillingName = ({ setOpenMenuModal, MainMeetingId, MainMeetingName }) => {
                     </FormContainer>
                 </Modal>
             </WrapperModal>
-            {tostPopUp && (
-                <TostPopUp
+            {toastPopUp && (
+                <ToastPopUp
                     message="모임명이 수정 되었습니다!"
-                    setTostPopUp={setTostPopUp}
+                    setToastPopUp={setToastPopUp}
                 />
             )}
         </BillingNameModalContainer>
