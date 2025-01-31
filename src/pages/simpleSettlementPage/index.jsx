@@ -103,7 +103,7 @@ const SimpleSettlement = () => {
                     들어와요!👇🏻
                 </span>
             </div>
-            <section className="flex flex-col justify-center items-center gap-5 px-6 mt-6">
+            {/* <section className="flex flex-col justify-center items-center gap-5 px-6 mt-6">
                 <TossRemittance
                     meetingName={meetingData}
                     tossModalOpen={tossModalOpen}
@@ -114,10 +114,10 @@ const SimpleSettlement = () => {
                     kakaoModalOpen={kakaoModalOpen}
                     setKakaoModalOpen={setKakaoModalOpen}
                 />
-            </section>
+            </section> */}
             <section className="flex justify-center items-center gap-5 py-10">
                 <KakaoShare meetingName={meetingData} />
-                <BillingResultShare meetingName={meetingData} />
+                {/* <BillingResultShare meetingName={meetingData} /> */}
             </section>
         </>
     );
