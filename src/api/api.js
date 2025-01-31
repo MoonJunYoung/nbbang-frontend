@@ -2,6 +2,8 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export let Token = () => Cookies.get('authToken');
+
+
 const axiosData = () =>
     axios.create({
         baseURL: 'https://api.nbbang.life',
