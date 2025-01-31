@@ -5,20 +5,20 @@ import {
     useSearchParams,
 } from 'react-router-dom';
 import './App.css';
-import SigndPage from './pages/SigndPage';
-import MainPage from './pages/MainPage';
-import BillingPage from './pages/BillingPage';
-import ResultPage from './pages/ResultPage';
-import UserProtocolPage from './pages/UserProtocolPage';
-import SignIn from './components/Auth/SignIn';
+import SigndPage from './pages/signdPage';
+import MainPage from './pages/mainPage';
+import BillingPage from './pages/billingPage';
+import ResultPage from './pages/resultPage';
+import UserProtocolPage from './pages/userProtocolPage';
+import SignIn from './components/auth/SignIn';
 import SimpleSettlementPage from './pages/simpleSettlementPage';
-import SignUp from './components/Auth/SignUp';
+import SignUp from './components/auth/SignUp';
 import {
     KakaoRedirect,
     GooglesRedirect,
     NaverRedirect,
-} from './components/SocialLogin/SocialPlatformRedirect';
-import SimpleSettlementResultPage from './pages/SimpleSettlementResultPage';
+} from './components/socialLogin/SocialPlatformRedirect';
+import SimpleSettlementResultPage from './pages/simpleSettlementResultPage';
 
 function App() {
     return (
