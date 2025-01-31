@@ -43,22 +43,23 @@ const KakaoShare = ({ meetingName }) => {
     };
 
     const shareKakao = () => {
+        if (!meetingName || !meetingName.name || !meetingName.share_link) {
+            console.error('Missing required meetingName properties');
+            return;
+        }
+
         window.Kakao.Link.sendDefault({
             objectType: 'text',
-            content: {
-                text: meetingName.is_simple
+            text: meetingName.is_simple
                     ? `${meetingName.name}의 정산결과 입니다.\n
                         사용 금액 : ${meetingName.simple_price}\n
                         참석 인원 : ${meetingName.simple_member_count}명 \n
-                        인 당 : ${meetingName.simple_member_amount}
-                    `
+                        인 당 : ${meetingName.simple_member_amount}`
                     : `${meetingName.name}의 정산결과 입니다.`,
-                imageUrl: '',
                 link: {
                     webUrl: meetingName.share_link,
                     mobileWebUrl: meetingName.share_link,
                 },
-            },
             buttons: meetingName.is_simple
                 ? [
                       meetingName.kakao_deposit_link && {
