@@ -28,6 +28,7 @@ const KakaoIcon = styled.img`
 `;
 
 const KakaoShare = ({ meetingName }) => {
+
     useEffect(() => {
         initKakao();
     }, [meetingName]);
@@ -43,10 +44,9 @@ const KakaoShare = ({ meetingName }) => {
 
     const shareKakao = () => {
         window.Kakao.Link.sendDefault({
-            objectType: 'feed',
+            objectType: 'text',
             content: {
-                title: 'Nbbang',
-                description: meetingName.is_simple
+                text: meetingName.is_simple
                     ? `${meetingName.name}의 정산결과 입니다.\n
                         사용 금액 : ${meetingName.simple_price}\n
                         참석 인원 : ${meetingName.simple_member_count}명 \n
