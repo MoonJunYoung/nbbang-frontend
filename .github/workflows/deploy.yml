@@ -1,4 +1,4 @@
-name: Deploy ConceptK to AWS S3
+name: Deploy Nbbang to AWS S3
 
 on:
     push:
