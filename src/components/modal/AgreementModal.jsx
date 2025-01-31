@@ -3,7 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { LinkStyle } from '../Auth/AuthComponent.styled';
+import { LinkStyle } from '../auth/AuthComponent.styled';
 
 const AgreementModalContainer = styled.div`
     z-index: 10;

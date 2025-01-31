@@ -4,9 +4,9 @@ import {
     NaverLogin,
     KakaoLogin,
     GoogleLogin,
-} from '../../components/SocialLogin/SocialPlatformLogin';
+} from '../../components/socialLogin/SocialPlatformLogin';
 import { Link } from 'react-router-dom';
-import SigndLogo from '../../components/Auth/SigndLogo';
+import SigndLogo from '../../components/auth/SigndLogo';
 
 const SigndContainer = styled.div`
     display: inline-block;

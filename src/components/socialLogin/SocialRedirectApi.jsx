@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
-import AgreementModal from '../Modal/AgreementModal';
+import AgreementModal from '../modal/AgreementModal';
 
 export const Redirect = ({ accessToken, apiUrl, navigate }) => {
     const [openModal, setOpenModal] = useState(false);
