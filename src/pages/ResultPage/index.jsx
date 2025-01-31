@@ -26,7 +26,7 @@ const MeetingContaner = styled.div`
 `;
 
 const MeetingName = styled.h1`
-    font-size: 20px;
+    font-size: 18px;
     color: #333;
     text-align: center;
     font-weight: bold;

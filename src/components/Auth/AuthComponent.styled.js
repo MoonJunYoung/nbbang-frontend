@@ -41,7 +41,7 @@ export const Input = styled(motion.input)`
     border-bottom: 2px solid #0066FF;
     border-radius: 0px;
     height: 30px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     @media (max-width: 768px) {
         font-size: 16px;
@@ -166,14 +166,14 @@ export const AuthenticationTitleContainer = styled(motion.div)`
 `;
 
 export const AuthenticationTitle = styled(motion.p)`
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 700;
     margin: 10px 0px;
     animation: ${fadeIn} 1s;
 `;
 
 export const AuthenticationSubtitle = styled(motion.p)`
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: #979797;
     margin: 10px 0px;
