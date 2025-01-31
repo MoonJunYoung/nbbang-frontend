@@ -28,7 +28,7 @@ const KakaoIcon = styled.img`
 `;
 
 const KakaoShare = ({ meetingName }) => {
-    console.log(meetingName)
+
     useEffect(() => {
         initKakao();
     }, [meetingName]);
@@ -51,14 +51,15 @@ const KakaoShare = ({ meetingName }) => {
         window.Kakao.Link.sendDefault({
             objectType: 'text',
             text: meetingName.is_simple
-        ? `${meetingName.name}의 정산결과 입니다.\n
-            사용 금액 : ${meetingName.simple_price}\n
-            참석 인원 : ${meetingName.simple_member_count}명 \n
-            인 당 : ${meetingName.simple_member_amount}`
-            : `${meetingName.name}의 정산결과 입니다.`,
-            link: {
-                    webUrl: meetingName.share_link,
-                    mobileWebUrl: meetingName.share_link,
+                    ? `${meetingName.name}의 정산결과 입니다.
+                        사용 금액 : ${meetingName.simple_price}
+                        참석 인원 : ${meetingName.simple_member_count}명
+                        인 당 : ${meetingName.simple_member_amount}`
+                    : `${meetingName.name}의 정산결과 입니다.`,
+
+                link: {
+                    webUrl: 'https://nbbang.life/',
+                    mobileWebUrl: 'https://nbbang.life/',
                 },
             buttons: meetingName.is_simple
                 ? [
