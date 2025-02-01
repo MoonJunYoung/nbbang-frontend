@@ -4,8 +4,12 @@ import "./index.css";
 import App from "./App";
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then((registration) => {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
       registration.unregister();
+    });
+  }).catch((error) => {
+    console.error('Service Worker unregistration failed:', error);
   });
 }
 
