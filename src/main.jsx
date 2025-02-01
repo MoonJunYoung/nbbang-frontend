@@ -13,6 +13,20 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+if (window.caches) {
+  caches.keys().then((cacheNames) => {
+    return Promise.all(
+      cacheNames.map((cacheName) => {
+        return caches.delete(cacheName);
+      })
+    );
+  }).then(() => {
+    console.log('All caches deleted');
+  }).catch((error) => {
+    console.error('Cache deletion failed:', error);
+  });
+}
+
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
 //   <React.StrictMode>
