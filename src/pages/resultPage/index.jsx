@@ -129,7 +129,7 @@ const KakaoContaner = styled.div`
 const BillingMemberContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    height: 100px;
+    height: auto;
 `;
 
 const StyledCheckboxLabel = styled.div`
@@ -315,62 +315,6 @@ function SharePage() {
                 </MeetingContaner>
             )}
             <BillingLine>
-                {loading
-                    ? Array.from({ length: SkeletonCount }).map((_, index) => (
-                          <PaymentSkeleton key={index} />
-                      ))
-                    : payments.map((paymentdata) => (
-                          <PaymentList key={paymentdata.id}>
-                              <PaymentContainers>
-                                  <PaymentUserContainer
-                                      onClick={() => handleClick(paymentdata)}
-                                  >
-                                      <Payment>
-                                          <PaymentPlace
-                                              paymentdata={paymentdata}
-                                          >
-                                              {truncate(paymentdata.place, 10)}
-                                          </PaymentPlace>
-                                          <PaymentPayer
-                                              paymentdata={paymentdata}
-                                          >
-                                              결제자 {paymentdata.pay_member}
-                                          </PaymentPayer>
-                                      </Payment>
-                                      <Payment isRight>
-                                          <PaymentPrice>
-                                              {truncate(
-                                                  paymentdata.price
-                                                      .toLocaleString()
-                                                      .toString() + '원',
-                                                  12,
-                                              )}
-                                          </PaymentPrice>
-                                          <PaymentSplitPrice>
-                                              인당{' '}
-                                              {paymentdata.split_price.toLocaleString()}
-                                              원
-                                          </PaymentSplitPrice>
-                                      </Payment>
-                                  </PaymentUserContainer>
-                                  <PaymentMembers>
-                                      {paymentdata.attend_member.map(
-                                          (attendMemberdata, index) => (
-                                              <div key={index}>
-                                                  <span>
-                                                      {truncate(
-                                                          attendMemberdata,
-                                                          4,
-                                                      )}
-                                                  </span>
-                                              </div>
-                                          ),
-                                      )}
-                                  </PaymentMembers>
-                              </PaymentContainers>
-                          </PaymentList>
-                      ))}
-                <Line />
                 <BillingContainer>
                     {loading
                         ? Array.from({ length: SkeletonCount }).map(
@@ -619,6 +563,61 @@ function SharePage() {
                               </BillingHistory>
                           ))}
                 </BillingContainer>
+                {loading
+                    ? Array.from({ length: SkeletonCount }).map((_, index) => (
+                          <PaymentSkeleton key={index} />
+                      ))
+                    : payments.map((paymentdata) => (
+                          <PaymentList key={paymentdata.id}>
+                              <PaymentContainers>
+                                  <PaymentUserContainer
+                                      onClick={() => handleClick(paymentdata)}
+                                  >
+                                      <Payment>
+                                          <PaymentPlace
+                                              paymentdata={paymentdata}
+                                          >
+                                              {truncate(paymentdata.place, 10)}
+                                          </PaymentPlace>
+                                          <PaymentPayer
+                                              paymentdata={paymentdata}
+                                          >
+                                              결제자 {paymentdata.pay_member}
+                                          </PaymentPayer>
+                                      </Payment>
+                                      <Payment isRight>
+                                          <PaymentPrice>
+                                              {truncate(
+                                                  paymentdata.price
+                                                      .toLocaleString()
+                                                      .toString() + '원',
+                                                  12,
+                                              )}
+                                          </PaymentPrice>
+                                          <PaymentSplitPrice>
+                                              인당{' '}
+                                              {paymentdata.split_price.toLocaleString()}
+                                              원
+                                          </PaymentSplitPrice>
+                                      </Payment>
+                                  </PaymentUserContainer>
+                                  <PaymentMembers>
+                                      {paymentdata.attend_member.map(
+                                          (attendMemberdata, index) => (
+                                              <div key={index}>
+                                                  <span>
+                                                      {truncate(
+                                                          attendMemberdata,
+                                                          4,
+                                                      )}
+                                                  </span>
+                                              </div>
+                                          ),
+                                      )}
+                                  </PaymentMembers>
+                              </PaymentContainers>
+                          </PaymentList>
+                      ))}
             </BillingLine>
             {openToast && (
                 <ToastPopUp
@@ -727,7 +726,7 @@ const PaymentMembers = styled.div`
     }
 
     span {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 600;
         color: #3182f6;
     }
@@ -756,15 +755,15 @@ const LeaderBillingContainer = styled.div`
 `;
 
 const Member = styled.p`
-    font-size: 17px;
-    color: black;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 800;
+    color: rgb(0, 68, 254);
 `;
 
 const Amount = styled.p`
-    color: #272626ab;
-    font-size: 16px;
-    font-weight: 500;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
     position: relative;
 `;
 
@@ -773,16 +772,17 @@ const Billings = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
+    gap: 8px;
 `;
 
 const LeaderAmount = styled(Amount)`
-    color: #272626ab;
+    color: black;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 12px;
 `;
 const LeaderBillingMoney = styled.span`
-    font-size: 15px;
+    font-size: 14px;
     color: #3c4043;
     margin-top: 8px;
     display: block;
