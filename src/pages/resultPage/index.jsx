@@ -8,6 +8,7 @@ import Lottie from 'lottie-react';
 import animationMoney from '../../assets/animations/money.json';
 import animationStart from '../../assets/animations/start.json';
 import { Link, useNavigate } from 'react-router-dom';
+import animationData from '../../assets/animations/check.json';
 import {
     PaymentSkeleton,
     BillingSkeleton,
@@ -34,8 +35,8 @@ const MeetingName = styled.h1`
 
 const MeetingDate = styled.div`
     font-size: 16px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     color: black;
     text-align: center;
 `;
@@ -149,6 +150,7 @@ const TitleContainer = styled.div`
     gap: 5px;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
 `;
 
 const Line = styled.div`
@@ -296,6 +298,12 @@ function SharePage() {
                 </div>
             ) : (
                 <MeetingContaner>
+                    <MeetingDate>
+                        {meetings?.date?.replace(
+                            /(\d{4})-(\d{2})-(\d{2})/,
+                            '$1년 $2월 $3일',
+                        ) || ''}
+                    </MeetingDate>
                     <TitleContainer>
                         <LottieContainer>
                             <Lottie
@@ -306,12 +314,6 @@ function SharePage() {
                         </LottieContainer>
                         <MeetingName>{meetings.name}의 정산결과</MeetingName>
                     </TitleContainer>
-                    <MeetingDate>
-                        {meetings?.date?.replace(
-                            /(\d{4})-(\d{2})-(\d{2})/,
-                            '$1년 $2월 $3일',
-                        ) || ''}
-                    </MeetingDate>
                 </MeetingContaner>
             )}
             <BillingLine>
@@ -563,6 +565,17 @@ function SharePage() {
                               </BillingHistory>
                           ))}
                 </BillingContainer>
+                <BillingLineComent>
+                    결제내역을 확인해보세요!
+                    <LottieContainer>
+                        <Lottie
+                            animationData={animationData}
+                            loop={true}
+                            autoplay={true}
+                        />
+                    </LottieContainer>
+                </BillingLineComent>
+
                 {loading
                     ? Array.from({ length: SkeletonCount }).map((_, index) => (
                           <PaymentSkeleton key={index} />
@@ -786,4 +799,13 @@ const LeaderBillingMoney = styled.span`
     color: #3c4043;
     margin-top: 8px;
     display: block;
+`;
+const BillingLineComent = styled.h2`
+    font-size: 18px;
+    font-weight: 800;
+    color: #191f28;
+    padding-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
