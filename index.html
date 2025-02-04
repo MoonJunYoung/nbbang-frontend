@@ -32,13 +32,12 @@
         <title>엔빵</title>
         <script>
             (function () {
-                console.log("🚀 [서비스 워커 제거 스크립트 실행]");
+                console.log("🚀 [서비스 워커 및 캐시 제거 스크립트 실행]");
                 
-                // ✅ 무한 리로드 방지: 새로고침 여부 체크
                 if (!localStorage.getItem("reloadOnce")) {
-                    localStorage.setItem("reloadOnce", "true"); // 새로고침 플래그 저장
+                    localStorage.setItem("reloadOnce", "true");
         
-                    // 1️⃣ 서비스 워커 해제
+                    // 서비스 워커 제거
                     if ("serviceWorker" in navigator) {
                         navigator.serviceWorker.getRegistrations().then((registrations) => {
                             registrations.forEach((registration) => {
@@ -49,7 +48,7 @@
                         });
                     }
         
-                    // 2️⃣ 기존 캐시 삭제 (JS, API 응답 등)
+                    // 기존 캐시 삭제
                     if (window.caches) {
                         caches.keys().then((cacheNames) => {
                             cacheNames.forEach((cacheName) => {
@@ -60,13 +59,13 @@
                         });
                     }
         
-                    // 3️⃣ 강제 새로고침 (한 번만 실행)
+                    // ✅ 강제 새로고침 (index.html을 강제로 다시 로드)
                     setTimeout(() => {
-                        window.location.reload(true);
-                    }, 2000); // 2초 후 실행
+                        window.location.replace(window.location.pathname + "?refresh=" + new Date().getTime());
+                    }, 2000);
                 } else {
-                    console.log("🛑 [서비스 워커 제거 스크립트] 이미 실행됨, 새로고침 방지");
-                    localStorage.removeItem("reloadOnce"); // 플래그 초기화
+                    console.log("🛑 이미 새로고침 실행됨, 반복 방지");
+                    localStorage.removeItem("reloadOnce");
                 }
             })();
         </script>
