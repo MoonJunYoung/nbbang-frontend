@@ -30,45 +30,6 @@
         />
         <meta name="description" content="빠른 정산, 원클릭 송금" />
         <title>엔빵</title>
-        <script>
-            (function () {
-                console.log("🚀 [서비스 워커 및 캐시 제거 스크립트 실행]");
-                
-                if (!localStorage.getItem("reloadOnce")) {
-                    localStorage.setItem("reloadOnce", "true");
-        
-                    // 서비스 워커 제거
-                    if ("serviceWorker" in navigator) {
-                        navigator.serviceWorker.getRegistrations().then((registrations) => {
-                            registrations.forEach((registration) => {
-                                registration.unregister().then(() => {
-                                    console.log("✅ [서비스 워커 삭제 완료]");
-                                });
-                            });
-                        });
-                    }
-        
-                    // 기존 캐시 삭제
-                    if (window.caches) {
-                        caches.keys().then((cacheNames) => {
-                            cacheNames.forEach((cacheName) => {
-                                caches.delete(cacheName).then(() => {
-                                    console.log(`✅ [캐시 삭제 완료]: ${cacheName}`);
-                                });
-                            });
-                        });
-                    }
-        
-                    // ✅ 강제 새로고침 (index.html을 강제로 다시 로드)
-                    setTimeout(() => {
-                        window.location.replace(window.location.pathname + "?refresh=" + new Date().getTime());
-                    }, 2000);
-                } else {
-                    console.log("🛑 이미 새로고침 실행됨, 반복 방지");
-                    localStorage.removeItem("reloadOnce");
-                }
-            })();
-        </script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
