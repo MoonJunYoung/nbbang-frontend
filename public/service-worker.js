@@ -1,28 +1,47 @@
-// 🚀 새로운 서비스 워커가 기존 캐시를 삭제하고 즉시 활성화되도록 설정
+const CACHE_NAME = "dynamic-cache-v1";
+
+
 self.addEventListener("install", (event) => {
-    console.log("🚀 [Service Worker] 새로운 버전 설치됨!");
-    self.skipWaiting(); // 즉시 기존 서비스 워커 덮어쓰기
-  });
-  
-  self.addEventListener("activate", (event) => {
-    console.log("⚡ [Service Worker] 활성화됨! 기존 캐시 삭제 시작...");
-  
+    console.log("✅ Service Worker 설치됨");
+    self.skipWaiting(); 
+});
+
+self.addEventListener("activate", (event) => {
+    console.log("✅ Service Worker 활성화됨");
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            console.log(`🗑️ [Service Worker] 캐시 삭제: ${cacheName}`);
-            return caches.delete(cacheName);
-          })
-        );
-      }).then(() => {
-        console.log("✅ [Service Worker] 모든 캐시 삭제 완료!");
-      })
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames
+                    .filter((name) => name !== CACHE_NAME)
+                    .map((name) => caches.delete(name))
+            );
+        })
     );
-  });
-  
-  // 모든 요청을 네트워크로 보내도록 설정 (기존 캐시 무효화)
-  self.addEventListener("fetch", (event) => {
-    console.log(`🌍 [Service Worker] 네트워크에서 가져오기: ${event.request.url}`);
-    event.respondWith(fetch(event.request));
-  });
+    return self.clients.claim();
+});
+
+self.addEventListener("fetch", (event) => {
+    if (event.request.destination === "script") {
+        event.respondWith(
+            fetch(event.request) 
+                .then((networkResponse) => {
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, networkResponse.clone()); 
+                        return networkResponse;
+                    });
+                })
+                .catch(() => caches.match(event.request)) 
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((response) => {
+                return response || fetch(event.request).then((networkResponse) => {
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
+                });
+            })
+        );
+    }
+});
