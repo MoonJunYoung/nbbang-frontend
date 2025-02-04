@@ -13,6 +13,7 @@ if ("serviceWorker" in navigator) {
           newWorker.onstatechange = () => {
               if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
                   console.log("⚡ 새로운 서비스 워커가 설치됨. 페이지 강제 새로고침 실행!");
+                  window.location.reload(true); // 🔄 강제 새로고침 실행
               }
           };
       };
