@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
-// ✅ 서비스 워커 등록 및 기존 서비스 워커 삭제
+// ✅ 기존 서비스 워커 제거 후 새로운 서비스 워커 등록
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
       registrations.forEach((registration) => {
@@ -34,7 +34,7 @@ if (window.caches) {
   });
 }
 
-// ✅ 강제 새로고침을 단 1회만 실행 (localStorage 사용)
+// ✅ 강제 새로고침을 한 번만 실행하도록 설정
 if (!localStorage.getItem("hasReloaded")) {
   localStorage.setItem("hasReloaded", "true"); // 🚀 새로고침 여부 저장
 
@@ -45,6 +45,5 @@ if (!localStorage.getItem("hasReloaded")) {
 } else {
   console.log("🛑 이미 새로고침 됨, 추가 실행 방지");
 }
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
