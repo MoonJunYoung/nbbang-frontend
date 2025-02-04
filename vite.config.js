@@ -12,6 +12,8 @@ export default defineConfig({
                 'apple-touch-icon.png',
                 'masked-icon.svg',
             ],
+            injectRegister: 'auto', // 서비스 워커 자동 등록
+            strategies: 'generateSW',
             manifest: {
                 name: 'Nbbang',
                 short_name: 'Nbbang',
@@ -35,6 +37,8 @@ export default defineConfig({
             workbox: {
                 globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
                 maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB로 설정
+                skipWaiting: true, // 서비스 워커 업데이트 시 즉시 활성화
+                clientsClaim: true, // 새 서비스 워커가 기존 클라이언트를 즉시 제어
             },
         }),
     ],
