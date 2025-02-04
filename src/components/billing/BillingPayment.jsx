@@ -107,9 +107,10 @@ const DraggableHandle = styled.div`
     position: absolute;
     width: 40%;
     height: 0px;
-    background-color: #fff;
-    border: 3px solid #e5e8eb;
-    border-radius: 5px;
+    background-color: #e5e8eb;
+    border: 3px solid #fff;
+    border-radius: 10px;
+    padding: 3px;
 `;
 
 const PaymentContainers = styled.div`

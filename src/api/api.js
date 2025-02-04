@@ -12,7 +12,7 @@ const axiosData = () =>
             Authorization: `Bearer ${Token()}`,
         },
     });
-
+//
 // loging
 export const PostLogData = (logData) => {
     return axiosData().post(`/log`, { data: logData });
