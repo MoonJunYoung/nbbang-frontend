@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import nbbang_Logo from '../../../public/images/nbbang_Logo.png';
 
 const KakaoContainer = styled.div`
     display: flex;
@@ -28,7 +29,6 @@ const KakaoIcon = styled.img`
 `;
 
 const KakaoShare = ({ meetingName }) => {
-    console.log(meetingName?.kakao_deposit_link);
     useEffect(() => {
         initKakao();
     }, [meetingName]);
@@ -43,57 +43,28 @@ const KakaoShare = ({ meetingName }) => {
     };
 
     const shareKakao = () => {
-        if (!meetingName || !meetingName.name || !meetingName.share_link) {
-            console.error('Missing required meetingName properties');
-            return;
-        }
-
         window.Kakao.Link.sendDefault({
-            objectType: 'text',
-            text: meetingName.is_simple
-                ? `${meetingName.name}의 정산결과 입니다.\n\n사용 금액 : ${meetingName.simple_price.toLocaleString()}원\n참석 인원 : ${meetingName.simple_member_count}명 \n인 당 : ${meetingName.simple_member_amount.toLocaleString()}원`
-                : `${meetingName.name}의 정산결과 입니다.`,
-
-            link: {
-                webUrl: 'https://nbbang.life/',
-                mobileWebUrl: 'https://nbbang.life/',
+            objectType: 'feed',
+            content: {
+                title: 'Nbbang',
+                description: meetingName.is_simple
+                    ? `${meetingName.name}의 간편정산결과 입니다.`
+                    : `${meetingName.name}의 정산결과 입니다.`,
+                imageUrl: nbbang_Logo,
+                link: {
+                    webUrl: meetingName.share_link,
+                    mobileWebUrl: meetingName.share_link,
+                },
             },
-            buttons: meetingName.is_simple
-                ? [
-                      ...(meetingName.kakao_deposit_link
-                          ? [
-                                {
-                                    title: '카카오 송금',
-                                    link: {
-                                        webUrl: meetingName.kakao_deposit_link,
-                                        mobileWebUrl:
-                                            meetingName.kakao_deposit_link,
-                                    },
-                                },
-                            ]
-                          : []),
-                      ...(meetingName.toss_deposit_link
-                          ? [
-                                {
-                                    title: '토스 송금',
-                                    link: {
-                                        webUrl: meetingName.toss_deposit_link,
-                                        mobileWebUrl:
-                                            meetingName.toss_deposit_link,
-                                    },
-                                },
-                            ]
-                          : []),
-                  ]
-                : [
-                      {
-                          title: '정산 내역 확인하러가기',
-                          link: {
-                              webUrl: meetingName.share_link,
-                              mobileWebUrl: meetingName.share_link,
-                          },
-                      },
-                  ],
+            buttons: [
+                {
+                    title: '정산 내역 확인하러가기',
+                    link: {
+                        webUrl: meetingName.share_link,
+                        mobileWebUrl: meetingName.share_link,
+                    },
+                },
+            ],
             installTalk: true,
         });
     };
