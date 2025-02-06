@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getBillingResultPage } from '@/api/api';
 import LoadingSpinner from '@/components/common/LodingSpinner';
 import SlideCheckbox from '@/components/common/SlideCheckBox';
@@ -19,6 +19,7 @@ const SettlementDetail = ({ label, value, unit }) => (
 
 const SimpleSettlementResultPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const [openToast, setOpenToast] = useState(false);
     const meeting = searchParams.get('simple-meeting');
@@ -84,7 +85,13 @@ const SimpleSettlementResultPage = () => {
     };
 
     return (
-        <div className=" flex flex-col items-center h-screen">
+        <div className="relative flex flex-col items-center h-screen">
+            <img
+                onClick={() => navigate('/')}
+                src="/images/beck.png"
+                alt="뒤로가기"
+                className="w-5 z-10 absolute left-0 m-5"
+            />
             <div className="h-full flex items-center">
                 <ul className="text-2xl font-bold text-gray-700">
                     <li>
