@@ -42,8 +42,8 @@ const MeetingDate = styled.div`
 `;
 
 const LottieContainer = styled.div`
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 `;
 
 const StartAnimation = styled.div`
@@ -72,6 +72,7 @@ const LeaderContainer = styled.div`
 const MemberContainer = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 10px;
     align-items: flex-end;
     justify-content: space-between;
 `;
@@ -150,7 +151,7 @@ const TitleContainer = styled.div`
     gap: 5px;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin: 15px 0px;
 `;
 
 const Line = styled.div`
@@ -756,7 +757,7 @@ const BillingContainer = styled.div`
 
 const BillingHistory = styled.div`
     margin: 10px 0;
-    padding: 10px 20px 10px 20px;
+    padding: 15px 20px;
     background: white;
     border-bottom: 1px solid #e8f0fe;
 `;
@@ -804,7 +805,7 @@ const BillingLineComent = styled.h2`
     font-size: 18px;
     font-weight: 800;
     color: #191f28;
-    padding-left: 10px;
+    padding: 20px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
