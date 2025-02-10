@@ -13,6 +13,7 @@ import UserProtocolPage from './pages/userProtocolPage';
 import SignIn from './components/auth/SignIn';
 import SimpleSettlementPage from './pages/simpleSettlementPage';
 import SignUp from './components/auth/SignUp';
+import AppBar from './components/common/AppBar';
 import {
     KakaoRedirect,
     GooglesRedirect,
@@ -23,6 +24,7 @@ import SimpleSettlementResultPage from './pages/simpleSettlementResultPage';
 function App() {
     return (
         <div className="App">
+            <AppBar />
             <Router>
                 <Routes>
                     <Route path="/signd" element={<SigndPage />} />
