@@ -716,7 +716,7 @@ const BillingPayment = ({ member, payment, setPayment }) => {
                                                                     <PaymentPlace>
                                                                         {truncate(
                                                                             paymentdata.place,
-                                                                            10,
+                                                                            9,
                                                                         )}
                                                                     </PaymentPlace>
                                                                     <PaymentPayer>

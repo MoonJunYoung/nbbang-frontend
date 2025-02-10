@@ -23,6 +23,7 @@ const SimpleSettlement = () => {
     const [kakaoModalOpen, setKakaoModalOpen] = useState(false);
     const [toastPopUp, setToastPopUp] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
     const handleMeetingDate = (date) => {
         setPatchMeetingData({ ...patchMeetingData, date: date });
@@ -80,6 +81,8 @@ const SimpleSettlement = () => {
             <MeetingDetailsInput
                 meetingData={patchMeetingData}
                 setMeetingData={setPatchMeetingData}
+                openModal={openModal}
+                setOpenModal={setOpenModal}
             />
             <MemberCount
                 value={patchMeetingData.simple_member_count}
