@@ -9,7 +9,7 @@ const Calculator = ({ setOpenModal, setMeetingData }) => {
     const handleClick = (value) => {
         if (value === '=') {
             try {
-                setResult(eval(input).toString()); // 계산 실행
+                setResult(eval(input).toString());
             } catch {
                 setResult('Error');
             }
@@ -17,16 +17,16 @@ const Calculator = ({ setOpenModal, setMeetingData }) => {
             setInput('');
             setResult('');
         } else if (value === '←') {
-            setInput((prev) => prev.slice(0, -1)); // 마지막 문자 삭제
+            setInput((prev) => prev.slice(0, -1));
         } else {
             setInput((prev) => prev + value);
         }
     };
 
-    // 사용금액 자동 기입 → 결과값을 setMeetingData의 simple_price에 저장
     const handleSetMeetingPlace = () => {
         if (result) {
             setMeetingData((prev) => ({ ...prev, simple_price: result }));
+            setOpenModal(false);
         }
     };
 
