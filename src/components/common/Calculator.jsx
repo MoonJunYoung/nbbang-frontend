@@ -70,9 +70,9 @@ const Calculator = ({ setOpenModal, setMeetingData }) => {
                     '3',
                     '*',
                     '0',
-                    '+',
-                    '←',
                     '.',
+                    '-',
+                    '+',
                     '=',
                 ].map((item) => (
                     <Button
@@ -81,8 +81,8 @@ const Calculator = ({ setOpenModal, setMeetingData }) => {
                         className={`h-14 text-xl font-semibold rounded-xl ${
                             item === '='
                                 ? 'col-span-2 bg-blue-500 text-white'
-                                : item === '←'
-                                  ? 'bg-yellow-500 text-white' // 백스페이스 버튼 디자인
+                                : item === '.'
+                                  ? 'bg-gray-100' // 점 버튼 디자인
                                   : 'bg-gray-100'
                         }`}
                     >
@@ -90,10 +90,10 @@ const Calculator = ({ setOpenModal, setMeetingData }) => {
                     </Button>
                 ))}
                 <Button
-                    onClick={() => handleClick('-')}
-                    className="h-14 text-xl font-semibold rounded-xl bg-gray-100 col-span-2"
+                    onClick={() => handleClick('←')}
+                    className="h-14 text-xl font-semibold rounded-xl bg-yellow-500 text-white col-span-2"
                 >
-                    -
+                    ←
                 </Button>
                 <span
                     className="absolute top-2 left-4 text-2xl"
