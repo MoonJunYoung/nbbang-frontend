@@ -23,7 +23,7 @@ const MeetingContaner = styled.div`
     position: relative;
 
     border-bottom: 1px solid #e8e8e8;
-    margin-top: 20px;
+    padding-top: 20px;
 `;
 
 const MeetingName = styled.h1`
@@ -174,6 +174,8 @@ const RemittanceContainer = styled.div`
 
 const NbbangButton = styled.div`
     display: flex;
+    width: 100%;
+    height: 100%;
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -182,7 +184,6 @@ const NbbangButton = styled.div`
     gap: 10px;
     font-weight: 600;
     font-size: 17px;
-    height: 50px;
     a {
         position: relative;
         z-index: 10;
