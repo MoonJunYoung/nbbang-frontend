@@ -114,7 +114,7 @@ const IconButton = styled(motion.button)`
     cursor: pointer;
 `;
 const AddButton = styled.div`
-    position: fixed;
+    position: absolute;
     bottom: 25px;
     left: 0;
     right: 0;
