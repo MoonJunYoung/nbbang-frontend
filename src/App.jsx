@@ -20,6 +20,7 @@ import {
     NaverRedirect,
 } from './components/socialLogin/SocialPlatformRedirect';
 import SimpleSettlementResultPage from './pages/simpleSettlementResultPage';
+import QRCodeModal from './components/Modal/QRCodeModal';
 
 function App() {
     return (
@@ -45,16 +46,13 @@ function App() {
                         더욱 빠르고 편리하게 NBBANG을 앱에서 경험해보세요
                     </li>
                 </ul>
-                <a href="">
-                    <img
-                        src="images/play_store.png"
-                        alt="play_store"
-                        className="w-[200px] mt-10 rounded-lg py-1 bg-black"
-                    />
-                </a>
+                <QRCodeModal
+                    url="https://play.google.com/store/apps/details?id=nbbang.middle"
+                    imageSrc="images/play_store.png"
+                />
             </div>
             <div className="hidden sm:block fixed inset-0 bg-gradient-to-br from-[#3167fc] via-[#4c8dff] to-[#a3c7ff] text-left overflow-hidden"></div>
-            <div className="relative z-50 bg-white min-h-svh lg:left-[16.1rem] lg:right-0">
+            <div className="relative z-30 bg-white min-h-svh lg:left-[16.1rem] lg:right-0">
                 <AppBar />
                 <Router>
                     <Routes>
