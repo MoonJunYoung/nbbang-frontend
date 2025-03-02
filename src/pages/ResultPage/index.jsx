@@ -15,6 +15,7 @@ import {
 } from '../../components/result/Skeleton';
 import { Skeleton } from '@/components/ui/skeleton';
 import ToastPopUp from '@/components/common/ToastPopUp';
+import { ImageGallery } from '@/components/Modal/ImageModal';
 
 const ResultContaner = styled.div``;
 
@@ -316,6 +317,11 @@ function SharePage() {
                         </LottieContainer>
                         <MeetingName>{meetings.name}의 정산결과</MeetingName>
                     </TitleContainer>
+                    {meetings.images ? (
+                        <ImageGallery images={meetings.images} />
+                    ) : (
+                        ''
+                    )}
                 </MeetingContaner>
             )}
             <BillingLine>

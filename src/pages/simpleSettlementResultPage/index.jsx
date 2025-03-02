@@ -4,6 +4,7 @@ import { getBillingResultPage } from '@/api/api';
 import LoadingSpinner from '@/components/common/LodingSpinner';
 import SlideCheckbox from '@/components/common/SlideCheckBox';
 import ToastPopUp from '@/components/common/ToastPopUp';
+import { ImageGallery } from '@/components/Modal/ImageModal';
 
 const SettlementDetail = ({ label, value, unit }) => (
     <div className="flex items-center justify-between">
@@ -93,12 +94,19 @@ const SimpleSettlementResultPage = () => {
                 className="w-5 z-10 absolute left-0 m-5"
             />
             <div className="h-full flex items-center">
-                <ul className="text-2xl font-bold text-gray-700">
-                    <li>
+                <ul className="font-bold text-gray-700">
+                    <li className="text-2xl">
                         <strong className="text-sky-500">총무</strong>님에게
                     </li>
-                    <li>{formatAmount(simple_member_amount)}원을</li>
-                    <li>보내주세요</li>
+                    <li className="text-2xl">
+                        {formatAmount(simple_member_amount)}원을
+                    </li>
+                    <li className="text-2xl pb-5">보내주세요</li>
+                    {meetingResultData.images ? (
+                        <ImageGallery images={meetingResultData.images} />
+                    ) : (
+                        ''
+                    )}
                 </ul>
             </div>
             <div className="w-full px-10">

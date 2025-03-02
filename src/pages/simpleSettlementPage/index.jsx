@@ -10,6 +10,8 @@ import BillingResultShare from '@/components/share/BillingResultShare';
 import { PatchSimpleSettlementData, getSimpleSettlementData } from '@/api/api';
 import SimpleSettlementResult from '@/components/simpleSettlement/SimpleSettlementResult';
 
+import ImageUploader from '@/components/common/image/ImageUploader';
+
 const SimpleSettlement = () => {
     const { meetingId } = useParams();
     const [patchMeetingData, setPatchMeetingData] = useState({
@@ -21,7 +23,6 @@ const SimpleSettlement = () => {
     const [meetingData, setMeetingData] = useState(null);
     const [tossModalOpen, setTossModalOpen] = useState(false);
     const [kakaoModalOpen, setKakaoModalOpen] = useState(false);
-    const [toastPopUp, setToastPopUp] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
 
@@ -83,6 +84,7 @@ const SimpleSettlement = () => {
                 setMeetingData={setPatchMeetingData}
                 openModal={openModal}
                 setOpenModal={setOpenModal}
+                meetingId={meetingId}
             />
             <MemberCount
                 value={patchMeetingData.simple_member_count}

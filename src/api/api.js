@@ -3,10 +3,9 @@ import axios from 'axios';
 
 export let Token = () => Cookies.get('authToken');
 
-
 const axiosData = () =>
     axios.create({
-        baseURL: 'https://api.nbbang.life',
+        baseURL: 'https://testapi.nbbang.life',
         // baseURL: "http://localhost:8000",
         headers: {
             Authorization: `Bearer ${Token()}`,
@@ -157,4 +156,14 @@ export const PatchBillingUserTossDeposit = (data) => {
 };
 export const PatchBillingMeetingTossDeposit = (meetingId, data) => {
     return axiosData().put(`meeting/${meetingId}/bank-account`, data);
+};
+
+// imges uploade
+
+export const PostImagesUpoloader = (meetingId, data) => {
+    return axiosData().post(`meeting/${meetingId}/images`, data);
+};
+
+export const PatchImagesUpoloader = (meetingId, data) => {
+    return axiosData().patch(`meeting/${meetingId}/images`, data);
 };

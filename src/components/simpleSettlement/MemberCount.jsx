@@ -3,7 +3,9 @@ import React from 'react';
 const MemberCount = ({ value, handleMemberCount }) => {
     return (
         <section className="flex flex-col text-left p-6">
-            <h3 className="text-lg font-bold">모임참여한 인원은 몇명인가요?</h3>
+            <h3 className="text-lg font-bold">
+                모임을 참여한 인원은 몇명인가요?
+            </h3>
             <div className="flex items-center justify-center mt-7">
                 <button
                     className="border border-gray-300 px-3 py-1 text-xl"

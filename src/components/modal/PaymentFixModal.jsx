@@ -24,29 +24,23 @@ const Modal = styled(motion.div)`
     display: flex;
     justify-content: center;
     flex-direction: column;
-    max-height: 500px;
     width: 300px;
     background: white;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    padding: 24px;
+    padding: 30px;
 `;
 
 const ModalClose = styled.button`
     cursor: pointer;
     position: absolute;
-    top: 16px;
+    top: 0px;
     right: 16px;
     background: none;
     border: none;
     font-size: 20px;
     color: #666;
     transition: all 0.2s ease;
-
-    &:hover {
-        color: #000;
-        transform: rotate(90deg);
-    }
 `;
 
 const PayMentFixInput = styled.input`

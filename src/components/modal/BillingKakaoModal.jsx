@@ -235,9 +235,12 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                                 onTouchMove={(e) => e.preventDefault()}
                             />
                         </InputBox>
-                        <KakaoIdDelete onClick={handleIdDelete}>
-                            입금 정보 비우기
-                        </KakaoIdDelete>
+                        <div>
+                            <KakaoIdDelete onClick={handleIdDelete}>
+                                입금 정보 비우기
+                            </KakaoIdDelete>
+                            <button>입금 정보 초기화</button>
+                        </div>
                         <KakaoIdExplanationContainer onClick={handleModalOpen}>
                             <KakaoIdExplanation>
                                 카카오 링크란?
