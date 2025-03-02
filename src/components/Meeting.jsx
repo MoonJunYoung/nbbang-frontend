@@ -56,7 +56,6 @@ const MeetingList = styled(motion.div)`
     overflow-x: hidden;
     gap: 16px;
     margin-top: 32px;
-    margin-bottom: 100px;
     &::-webkit-scrollbar {
         display: none;
     }
@@ -114,16 +113,9 @@ const IconButton = styled(motion.button)`
     cursor: pointer;
 `;
 const AddButton = styled.div`
-    position: absolute;
-    bottom: 25px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: calc(100% - 40px);
-    max-width: 420px;
-    height: 40px;
     display: flex;
     align-items: center;
+    margin: 40px 0px 30px 0px;
     gap: 18px;
     justify-content: space-between;
 `;

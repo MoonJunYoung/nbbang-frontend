@@ -43,13 +43,15 @@ const ImageUploader = ({ meetingId, meetingSimple }) => {
         const file = event.target.files[0];
         if (file) {
             if (selectedImageIndex !== null) {
-                const newImages = images.map((img, index) =>
-                    index === selectedImageIndex ? file : img,
-                );
+                const newImages = Array.isArray(images)
+                    ? images.map((img, index) =>
+                          index === selectedImageIndex ? file : img,
+                      )
+                    : [];
                 setImages(newImages);
                 setSelectedImageIndex(null);
             } else {
-                setImages([...images, file]);
+                setImages(Array.isArray(images) ? [...images, file] : [file]);
             }
             fileInputRef.current.value = '';
         }
@@ -63,7 +65,7 @@ const ImageUploader = ({ meetingId, meetingSimple }) => {
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
-            if (images.length > 0) {
+            if (Array.isArray(images) && images.length > 0) {
                 const webpImages = await Promise.all(
                     images.map(async (image) => {
                         if (image instanceof File) {
