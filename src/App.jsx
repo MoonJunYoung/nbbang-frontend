@@ -26,7 +26,7 @@ function App() {
     return (
         <div className="App">
             <div
-                className="hidden lg:block fixed h-full w-[26.1rem] z-50"
+                className="hidden lg:block fixed h-full w-[26.1rem] z-10"
                 style={{ left: 'calc(-35.1rem + 50vw)' }}
             >
                 <img

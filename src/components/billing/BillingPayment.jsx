@@ -17,6 +17,7 @@ import ToastPopUp from '../common/ToastPopUp';
 
 // react-beautiful-dnd 관련
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import ImageUploader from '../common/image/ImageUploader';
 
 // =================== Styled Components =================== //
 
@@ -59,7 +60,7 @@ const BillingAddPayment = styled.button`
     margin: 16px 0;
     transition: background-color 0.2s;
     border: none;
-    background-color: #3182f6;
+    background-color: #0066ff;
     color: white;
     cursor: pointer;
 
@@ -192,7 +193,7 @@ const PaymentMembers = styled.div`
     span {
         font-size: 14px;
         font-weight: 600;
-        color: #3182f6;
+        color: #0066ff;
     }
 `;
 
@@ -261,7 +262,7 @@ const StyledCheckboxLabel = styled.label`
         }
 
         &:checked {
-            background: #3182f6;
+            background: #0066ff;
             border: none;
         }
     }
@@ -314,7 +315,7 @@ const PaymentFixComent = styled.div`
 
     span {
         font-size: 13px;
-        color: #3182f6;
+        color: #0066ff;
         font-weight: 600;
     }
 `;
@@ -324,6 +325,7 @@ const TitleContainer = styled.div`
     justify-content: start;
     align-items: center;
     margin-bottom: 16px;
+    margin-top: 16px;
 `;
 
 const SelectContainer = styled.div`
@@ -570,6 +572,7 @@ const BillingPayment = ({ member, payment, setPayment }) => {
             <BillingPaymentContainer
                 member={member && member.length > 0 ? 'true' : undefined}
             >
+                <ImageUploader meetingId={meetingId} meetingType={false} />
                 <TitleContainer>
                     <Title>결제 내역을 추가 해주세요</Title>
                     <LottieContainer>

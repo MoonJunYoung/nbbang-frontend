@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import BillingInputBox from '../common/BillingInputBox';
 import Calculator from '../common/Calculator';
 import Bubble from '../common/Bubble';
+import ImageUploader from '../common/image/ImageUploader';
 
 const MeetingDetailsInput = ({
     meetingData,
     setMeetingData,
     openModal,
     setOpenModal,
+    meetingId,
 }) => {
     return (
-        <section className="p-6 text-left flex flex-col gap-20 mt-5 relative">
+        <section className="p-6 text-left flex flex-col mt-5 relative">
             <div>
                 <h3 className="text-lg font-bold mb-4">
                     모임명을 입력해주세요!
@@ -22,7 +24,7 @@ const MeetingDetailsInput = ({
                     }
                 />
             </div>
-            <div>
+            <div className="mt-20 mb-10">
                 <div className="flex gap-3 items-center mb-4 relative">
                     <h3 className="text-lg font-bold">
                         모임에서 사용한 금액은 얼마인가요?
@@ -57,6 +59,7 @@ const MeetingDetailsInput = ({
                     setMeetingData={setMeetingData}
                 />
             )}
+            <ImageUploader meetingId={meetingId} meetingType={true} />
         </section>
     );
 };

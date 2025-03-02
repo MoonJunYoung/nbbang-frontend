@@ -27,6 +27,7 @@ const PopUpContainer = styled.div`
     left: 50%;
     padding: 7px;
     min-width: 250px;
+    text-align: center;
     z-index: 3;
     background: #686482;
     color: #fff;

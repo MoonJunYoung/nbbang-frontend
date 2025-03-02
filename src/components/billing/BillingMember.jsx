@@ -37,7 +37,7 @@ const BillingAddMember = styled.button`
     font-weight: 600;
     transition: background-color 0.2s;
     border: none;
-    background-color: #3182f6;
+    background-color: #0066ff;
     color: white;
     cursor: pointer;
 
@@ -94,11 +94,6 @@ const MemberDelete = styled.p`
     color: #8b95a1;
     cursor: pointer;
     transition: all 0.2s;
-
-    &:hover {
-        background: #e5e8eb;
-        color: #4e5968;
-    }
 `;
 
 const Title = styled.h2`
