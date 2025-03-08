@@ -47,7 +47,7 @@ export const ImageModal = ({ images, isOpen, onClose }) => {
                 )}
                 <button
                     onClick={onClose}
-                    className="fixed top-0 left-2 text-gray-400 text-2xl"
+                    className="fixed top-0 left-2 text-gray-400 text-4xl"
                 >
                     x
                 </button>
