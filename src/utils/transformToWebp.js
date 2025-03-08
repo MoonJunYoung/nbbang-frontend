@@ -1,4 +1,7 @@
 export const transformToWebp = async (file) => {
+    const MAX_WIDTH = 1024; // 최대 너비 설정
+    const MAX_HEIGHT = 1024; // 최대 높이 설정
+
     const webpDataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -13,10 +16,25 @@ export const transformToWebp = async (file) => {
                     return;
                 }
 
-                canvas.width = img.width;
-                canvas.height = img.height;
+                let width = img.width;
+                let height = img.height;
 
-                ctx.drawImage(img, 0, 0, img.width, img.height);
+                // 이미지 크기 조정
+                if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+                    const aspectRatio = width / height;
+                    if (width > height) {
+                        width = MAX_WIDTH;
+                        height = MAX_WIDTH / aspectRatio;
+                    } else {
+                        height = MAX_HEIGHT;
+                        width = MAX_HEIGHT * aspectRatio;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                ctx.drawImage(img, 0, 0, width, height);
                 canvas.toBlob(
                     (blob) => {
                         if (blob) resolve(blob);
@@ -26,7 +44,7 @@ export const transformToWebp = async (file) => {
                             );
                     },
                     'image/webp',
-                    1,
+                    0.8, // 품질을 낮춰 파일 크기 줄이기
                 );
             };
             img.onerror = (error) => {
