@@ -132,7 +132,7 @@ const KakaoIdExplanationLine = styled.div`
     border-top: 1px solid darkmagenta;
 `;
 
-const KakaoIdDelete = styled.span`
+const KakaoIdDelete = styled.button`
     cursor: pointer;
     border: 1px solid silver;
     padding: 3px;
@@ -167,6 +167,16 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                 const responsePostData = await PatchBillingMeetingKakaoDeposit(
                     meetingId,
                     formData,
+                );
+                if (responsePostData.status === 200) {
+                    setKakaoModalOpen(false);
+                }
+            } else if (action === '입금 정보 초기화') {
+                const nullFormData = { kakao_deposit_id: null };
+                await PatchBillingUserKaKaoDeposit(nullFormData);
+                const responsePostData = await PatchBillingMeetingKakaoDeposit(
+                    meetingId,
+                    nullFormData,
                 );
                 if (responsePostData.status === 200) {
                     setKakaoModalOpen(false);
@@ -236,10 +246,14 @@ const BillingKakaoModal = ({ setKakaoModalOpen, meetingName }) => {
                             />
                         </InputBox>
                         <div>
-                            <KakaoIdDelete onClick={handleIdDelete}>
-                                입금 정보 비우기
+                            <KakaoIdDelete
+                                type="submit"
+                                onClick={(e) =>
+                                    handlePutBankData(e, '입금 정보 초기화')
+                                }
+                            >
+                                입금 정보 초기화
                             </KakaoIdDelete>
-                            <button>입금 정보 초기화</button>
                         </div>
                         <KakaoIdExplanationContainer onClick={handleModalOpen}>
                             <KakaoIdExplanation>
