@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
     NaverLogin,
@@ -7,6 +7,7 @@ import {
 } from '../../components/socialLogin/SocialPlatformLogin';
 import { Link } from 'react-router-dom';
 import SigndLogo from '../../components/auth/SigndLogo';
+import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const SigndContainer = styled.div`
     display: inline-block;
@@ -48,6 +49,10 @@ const Notice = styled.p`
 `;
 
 const SigndPage = () => {
+    useEffect(() => {
+        sendEventToAmplitude('view sign in', '');
+    }, []);
+
     return (
         <SigndContainer>
             <SigndLogo />

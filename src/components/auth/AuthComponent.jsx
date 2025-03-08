@@ -23,6 +23,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import ToastPopUp from '../common/ToastPopUp';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AmplitudeSetUserId, sendEventToAmplitude } from '@/utils/amplitude';
 
 const AuthComponent = ({
     title,
@@ -97,6 +98,8 @@ const AuthComponent = ({
                 Cookies.set('authToken', response.data, {
                     expires: 30,
                 });
+                await AmplitudeSetUserId();
+                sendEventToAmplitude('complete auth', '');
                 navigate('/');
             }
         } catch (error) {

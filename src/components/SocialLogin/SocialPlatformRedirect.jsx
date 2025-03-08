@@ -11,6 +11,7 @@ const GooglesRedirect = () => {
     return (
         <>
             <Redirect
+                type={'google'}
                 accessToken={accessToken}
                 apiUrl={apiUrl}
                 navigate={navigate}
@@ -28,6 +29,7 @@ const NaverRedirect = () => {
     return (
         <>
             <Redirect
+                type={'naver'}
                 accessToken={accessToken}
                 apiUrl={apiUrl}
                 navigate={navigate}
@@ -45,6 +47,7 @@ const KakaoRedirect = () => {
     return (
         <>
             <Redirect
+                type={'kakao'}
                 accessToken={accessToken}
                 apiUrl={apiUrl}
                 navigate={navigate}

@@ -2,8 +2,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import AgreementModal from '../modal/AgreementModal';
+import { AmplitudeSetUserId, sendEventToAmplitude } from '@/utils/amplitude';
 
-export const Redirect = ({ accessToken, apiUrl, navigate }) => {
+export const Redirect = ({ accessToken, apiUrl, navigate, type }) => {
     const [openModal, setOpenModal] = useState(false);
     const [userData, setUserData] = useState(false);
     const RedirectAPI = async () => {
@@ -11,6 +12,10 @@ export const Redirect = ({ accessToken, apiUrl, navigate }) => {
             const response = await axios.post(apiUrl, { token: accessToken });
             if (response.status === 201) {
                 Cookies.set('authToken', response.data, { expires: 30 });
+                await AmplitudeSetUserId();
+                sendEventToAmplitude('complete 3rd party sign in', {
+                    'provider type': type,
+                });
                 navigate('/');
             } else if (response.status === 202) {
                 setUserData(response.data);

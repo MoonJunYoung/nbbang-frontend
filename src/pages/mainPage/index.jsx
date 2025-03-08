@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Meeting from '../../components/Meeting';
 import { getUserData, Token } from '../../api/api';
 import Cookies from 'js-cookie';
+import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const Container = styled.main`
     width: 100%;
@@ -23,6 +24,7 @@ const MainPage = () => {
 
     useEffect(() => {
         fetchData();
+        sendEventToAmplitude('view meeting page', '');
     }, []);
 
     const fetchData = async () => {

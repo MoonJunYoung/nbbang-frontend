@@ -10,11 +10,15 @@ export const SocialLoginForm = ({
     src,
     comment,
     socialLoginUrl,
+    type,
     buttonStyle,
     containerStyle,
     imgStyle,
 }) => {
     const handleSocialLogin = () => {
+        sendEventToAmplitude('click 3rd party sign in', {
+            'provider type': type,
+        });
         window.location.href = socialLoginUrl;
     };
 

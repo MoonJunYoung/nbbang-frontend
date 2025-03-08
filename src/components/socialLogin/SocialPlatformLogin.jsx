@@ -5,6 +5,7 @@ const KakaoLogin = () => {
     const kakaoProps = {
         alt: 'Kakao',
         src: '/images/kakao.png',
+        type: 'kakao',
         comment: '카카오톡 로그인으로 시작하기',
         socialLoginUrl:
             'https://kauth.kakao.com/oauth/authorize?client_id=3d14355e2c9679326b4c15d249b82bc5&redirect_uri=https://nbbang.life/kakao-redirect&response_type=code',
@@ -29,6 +30,7 @@ const KakaoLogin = () => {
 const NaverLogin = () => {
     const naverProps = {
         alt: 'Naver',
+        type: 'naver',
         src: '/images/naver.png',
         comment: '네이버 로그인으로 시작하기',
         socialLoginUrl:
@@ -46,6 +48,7 @@ const NaverLogin = () => {
 const GoogleLogin = () => {
     const googleProps = {
         alt: 'google',
+        typo: 'google',
         src: '/images/google.png',
         comment: '구글 로그인으로 시작하기',
         socialLoginUrl:

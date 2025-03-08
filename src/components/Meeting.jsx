@@ -12,6 +12,7 @@ import BillingNameModal from './modal/BillingNameModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const Container = styled.div`
     padding: 0 20px;
@@ -178,6 +179,7 @@ const Meeting = ({ user }) => {
                     const responseHeaders =
                         responseSimple.headers.get('Location');
                     const meetingId = responseHeaders.split('/').pop();
+                    sendEventToAmplitude('create new meeting', '');
                     navigate(`/simple-settlement/${meetingId}`);
                 }
             } else if (meetingType === 'billing') {
@@ -186,6 +188,7 @@ const Meeting = ({ user }) => {
                     handleGetData();
                     const responseHeaders =
                         responseMeeting.headers.get('Location');
+                    sendEventToAmplitude('create new simpleSettlement', '');
                     navigate(`/${responseHeaders}`);
                 }
             }

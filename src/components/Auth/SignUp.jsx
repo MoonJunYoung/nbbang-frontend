@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { postSignUpData } from '../../api/api';
 import AuthComponent from './AuthComponent';
+import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -8,6 +9,10 @@ const SignUp = () => {
         password: '',
         name: '',
     });
+
+    useEffect(() => {
+        sendEventToAmplitude('view sign up', '');
+    }, []);
 
     const additionalFields = [
         {
