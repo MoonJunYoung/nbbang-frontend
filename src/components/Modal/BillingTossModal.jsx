@@ -162,6 +162,13 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
             } else if (action === '계속해서 사용하기') {
                 await PatchBillingMeetingTossDeposit(meetingId, formData);
                 responsePostData = await PatchBillingUserTossDeposit(formData);
+            } else if (action === '입금 정보 초기화') {
+                const nullFormData = { account_number: null, bank: null };
+                await PatchBillingUserTossDeposit(nullFormData);
+                responsePostData = await PatchBillingMeetingTossDeposit(
+                    meetingId,
+                    nullFormData,
+                );
             }
             if (responsePostData && responsePostData.status === 200) {
                 setTossModalOpen(false);
@@ -255,8 +262,13 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
                                 </option>
                             ))}
                         </select>
-                        <TossIdDelete onClick={handleIdDelete}>
-                            입금 정보 비우기
+                        <TossIdDelete
+                            type="submit"
+                            onClick={(e) =>
+                                handlePutBankData(e, '입금 정보 초기화')
+                            }
+                        >
+                            입금 정보 초기화
                         </TossIdDelete>
                         <Button
                             type="submit"
