@@ -4,6 +4,7 @@ import {
     Button,
     SocialLoginIcon,
 } from './SocialLoginForm.styled';
+import { sendEventToAmplitude } from '@/utils/amplitude';
 
 export const SocialLoginForm = ({
     alt,
