@@ -111,6 +111,7 @@ const ShareContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 20px;
+    margin-top: 100px;
 `;
 
 const Billing = ({ payment, meetingName, setMeetingName }) => {
@@ -212,7 +213,13 @@ const Billing = ({ payment, meetingName, setMeetingName }) => {
             </RemittanceContainer>
             <ShareContainer>
                 <KakaoShare meetingName={meetingName} />
-                <BillingResultShare meetingName={meetingName} />
+                <div className="relative">
+                    <BillingResultShare meetingName={meetingName} />
+                    <div className="text-left absolute top-[-70px] left-[-16px] text-sm bg-main-blue px-4 text-white py-2 rounded-2xl shadow-base border border-gray-300  whitespace-nowrap before:content-[''] before:absolute before:bottom-[-14px] before:left-[35px] before:-translate-x-1/2 before:border-8 before:border-transparent before:border-t-main-blue">
+                        링크 복사로 쉽고 <br />
+                        빠르게 비용을 나눠보세요!
+                    </div>
+                </div>
             </ShareContainer>
         </ResultContainar>
     );

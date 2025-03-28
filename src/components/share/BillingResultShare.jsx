@@ -34,14 +34,8 @@ const CopyIcon = styled.div`
     justify-content: center;
     gap: 12px;
     img {
-        margin-top: 4px;
-        width: 25px;
+        width: 40px;
         cursor: pointer;
-    }
-    span {
-        font-size: 13px;
-        font-weight: 800;
-        color: #8b95a1;
     }
 `;
 
@@ -57,49 +51,11 @@ const BillingResultShare = ({ meetingName }) => {
         }
     };
 
-    const getApiDataShare = async () => {
-        try {
-            if (window.navigator.share) {
-                await window.navigator.share({
-                    text: meetingName.share_link,
-                });
-            } else if (
-                window.ReactNativeWebView &&
-                window.ReactNativeWebView.postMessage
-            ) {
-                const message = {
-                    type: 'share',
-                    content: meetingName.share_link,
-                };
-                window.ReactNativeWebView.postMessage(JSON.stringify(message));
-            } else {
-                setToastPopUp(true);
-                getApiDataCopy();
-            }
-        } catch (error) {
-            console.error('공유 API 호출 실패');
-        }
-    };
-
-    const isMobile =
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent,
-        );
-
     return (
         <ShareButton>
-            {isMobile ? (
-                <ShareIcon
-                    src={'/images/share.png'}
-                    alt="share"
-                    onClick={getApiDataShare}
-                />
-            ) : (
-                <CopyIcon onClick={getApiDataCopy}>
-                    <img src={'/images/copy.png'} alt="copy" />
-                    <span>텍스트 복사</span>
-                </CopyIcon>
-            )}
+            <CopyIcon onClick={getApiDataCopy}>
+                <img src={'/images/copy.png'} alt="copy" />
+            </CopyIcon>
             {toastPopUp && (
                 <ToastPopUp
                     message="텍스트가 클립보드에 복사되었습니다."
