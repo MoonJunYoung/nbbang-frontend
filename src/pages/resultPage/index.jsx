@@ -592,28 +592,25 @@ function SharePage() {
                           <PaymentList key={paymentdata.id}>
                               <PaymentContainers>
                                   <PaymentUserContainer
-                                      onClick={() => handleClick(paymentdata)}
+                                  //   onClick={() => handleClick(paymentdata)} ? 클릭시 에버나서 그냥 주섯처리해버림
                                   >
                                       <Payment>
                                           <PaymentPlace
                                               paymentdata={paymentdata}
                                           >
-                                              {truncate(paymentdata.place, 10)}
+                                              {paymentdata.place}
                                           </PaymentPlace>
                                           <PaymentPayer
                                               paymentdata={paymentdata}
                                           >
-                                              결제자 {paymentdata.pay_member}
+                                              {paymentdata.pay_member}
                                           </PaymentPayer>
                                       </Payment>
                                       <Payment isRight>
                                           <PaymentPrice>
-                                              {truncate(
-                                                  paymentdata.price
-                                                      .toLocaleString()
-                                                      .toString() + '원',
-                                                  12,
-                                              )}
+                                              {paymentdata.price
+                                                  .toLocaleString()
+                                                  .toString() + '원'}
                                           </PaymentPrice>
                                           <PaymentSplitPrice>
                                               인당{' '}
@@ -693,6 +690,7 @@ const Payment = styled.div`
     border-radius: 12px;
     transition: all 0.2s;
     flex: 1;
+    justify-content: space-between;
 `;
 
 const PaymentPlace = styled.span`
