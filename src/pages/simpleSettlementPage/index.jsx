@@ -118,16 +118,20 @@ const SimpleSettlement = () => {
                     setKakaoModalOpen={setKakaoModalOpen}
                 />
             </section>
-            <section className="flex justify-center items-center gap-5 py-10 mt-[70px]">
-                <KakaoShare meetingName={meetingData} />
-                <div className="relative">
-                    <BillingResultShare meetingName={meetingData} />
-                    <div className="text-left absolute top-[-75px] left-[-16px] text-sm bg-main-blue px-4 text-white py-2 rounded-2xl shadow-base border border-gray-300  whitespace-nowrap before:content-[''] before:absolute before:bottom-[-14px] before:left-[35px] before:-translate-x-1/2 before:border-8 before:border-transparent before:border-t-main-blue">
-                        링크 복사로 쉽고 <br />
-                        빠르게 비용을 나눠보세요!
+            {meetingData?.simple_member_amount ? (
+                <section className="flex justify-center items-center gap-5 py-10 mt-[70px]">
+                    <KakaoShare meetingName={meetingData} />
+                    <div className="relative">
+                        <BillingResultShare meetingName={meetingData} />
+                        <div className="text-left absolute top-[-75px] left-[-16px] text-sm bg-main-blue px-4 text-white py-2 rounded-2xl shadow-base border border-gray-300  whitespace-nowrap before:content-[''] before:absolute before:bottom-[-14px] before:left-[35px] before:-translate-x-1/2 before:border-8 before:border-transparent before:border-t-main-blue">
+                            링크 복사로 쉽고 <br />
+                            빠르게 비용을 나눠보세요!
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            ) : (
+                <div className="pt-12"></div>
+            )}
         </>
     );
 };
