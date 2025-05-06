@@ -34,7 +34,7 @@ const SingnUpLink = styled(Link)`
     text-align: center;
     align-content: center;
 `;
-
+// texts
 const SingnInLink = styled.div`
     display: flex;
     align-items: center;
