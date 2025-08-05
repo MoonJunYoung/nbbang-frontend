@@ -25,7 +25,7 @@ export const ImageModal = ({ images, isOpen, onClose }) => {
         >
             <div className="relative max-w-screen-sm max-h-screen-sm sm:max-w-screen-xss sm:max-h-screen-xs md:w-[300px] lg:w-[500px] ">
                 <img
-                    src={`https://nbbang-images.s3.ap-northeast-2.amazonaws.com/${images[currentIndex]}`}
+                    src={`https://nbbang-receipt-images.s3.ap-northeast-2.amazonaws.com/${images[currentIndex]}`}
                     alt={`Image ${currentIndex + 1}`}
                     className=" p-5"
                 />

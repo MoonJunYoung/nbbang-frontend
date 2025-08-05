@@ -146,7 +146,7 @@ const ImageUploader = ({ meetingId, meetingSimple }) => {
                             <img
                                 src={
                                     typeof image === 'string'
-                                        ? `https://nbbang-images.s3.ap-northeast-2.amazonaws.com/${image}`
+                                        ? `https://nbbang-receipt-images.s3.ap-northeast-2.amazonaws.com/${image}`
                                         : URL.createObjectURL(image)
                                 }
                                 alt={`uploaded ${index}`}
