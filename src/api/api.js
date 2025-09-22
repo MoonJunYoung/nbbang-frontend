@@ -5,7 +5,7 @@ export let Token = () => Cookies.get('authToken');
 
 const axiosData = () =>
     axios.create({
-        baseURL: 'https://api.nbbang.life',
+        baseURL: 'https://api.nbbang.shop',
         // baseURL: "http://localhost:8000",
         headers: {
             Authorization: `Bearer ${Token()}`,

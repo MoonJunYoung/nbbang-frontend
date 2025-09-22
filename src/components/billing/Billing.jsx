@@ -8,6 +8,7 @@ import Lottie from 'lottie-react';
 import animationData from '../../assets/animations/check.json';
 import KakaoRemittance from '../remittance/KakaoRemittance';
 import TossRemittance from '../remittance/TossRemittance';
+import QRCodeModal from '../Modal/QRCodeModal';
 
 const ResultContainar = styled.div`
     display: ${(props) => (props.paymentState ? 'flex' : 'none')};
@@ -212,12 +213,20 @@ const Billing = ({ payment, meetingName, setMeetingName }) => {
                 />
             </RemittanceContainer>
             <ShareContainer>
+                <BillingResultShare meetingName={meetingName} />
                 <KakaoShare meetingName={meetingName} />
                 <div className="relative">
-                    <BillingResultShare meetingName={meetingName} />
-                    <div className="text-left absolute top-[-70px] left-[-16px] text-sm bg-main-blue px-4 text-white py-2 rounded-2xl shadow-base border border-gray-300  whitespace-nowrap before:content-[''] before:absolute before:bottom-[-14px] before:left-[35px] before:-translate-x-1/2 before:border-8 before:border-transparent before:border-t-main-blue">
-                        링크 복사로 쉽고 <br />
-                        빠르게 비용을 나눠보세요!
+                    <QRCodeModal
+                        url={meetingName.share_link}
+                        imageSrc="/images/qricon.png"
+                        className="size-8 "
+                        title="QR 찍고 바로 정산 페이지 확인하세요"
+                        description="한 번의 스캔으로 정산 끝!"
+                        description2="톡으로 링크 보내기 귀찮을 땐 👆🏼 QR로 바로 공유"
+                    />
+                    <div className="text-left absolute top-[-75px] left-[-16px] text-sm bg-main-blue px-4 text-white py-2 rounded-2xl shadow-base border border-gray-300  whitespace-nowrap before:content-[''] before:absolute before:bottom-[-14px] before:left-[35px] before:-translate-x-1/2 before:border-8 before:border-transparent before:border-t-main-blue">
+                        귀찮은 링크 공유 대신
+                        <br /> 👉 QR 한 방에 해결
                     </div>
                 </div>
             </ShareContainer>
