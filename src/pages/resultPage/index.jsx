@@ -449,7 +449,7 @@ function SharePage() {
                                                       data.tipCheck ? (
                                                           <MemberContainer>
                                                               <RemittanceTitle>
-                                                                  송금
+                                                                  바로 송금
                                                               </RemittanceTitle>
                                                               <RemittanceContainer>
                                                                   {data.tipped_kakao_deposit_link && (
@@ -491,6 +491,7 @@ function SharePage() {
                                                                   >
                                                                       <span>
                                                                           계좌&금액
+                                                                          복사
                                                                       </span>
                                                                       <img
                                                                           src="/images/copy.png"
@@ -504,7 +505,7 @@ function SharePage() {
                                                               {data.amount >
                                                                   0 && (
                                                                   <RemittanceTitle>
-                                                                      송금
+                                                                      바로 송금
                                                                   </RemittanceTitle>
                                                               )}
                                                               <RemittanceContainer>
@@ -554,6 +555,7 @@ function SharePage() {
                                                                       >
                                                                           <span>
                                                                               계좌&금액
+                                                                              복사
                                                                           </span>
                                                                           <img
                                                                               src="/images/copy.png"

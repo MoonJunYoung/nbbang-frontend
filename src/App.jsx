@@ -71,6 +71,10 @@ function App() {
                         <QRCodeModal
                             url="https://play.google.com/store/apps/details?id=nbbang.middle"
                             imageSrc="images/play_store.png"
+                            className="w-[200px] mt-10 rounded-lg py-1 bg-black"
+                            title="앱 설치하고 더 편하게 정산해보세요"
+                            description="앱 설치하고 더 편하게 정산해보세요"
+                            description2="휴대폰으로 QR 코드를 스캔해서 설치해보세요"
                         />
                     </div>
                     <div className="hidden sm:block fixed inset-0 bg-gradient-to-br from-[#3167fc] via-[#4c8dff] to-[#a3c7ff] text-left overflow-hidden"></div>
