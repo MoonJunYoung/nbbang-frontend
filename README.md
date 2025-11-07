@@ -1,6 +1,6 @@
 # Nbbnag
 
-[https://nbbang.life/](https://nbbang.life/)
+[https://nbbang.shop/](https://nbbang.shop/)
 
 <p align="center">
   <img src="https://github.com/moonjunyoung/nbbang/assets/110980148/f5abe421-22db-4e43-9583-dbaf3ac58886" alt="nbbang_Logo">
@@ -77,7 +77,7 @@
 
 ## Link
 
-> **서비스 주소** : [https://nbbang.life/](https://nbbang.life/)
+> **서비스 주소** : [https://nbbang.shop/](https://nbbang.shop/)
 
 <br/>
 
