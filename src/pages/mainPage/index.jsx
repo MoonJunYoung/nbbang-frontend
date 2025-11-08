@@ -17,7 +17,12 @@ const MainPage = () => {
     const [user, setUser] = useState([]);
 
     useEffect(() => {
+        console.log(
+            'MainPage 토큰 상태:',
+            authToken ? '토큰 있음' : '토큰 없음',
+        );
         if (!authToken) {
+            console.log('토큰이 없어서 로그인 페이지로 이동');
             navigate('/signd');
         }
     }, [authToken, navigate]);
@@ -32,11 +37,18 @@ const MainPage = () => {
             const response = await getUserData('user');
             setUser(response.data);
         } catch (error) {
-            if (error.response.status !== 200) {
-                Cookies.remove('authToken');
+            // 401 (Unauthorized)일 때만 토큰 제거
+            if (error.response && error.response.status === 401) {
+                console.log('인증 토큰이 만료되었습니다.');
+                Cookies.remove('authToken', { path: '/' });
                 navigate('/signd');
+            } else {
+                // 다른 오류는 로그만 출력 (토큰 유지)
+                console.log(
+                    'Api 요청 실패:',
+                    error.response?.status || 'Network Error',
+                );
             }
-            console.log('Api 요청 실패');
         }
     };
 

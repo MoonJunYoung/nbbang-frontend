@@ -11,7 +11,12 @@ export const Redirect = ({ accessToken, apiUrl, navigate, type }) => {
         try {
             const response = await axios.post(apiUrl, { token: accessToken });
             if (response.status === 201) {
-                Cookies.set('authToken', response.data, { expires: 30 });
+                Cookies.set('authToken', response.data, {
+                    expires: 30,
+                    path: '/',
+                    sameSite: 'Strict',
+                    secure: window.location.protocol === 'https:'
+                });
                 await AmplitudeSetUserId();
                 sendEventToAmplitude('complete 3rd party sign in', {
                     'provider type': type,

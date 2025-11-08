@@ -108,7 +108,7 @@ const UserSetting = ({ setUserSettingModal }) => {
     };
 
     const handleLogOut = () => {
-        Cookies.remove('authToken');
+        Cookies.remove('authToken', { path: '/' });
         navigate('/signd');
     };
 

@@ -171,7 +171,12 @@ const Agreement = ({ userData, navigate, apiUrl }) => {
             const response = await axios.post(apiUrl, userData);
             console.log(response);
             if (response.status === 201) {
-                Cookies.set('authToken', response.data, { expires: 30 });
+                Cookies.set('authToken', response.data, {
+                    expires: 30,
+                    path: '/',
+                    sameSite: 'Strict',
+                    secure: window.location.protocol === 'https:'
+                });
                 navigate('/');
             } else {
                 console.log('APi 서버로 전송하는 중 오류가 발생했습니다.');

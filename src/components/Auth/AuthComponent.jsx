@@ -95,9 +95,24 @@ const AuthComponent = ({
             });
 
             if (response.data) {
+                console.log(
+                    '로그인 성공, 토큰 저장:',
+                    response.data.substring(0, 20) + '...',
+                );
                 Cookies.set('authToken', response.data, {
                     expires: 30,
+                    path: '/',
+                    sameSite: 'Strict',
+                    secure: window.location.protocol === 'https:',
                 });
+
+                // 토큰이 제대로 저장되었는지 확인
+                const savedToken = Cookies.get('authToken');
+                console.log(
+                    '저장된 토큰 확인:',
+                    savedToken ? '토큰 저장됨' : '토큰 저장 실패',
+                );
+
                 await AmplitudeSetUserId();
                 sendEventToAmplitude('complete auth', '');
                 navigate('/');
