@@ -3,14 +3,13 @@ import styled from 'styled-components';
 import { putPaymentData } from '../../api/api';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { truncate } from '../Meeting';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const PayMentFixContainer = styled.div`
     z-index: 10;
     position: absolute;
 `;
 
-const WrapperModal = styled(motion.div)`
+const WrapperModal = styled.div`
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -19,7 +18,7 @@ const WrapperModal = styled(motion.div)`
     align-items: center;
 `;
 
-const Modal = styled(motion.div)`
+const Modal = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -30,7 +29,6 @@ const Modal = styled(motion.div)`
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     padding: 32px 24px 24px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
 const ModalHeader = styled.div`
@@ -127,7 +125,7 @@ const PayMentFixInput = styled.input`
     }
 `;
 
-const PayMentFix = styled(motion.button)`
+const PayMentFix = styled.button`
     width: 100%;
     height: 48px;
     background: linear-gradient(135deg, #3182f6 0%, #1d4ed8 100%);
@@ -368,117 +366,95 @@ const PaymentFix = ({
 
     return (
         <PayMentFixContainer>
-            <AnimatePresence>
-                <WrapperModal
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
-                    <Modal
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                        transition={{ type: 'spring', duration: 0.5 }}
-                        ref={ref}
-                    >
-                        <ModalHeader>
-                            <ModalTitle>결제 정보 수정</ModalTitle>
-                            <ModalClose onClick={() => setOpenModal(false)}>
-                                ×
-                            </ModalClose>
-                        </ModalHeader>
+            <WrapperModal>
+                <Modal ref={ref}>
+                    <ModalHeader>
+                        <ModalTitle>결제 정보 수정</ModalTitle>
+                        <ModalClose onClick={() => setOpenModal(false)}>
+                            ×
+                        </ModalClose>
+                    </ModalHeader>
 
-                        <FormContainer onSubmit={handlePutData}>
-                            <InputGroup>
-                                <Label>결제 내역</Label>
-                                <InputBox>
-                                    <PayMentFixInput
-                                        type="text"
-                                        name="place"
-                                        value={formData.place}
-                                        placeholder="결제내역을 입력해주세요"
-                                        onChange={handleInputChange}
-                                        autoComplete="off"
-                                    />
-                                </InputBox>
-                            </InputGroup>
+                    <FormContainer onSubmit={handlePutData}>
+                        <InputGroup>
+                            <Label>결제 내역</Label>
+                            <InputBox>
+                                <PayMentFixInput
+                                    type="text"
+                                    name="place"
+                                    value={formData.place}
+                                    placeholder="결제내역을 입력해주세요"
+                                    onChange={handleInputChange}
+                                    autoComplete="off"
+                                />
+                            </InputBox>
+                        </InputGroup>
 
-                            <InputGroup>
-                                <Label>결제 금액</Label>
-                                <InputBox>
-                                    <PayMentFixInput
-                                        type="number"
-                                        name="price"
-                                        value={formData.price}
-                                        placeholder="결제금액을 입력해주세요"
-                                        onChange={handleInputChange}
-                                        autoComplete="off"
-                                    />
-                                </InputBox>
-                            </InputGroup>
+                        <InputGroup>
+                            <Label>결제 금액</Label>
+                            <InputBox>
+                                <PayMentFixInput
+                                    type="number"
+                                    name="price"
+                                    value={formData.price}
+                                    placeholder="결제금액을 입력해주세요"
+                                    onChange={handleInputChange}
+                                    autoComplete="off"
+                                />
+                            </InputBox>
+                        </InputGroup>
 
-                            <InputGroup>
-                                <Label>결제자 선택</Label>
-                                <SelectBox>
-                                    <StyledSelect
-                                        value={selectedMember}
-                                        onChange={handleMemberDropBoxSelect}
-                                    >
-                                        {member.map((memberdata) => (
-                                            <option
-                                                key={memberdata.id}
-                                                value={memberdata.id}
-                                            >
-                                                {memberdata.name}
-                                            </option>
-                                        ))}
-                                    </StyledSelect>
-                                </SelectBox>
-                            </InputGroup>
-
-                            <InputGroup>
-                                <Label>참여 멤버 선택</Label>
-                                <StyledCheckboxDiv>
+                        <InputGroup>
+                            <Label>결제자 선택</Label>
+                            <SelectBox>
+                                <StyledSelect
+                                    value={selectedMember}
+                                    onChange={handleMemberDropBoxSelect}
+                                >
                                     {member.map((memberdata) => (
-                                        <StyledCheckboxLabel
+                                        <option
                                             key={memberdata.id}
+                                            value={memberdata.id}
+                                        >
+                                            {memberdata.name}
+                                        </option>
+                                    ))}
+                                </StyledSelect>
+                            </SelectBox>
+                        </InputGroup>
+
+                        <InputGroup>
+                            <Label>참여 멤버 선택</Label>
+                            <StyledCheckboxDiv>
+                                {member.map((memberdata) => (
+                                    <StyledCheckboxLabel
+                                        key={memberdata.id}
+                                        checked={memberSelection[memberdata.id]}
+                                    >
+                                        <input
+                                            type="checkbox"
                                             checked={
                                                 memberSelection[memberdata.id]
                                             }
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={
-                                                    memberSelection[
-                                                        memberdata.id
-                                                    ]
-                                                }
-                                                onChange={(e) =>
-                                                    handleMemberSelect(
-                                                        e,
-                                                        memberdata.id,
-                                                    )
-                                                }
-                                            />
-                                            <span>
-                                                {truncate(memberdata.name, 5)}
-                                            </span>
-                                        </StyledCheckboxLabel>
-                                    ))}
-                                </StyledCheckboxDiv>
-                            </InputGroup>
+                                            onChange={(e) =>
+                                                handleMemberSelect(
+                                                    e,
+                                                    memberdata.id,
+                                                )
+                                            }
+                                        />
+                                        <span>
+                                            {truncate(memberdata.name, 5)}
+                                        </span>
+                                    </StyledCheckboxLabel>
+                                ))}
+                            </StyledCheckboxDiv>
+                        </InputGroup>
 
-                            <PayMentFix
-                                type="submit"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                수정 완료
-                            </PayMentFix>
-                        </FormContainer>
-                    </Modal>
-                </WrapperModal>
-            </AnimatePresence>
+                        <PayMentFix type="submit">수정 완료</PayMentFix>
+                    </FormContainer>
+                </Modal>
+            </WrapperModal>
         </PayMentFixContainer>
     );
 };
