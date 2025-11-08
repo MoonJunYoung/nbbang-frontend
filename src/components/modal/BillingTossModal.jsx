@@ -27,58 +27,69 @@ const Modal = styled(motion.div)`
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    height: 300px;
-    width: 330px;
+    gap: 20px;
+    width: 90%;
+    max-width: 360px;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+`;
 
-    animation: scaleIn 0.2s ease-out;
+const ModalHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+`;
 
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
+const ModalTitle = styled.h2`
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
 `;
 
 const ModalClose = styled.button`
-    cursor: pointer;
     position: absolute;
-    top: 0px;
-    right: 8px;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
     background: none;
     border: none;
-    font-size: 20px;
     color: #666;
+    font-size: 18px;
+    cursor: pointer;
 `;
 
-const Form = styled.form`
+const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 13px;
+    gap: 16px;
+    width: 100%;
+`;
+
+const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+
+const Label = styled.label`
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
 `;
 
 const InputBox = styled.div`
+    width: 100%;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 180px;
-    height: 35px;
-    border: 1px solid #cce5ff;
-    border-radius: 10px;
-    transition: border-color 0.3s ease;
 
     &:focus-within {
         border-color: #1849fd;
@@ -86,53 +97,105 @@ const InputBox = styled.div`
 `;
 
 const Input = styled.input`
+    width: 100%;
+    background: transparent;
     border: none;
-    width: 150px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #333;
+
+    &:focus {
+        outline: none;
+    }
 
     &::placeholder {
-        font-size: 13px;
+        color: #999;
     }
 `;
 
-const Button = styled.button`
-    margin-top: 5px;
+const ActionButton = styled.button`
+    width: 100%;
+    height: 40px;
+    background: ${(props) => (props.primary ? '#1849fd' : '#f5f5f5')};
+    color: ${(props) => (props.primary ? 'white' : '#666')};
     border: none;
-    background-color: #1849fd;
-    color: white;
     border-radius: 8px;
-    height: 35px;
-    width: 100%;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 13px;
-`;
-const Message = styled.p`
     font-size: 14px;
-    width: 100%;
-    margin: 0;
-    font-weight: 600;
-    color: #555;
-    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+        background: ${(props) => (props.primary ? '#0f3cc9' : '#eee')};
+    }
 `;
-const PopUp = styled.span`
-    display: inline-block;
-    font-size: 11px;
-    border: 1px solid deepskyblue;
-    color: deepskyblue;
-    width: 13px;
-    height: 13px;
-    border-radius: 20px;
-    margin-right: 2px;
+const InfoMessage = styled.div`
+    padding: 16px;
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1565c0;
+    text-align: center;
+    line-height: 1.4;
 `;
 
-const TossIdDelete = styled.span`
-    cursor: pointer;
-    border: 1px solid silver;
-    padding: 3px;
+const DeleteButton = styled.button`
+    padding: 6px 12px;
+    background: #f5f5f5;
+    color: #666;
+    border: none;
+    border-radius: 6px;
     font-size: 12px;
-    color: white;
-    background-color: silver;
-    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background: #eee;
+    }
+`;
+
+const SelectBox = styled.div`
+    width: 100%;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    &:focus-within {
+        border-color: #1849fd;
+    }
+
+    &::after {
+        content: '▼';
+        position: absolute;
+        right: 12px;
+        color: #666;
+        font-size: 12px;
+        pointer-events: none;
+    }
+`;
+
+const StyledSelect = styled.select`
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0 32px 0 12px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    appearance: none;
+
+    &:focus {
+        outline: none;
+    }
+
+    option {
+        padding: 8px;
+        font-weight: 500;
+    }
 `;
 
 const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
@@ -227,66 +290,86 @@ const BillingTossModal = ({ setTossModalOpen, meetingName }) => {
         <BillingResultContainer>
             <WrapperModal>
                 <Modal ref={ref}>
-                    <ModalClose onClick={handleTossModalClose}>×</ModalClose>
-                    <Message>
-                        <PopUp>?</PopUp>링크로 공유할때 해당 계좌로 토스
-                        송금하기 기능이 추가 돼요!
-                    </Message>
-                    <Form onSubmit={handlePutBankData}>
-                        <InputBox>
-                            <Input
-                                type="text"
-                                name="account_number"
-                                value={formData.account_number || ''}
-                                placeholder="계좌번호를 입력해주세요"
-                                onChange={handleInputChange}
-                                onInput={handleNumericInput} // 숫자 이외의 입력을 필터링
-                                maxLength="20"
-                                autoComplete="off"
-                                onTouchStart={(e) => e.preventDefault()}
-                                onTouchMove={(e) => e.preventDefault()}
-                            />
-                        </InputBox>
-                        <select
-                            value={formData.bank || UsersBankData[0].bank}
-                            onChange={handleBankSelect}
-                            style={{
-                                width: '90px',
-                                height: '20px',
-                                border: '1px solid silver',
-                            }}
-                        >
-                            {UsersBankData.map((bankData, index) => (
-                                <option key={index} value={bankData.bank}>
-                                    {bankData.bank}
-                                </option>
-                            ))}
-                        </select>
-                        <TossIdDelete
+                    <ModalHeader>
+                        <ModalTitle>토스 송금 설정</ModalTitle>
+                        <ModalClose onClick={handleTossModalClose}>
+                            ×
+                        </ModalClose>
+                    </ModalHeader>
+
+                    <InfoMessage>
+                        링크로 공유할 때 해당 계좌로 토스 송금하기 기능이
+                        추가됩니다! 🏦
+                    </InfoMessage>
+
+                    <FormContainer onSubmit={handlePutBankData}>
+                        <InputGroup>
+                            <Label>계좌번호</Label>
+                            <InputBox>
+                                <Input
+                                    type="text"
+                                    name="account_number"
+                                    value={formData.account_number || ''}
+                                    placeholder="계좌번호를 입력해주세요"
+                                    onChange={handleInputChange}
+                                    onInput={handleNumericInput}
+                                    maxLength="20"
+                                    autoComplete="off"
+                                    onTouchStart={(e) => e.preventDefault()}
+                                    onTouchMove={(e) => e.preventDefault()}
+                                />
+                            </InputBox>
+                        </InputGroup>
+
+                        <InputGroup>
+                            <Label>은행 선택</Label>
+                            <SelectBox>
+                                <StyledSelect
+                                    value={
+                                        formData.bank || UsersBankData[0].bank
+                                    }
+                                    onChange={handleBankSelect}
+                                >
+                                    {UsersBankData.map((bankData, index) => (
+                                        <option
+                                            key={index}
+                                            value={bankData.bank}
+                                        >
+                                            {bankData.bank}
+                                        </option>
+                                    ))}
+                                </StyledSelect>
+                            </SelectBox>
+                        </InputGroup>
+
+                        <DeleteButton
                             type="submit"
                             onClick={(e) =>
                                 handlePutBankData(e, '입금 정보 초기화')
                             }
                         >
-                            입금 정보 초기화
-                        </TossIdDelete>
-                        <Button
+                            정보 초기화
+                        </DeleteButton>
+
+                        <ActionButton
                             type="submit"
                             onClick={(e) =>
                                 handlePutBankData(e, '이번에만 사용하기')
                             }
                         >
                             이번에만 사용하기
-                        </Button>
-                        <Button
+                        </ActionButton>
+
+                        <ActionButton
                             type="submit"
+                            primary
                             onClick={(e) =>
                                 handlePutBankData(e, '계속해서 사용하기')
                             }
                         >
                             계속해서 사용하기
-                        </Button>
-                    </Form>
+                        </ActionButton>
+                    </FormContainer>
                 </Modal>
             </WrapperModal>
         </BillingResultContainer>

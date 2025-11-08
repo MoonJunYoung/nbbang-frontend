@@ -22,90 +22,181 @@ const WrapperModal = styled(motion.div)`
 const Modal = styled(motion.div)`
     position: relative;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    width: 300px;
+    gap: 24px;
+    width: 90%;
+    max-width: 420px;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    padding: 32px 24px 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
+const ModalHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const ModalTitle = styled.h2`
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+    letter-spacing: -0.3px;
+    margin: 0;
 `;
 
 const ModalClose = styled.button`
-    cursor: pointer;
     position: absolute;
-    top: 0px;
+    top: 16px;
     right: 16px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #666;
-    transition: all 0.2s ease;
-`;
-
-const PayMentFixInput = styled.input`
-    padding: 12px 16px;
-    border: 1px solid #e1e1e1;
+    width: 32px;
+    height: 32px;
     border-radius: 12px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-
-    &:focus {
-        outline: none;
-        border-color: #0066ff;
-        box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
-    }
-`;
-
-const PayMentFixInputBox = styled.div`
-    margin: 8px 0;
-    width: 100%;
-`;
-
-const PayMentFix = styled(motion.button)`
+    background: #f8f9fa;
     border: none;
-    border-radius: 12px;
-    margin-top: 20px;
-    width: 100%;
-    padding: 12px;
-    background: #0066ff;
-    color: white;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 18px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-        background: #0052cc;
-        transform: translateY(-1px);
+        background: #e9ecef;
+        color: #495057;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.95);
     }
 `;
 
-const PayMentMemberFix = styled.p`
-    margin: 16px 0 8px 0;
+const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+
+const Label = styled.label`
+    font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: #495057;
+    letter-spacing: -0.2px;
+`;
+
+const InputBox = styled.div`
+    width: 100%;
+    height: 52px;
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+
+    &:focus-within {
+        border-color: #3182f6;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
+    }
+`;
+
+const PayMentFixInput = styled.input`
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #191f28;
+    letter-spacing: -0.2px;
+
+    &:focus {
+        outline: none;
+    }
+
+    &::placeholder {
+        color: #adb5bd;
+        font-weight: 400;
+    }
+`;
+
+const PayMentFix = styled(motion.button)`
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #3182f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+
+    &:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(49, 130, 246, 0.4);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(49, 130, 246, 0.3);
+    }
+
+    &:disabled {
+        background: #adb5bd;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+`;
+
+const SectionTitle = styled.h3`
+    font-size: 16px;
+    font-weight: 700;
+    color: #191f28;
+    letter-spacing: -0.3px;
+    margin: 0 0 12px 0;
 `;
 
 const StyledCheckboxDiv = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 12px;
-    margin: 16px 0;
+    margin-top: 12px;
 `;
 
 const StyledCheckboxLabel = styled.label`
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    background: ${(props) => (props.checked ? '#0066ff' : '#f5f5f5')};
+    padding: 12px 8px;
+    border-radius: 12px;
+    background: ${(props) =>
+        props.checked
+            ? 'linear-gradient(135deg, #3182f6 0%, #1d4ed8 100%)'
+            : '#f8f9fa'};
+    border: 2px solid ${(props) => (props.checked ? '#3182f6' : '#dee2e6')};
     transition: all 0.2s ease;
+    min-height: 44px;
 
     span {
-        color: ${(props) => (props.checked ? 'white' : '#666')};
+        color: ${(props) => (props.checked ? 'white' : '#495057')};
         font-size: 13px;
-        font-weight: 500;
+        font-weight: ${(props) => (props.checked ? '600' : '500')};
+        text-align: center;
+        letter-spacing: -0.2px;
     }
 
     input[type='checkbox'] {
@@ -114,29 +205,72 @@ const StyledCheckboxLabel = styled.label`
     }
 
     &:hover {
-        background: ${(props) => (props.checked ? '#0052cc' : '#e9e9e9')};
+        background: ${(props) =>
+            props.checked
+                ? 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)'
+                : '#e9ecef'};
+        border-color: ${(props) => (props.checked ? '#1d4ed8' : '#adb5bd')};
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+`;
+
+const SelectBox = styled.div`
+    width: 100%;
+    height: 52px;
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    &:focus-within {
+        border-color: #3182f6;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
+    }
+
+    &::after {
+        content: '▼';
+        position: absolute;
+        right: 16px;
+        color: #6c757d;
+        font-size: 12px;
+        pointer-events: none;
     }
 `;
 
 const StyledSelect = styled.select`
     width: 100%;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid #e1e1e1;
-    background: white;
+    background: transparent;
+    border: none;
+    padding: 0 40px 0 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #191f28;
+    letter-spacing: -0.2px;
     cursor: pointer;
-    font-size: 14px;
+    appearance: none;
 
     &:focus {
         outline: none;
-        border-color: #0066ff;
-        box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+    }
+
+    option {
+        padding: 8px;
+        font-weight: 500;
     }
 `;
 
-const Form = styled.form`
+const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
+    gap: 20px;
     width: 100%;
 `;
 
@@ -247,77 +381,101 @@ const PaymentFix = ({
                         transition={{ type: 'spring', duration: 0.5 }}
                         ref={ref}
                     >
-                        <ModalClose onClick={() => setOpenModal(false)}>
-                            ×
-                        </ModalClose>
-                        <Form onSubmit={handlePutData}>
-                            <PayMentFixInputBox>
-                                <PayMentFixInput
-                                    type="text"
-                                    name="place"
-                                    value={formData.place}
-                                    placeholder="결제내역을 입력해주세요"
-                                    onChange={handleInputChange}
-                                    autoComplete="off"
-                                />
-                            </PayMentFixInputBox>
-                            <PayMentFixInputBox>
-                                <PayMentFixInput
-                                    type="number"
-                                    name="price"
-                                    value={formData.price}
-                                    placeholder="결제금액을 입력해주세요"
-                                    onChange={handleInputChange}
-                                    autoComplete="off"
-                                />
-                            </PayMentFixInputBox>
-                            <PayMentMemberFix>결제자 선택</PayMentMemberFix>
-                            <StyledSelect
-                                value={selectedMember}
-                                onChange={handleMemberDropBoxSelect}
-                            >
-                                {member.map((memberdata) => (
-                                    <option
-                                        key={memberdata.id}
-                                        value={memberdata.id}
+                        <ModalHeader>
+                            <ModalTitle>결제 정보 수정</ModalTitle>
+                            <ModalClose onClick={() => setOpenModal(false)}>
+                                ×
+                            </ModalClose>
+                        </ModalHeader>
+
+                        <FormContainer onSubmit={handlePutData}>
+                            <InputGroup>
+                                <Label>결제 내역</Label>
+                                <InputBox>
+                                    <PayMentFixInput
+                                        type="text"
+                                        name="place"
+                                        value={formData.place}
+                                        placeholder="결제내역을 입력해주세요"
+                                        onChange={handleInputChange}
+                                        autoComplete="off"
+                                    />
+                                </InputBox>
+                            </InputGroup>
+
+                            <InputGroup>
+                                <Label>결제 금액</Label>
+                                <InputBox>
+                                    <PayMentFixInput
+                                        type="number"
+                                        name="price"
+                                        value={formData.price}
+                                        placeholder="결제금액을 입력해주세요"
+                                        onChange={handleInputChange}
+                                        autoComplete="off"
+                                    />
+                                </InputBox>
+                            </InputGroup>
+
+                            <InputGroup>
+                                <Label>결제자 선택</Label>
+                                <SelectBox>
+                                    <StyledSelect
+                                        value={selectedMember}
+                                        onChange={handleMemberDropBoxSelect}
                                     >
-                                        {memberdata.name}
-                                    </option>
-                                ))}
-                            </StyledSelect>
-                            <PayMentMemberFix>참여 멤버 선택</PayMentMemberFix>
-                            <StyledCheckboxDiv>
-                                {member.map((memberdata) => (
-                                    <StyledCheckboxLabel
-                                        key={memberdata.id}
-                                        checked={memberSelection[memberdata.id]}
-                                    >
-                                        <input
-                                            type="checkbox"
+                                        {member.map((memberdata) => (
+                                            <option
+                                                key={memberdata.id}
+                                                value={memberdata.id}
+                                            >
+                                                {memberdata.name}
+                                            </option>
+                                        ))}
+                                    </StyledSelect>
+                                </SelectBox>
+                            </InputGroup>
+
+                            <InputGroup>
+                                <Label>참여 멤버 선택</Label>
+                                <StyledCheckboxDiv>
+                                    {member.map((memberdata) => (
+                                        <StyledCheckboxLabel
+                                            key={memberdata.id}
                                             checked={
                                                 memberSelection[memberdata.id]
                                             }
-                                            onChange={(e) =>
-                                                handleMemberSelect(
-                                                    e,
-                                                    memberdata.id,
-                                                )
-                                            }
-                                        />
-                                        <span>
-                                            {truncate(memberdata.name, 5)}
-                                        </span>
-                                    </StyledCheckboxLabel>
-                                ))}
-                            </StyledCheckboxDiv>
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={
+                                                    memberSelection[
+                                                        memberdata.id
+                                                    ]
+                                                }
+                                                onChange={(e) =>
+                                                    handleMemberSelect(
+                                                        e,
+                                                        memberdata.id,
+                                                    )
+                                                }
+                                            />
+                                            <span>
+                                                {truncate(memberdata.name, 5)}
+                                            </span>
+                                        </StyledCheckboxLabel>
+                                    ))}
+                                </StyledCheckboxDiv>
+                            </InputGroup>
+
                             <PayMentFix
                                 type="submit"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                저장하기
+                                수정 완료
                             </PayMentFix>
-                        </Form>
+                        </FormContainer>
                     </Modal>
                 </WrapperModal>
             </AnimatePresence>
