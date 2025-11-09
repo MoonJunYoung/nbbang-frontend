@@ -24,14 +24,20 @@ const Container = styled.div`
 `;
 
 const Header = styled(motion.header)`
-    padding: 20px 0 15px;
+    padding: 20px 0 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 16px;
     background: #ffffff;
     position: sticky;
     top: 0;
     z-index: 10;
+`;
+
+const HeaderTop = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const UserName = styled(motion.h1)`
@@ -66,61 +72,62 @@ const SettingButton = styled(motion.button)`
     }
 `;
 
+const FilterTabs = styled.div`
+    display: flex;
+    gap: 8px;
+    padding-bottom: 15px;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+`;
+
+const FilterTab = styled(motion.button)`
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background: ${(props) => (props.active ? '#3182f6' : '#f1f3f5')};
+    color: ${(props) => (props.active ? '#ffffff' : '#6b7684')};
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover {
+        background: ${(props) => (props.active ? '#2870ea' : '#e9ecef')};
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+`;
+
+const FilterCount = styled.span`
+    background: ${(props) =>
+        props.active ? 'rgba(255,255,255,0.2)' : '#dee2e6'};
+    color: ${(props) => (props.active ? '#ffffff' : '#495057')};
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+`;
+
 const MeetingList = styled(motion.div)`
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    gap: 24px;
+    gap: 8px;
     margin-top: 10px;
     margin-bottom: 100px;
     &::-webkit-scrollbar {
         display: none;
     }
-`;
-
-const SectionContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 8px;
-`;
-
-const SectionHeader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 8px;
-    margin-bottom: 4px;
-`;
-
-const SectionTitle = styled.h2`
-    font-size: 18px;
-    font-weight: 700;
-    color: #191f28;
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-`;
-
-const SectionBadge = styled.span`
-    background: ${(props) => props.bgColor || '#f1f3f5'};
-    color: ${(props) => props.textColor || '#495057'};
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 20px;
-    min-width: 24px;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-`;
-
-const SectionCards = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
 `;
 
 const MeetingCard = styled(motion(Link))`
@@ -326,18 +333,6 @@ const EmptyState = styled(motion.div)`
     }
 `;
 
-const SectionEmptyState = styled.div`
-    padding: 32px 24px;
-    text-align: center;
-    color: #adb5bd;
-    font-size: 14px;
-    font-weight: 500;
-    background: #ffffff;
-    border-radius: 12px;
-    border: 2px dashed #dee2e6;
-    letter-spacing: -0.2px;
-`;
-
 export const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n - 1) + '...' : str;
 };
@@ -348,10 +343,20 @@ const Meeting = ({ user }) => {
     const [openMenuModal, setOpenMenuModal] = useState(false);
     const [openUserSettingModal, setUserSettingModal] = useState(false);
     const [selectedMeetingId, setSelectedMeetingId] = useState(null);
+    const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'regular', 'simple'
 
     // 모임 목록과 간편 정산 분리
     const regularMeetings = meetings.filter((meeting) => !meeting.is_simple);
     const simpleMeetings = meetings.filter((meeting) => meeting.is_simple);
+
+    // 필터에 따른 표시할 목록
+    const getDisplayMeetings = () => {
+        if (activeFilter === 'regular') return regularMeetings;
+        if (activeFilter === 'simple') return simpleMeetings;
+        return meetings; // 'all'
+    };
+
+    const displayMeetings = getDisplayMeetings();
 
     const handleGetData = async () => {
         try {
@@ -408,6 +413,71 @@ const Meeting = ({ user }) => {
         }
     };
 
+    const renderMeetingCard = (meeting) => {
+        const isSimple = meeting.is_simple;
+        const linkTo = isSimple
+            ? `/simple-settlement/${meeting.id}`
+            : `/meeting/${meeting.id}`;
+        const tagBg = isSimple ? '#fef3c7' : '#dbeafe';
+        const tagColor = isSimple ? '#d97706' : '#1d4ed8';
+        const tagText = isSimple ? '간편정산' : '모임정산';
+
+        return (
+            <MeetingCard
+                key={meeting.id}
+                to={linkTo}
+                initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                }}
+                animate={{
+                    opacity: 1,
+                    scale: 1,
+                }}
+                exit={{
+                    opacity: 0,
+                    scale: 0.8,
+                }}
+                transition={{ duration: 0.2 }}
+            >
+                <MeetingInfo>
+                    <MeetingHeader>
+                        <MeetingDate>{meeting.date}</MeetingDate>
+                        <MeetingTag bgColor={tagBg} textColor={tagColor}>
+                            {tagText}
+                        </MeetingTag>
+                    </MeetingHeader>
+                    <MeetingName>{truncate(meeting.name, 15)}</MeetingName>
+                </MeetingInfo>
+                <ActionButtons>
+                    <IconButton
+                        whileTap={{
+                            scale: 0.9,
+                        }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setSelectedMeetingId(meeting.id);
+                            setOpenMenuModal(true);
+                        }}
+                    >
+                        <AiOutlineEdit size={18} />
+                    </IconButton>
+                    <IconButton
+                        whileTap={{
+                            scale: 0.9,
+                        }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handelDeleteBilling(meeting.id);
+                        }}
+                    >
+                        <RiDeleteBinLine size={18} />
+                    </IconButton>
+                </ActionButtons>
+            </MeetingCard>
+        );
+    };
+
     return (
         <Container>
             <Header
@@ -415,223 +485,98 @@ const Meeting = ({ user }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <UserName>{user.name}님의 모임 👋</UserName>
-                <SettingButton
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setUserSettingModal(true)}
-                >
-                    <img
-                        src="/images/Setting.png"
-                        alt="설정"
-                        width="24"
+                <HeaderTop>
+                    <UserName>{user.name}님의 모임 👋</UserName>
+                    <SettingButton
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => setUserSettingModal(true)}
-                    />
-                </SettingButton>
-                {openUserSettingModal && (
-                    <UserSettingModal
-                        setUserSettingModal={setUserSettingModal}
-                    />
-                )}
+                    >
+                        <img
+                            src="/images/Setting.png"
+                            alt="설정"
+                            width="24"
+                            onClick={() => setUserSettingModal(true)}
+                        />
+                    </SettingButton>
+                    {openUserSettingModal && (
+                        <UserSettingModal
+                            setUserSettingModal={setUserSettingModal}
+                        />
+                    )}
+                </HeaderTop>
+
+                <FilterTabs>
+                    <FilterTab
+                        active={activeFilter === 'all'}
+                        onClick={() => setActiveFilter('all')}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        전체
+                        <FilterCount active={activeFilter === 'all'}>
+                            {meetings.length}
+                        </FilterCount>
+                    </FilterTab>
+                    <FilterTab
+                        active={activeFilter === 'regular'}
+                        onClick={() => setActiveFilter('regular')}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        모임정산
+                        <FilterCount active={activeFilter === 'regular'}>
+                            {regularMeetings.length}
+                        </FilterCount>
+                    </FilterTab>
+                    <FilterTab
+                        active={activeFilter === 'simple'}
+                        onClick={() => setActiveFilter('simple')}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        간편정산
+                        <FilterCount active={activeFilter === 'simple'}>
+                            {simpleMeetings.length}
+                        </FilterCount>
+                    </FilterTab>
+                </FilterTabs>
             </Header>
             <MeetingList
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
             >
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     {meetings.length > 0 ? (
-                        <>
-                            {/* 모임 목록 섹션 */}
-                            <SectionContainer>
-                                <SectionHeader>
-                                    <SectionTitle>💼 모임 목록</SectionTitle>
-                                    <SectionBadge
-                                        bgColor="#dbeafe"
-                                        textColor="#1d4ed8"
-                                    >
-                                        {regularMeetings.length}
-                                    </SectionBadge>
-                                </SectionHeader>
-                                <SectionCards>
-                                    {regularMeetings.length > 0 ? (
-                                        regularMeetings.map((meeting) => (
-                                            <MeetingCard
-                                                key={meeting.id}
-                                                to={`/meeting/${meeting.id}`}
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.8,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                }}
-                                                exit={{
-                                                    opacity: 0,
-                                                    scale: 0.8,
-                                                }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <MeetingInfo>
-                                                    <MeetingHeader>
-                                                        <MeetingDate>
-                                                            {meeting.date}
-                                                        </MeetingDate>
-                                                        <MeetingTag
-                                                            bgColor="#dbeafe"
-                                                            textColor="#1d4ed8"
-                                                        >
-                                                            모임 목록
-                                                        </MeetingTag>
-                                                    </MeetingHeader>
-                                                    <MeetingName>
-                                                        {truncate(
-                                                            meeting.name,
-                                                            15,
-                                                        )}
-                                                    </MeetingName>
-                                                </MeetingInfo>
-                                                <ActionButtons>
-                                                    <IconButton
-                                                        whileTap={{
-                                                            scale: 0.9,
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setOpenMenuModal(
-                                                                true,
-                                                            );
-                                                            setSelectedMeetingId(
-                                                                meeting.id,
-                                                            );
-                                                        }}
-                                                    >
-                                                        <AiOutlineEdit
-                                                            size={20}
-                                                        />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        whileTap={{
-                                                            scale: 0.9,
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handelDeleteBilling(
-                                                                meeting.id,
-                                                            );
-                                                        }}
-                                                    >
-                                                        <RiDeleteBinLine
-                                                            size={20}
-                                                        />
-                                                    </IconButton>
-                                                </ActionButtons>
-                                            </MeetingCard>
-                                        ))
-                                    ) : (
-                                        <SectionEmptyState>
-                                            아직 등록된 모임이 없어요
-                                        </SectionEmptyState>
-                                    )}
-                                </SectionCards>
-                            </SectionContainer>
-
-                            {/* 간편 정산 섹션 */}
-                            <SectionContainer>
-                                <SectionHeader>
-                                    <SectionTitle>⚡ 간편 정산</SectionTitle>
-                                    <SectionBadge
-                                        bgColor="#fef3c7"
-                                        textColor="#d97706"
-                                    >
-                                        {simpleMeetings.length}
-                                    </SectionBadge>
-                                </SectionHeader>
-                                <SectionCards>
-                                    {simpleMeetings.length > 0 ? (
-                                        simpleMeetings.map((meeting) => (
-                                            <MeetingCard
-                                                key={meeting.id}
-                                                to={`/simple-settlement/${meeting.id}`}
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.8,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                }}
-                                                exit={{
-                                                    opacity: 0,
-                                                    scale: 0.8,
-                                                }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <MeetingInfo>
-                                                    <MeetingHeader>
-                                                        <MeetingDate>
-                                                            {meeting.date}
-                                                        </MeetingDate>
-                                                        <MeetingTag
-                                                            bgColor="#fef3c7"
-                                                            textColor="#d97706"
-                                                        >
-                                                            간편 정산
-                                                        </MeetingTag>
-                                                    </MeetingHeader>
-                                                    <MeetingName>
-                                                        {truncate(
-                                                            meeting.name,
-                                                            15,
-                                                        )}
-                                                    </MeetingName>
-                                                </MeetingInfo>
-                                                <ActionButtons>
-                                                    <IconButton
-                                                        whileTap={{
-                                                            scale: 0.9,
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setOpenMenuModal(
-                                                                true,
-                                                            );
-                                                            setSelectedMeetingId(
-                                                                meeting.id,
-                                                            );
-                                                        }}
-                                                    >
-                                                        <AiOutlineEdit
-                                                            size={20}
-                                                        />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        whileTap={{
-                                                            scale: 0.9,
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handelDeleteBilling(
-                                                                meeting.id,
-                                                            );
-                                                        }}
-                                                    >
-                                                        <RiDeleteBinLine
-                                                            size={20}
-                                                        />
-                                                    </IconButton>
-                                                </ActionButtons>
-                                            </MeetingCard>
-                                        ))
-                                    ) : (
-                                        <SectionEmptyState>
-                                            아직 간편 정산이 없어요
-                                        </SectionEmptyState>
-                                    )}
-                                </SectionCards>
-                            </SectionContainer>
-                        </>
+                        <motion.div
+                            key={activeFilter}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '8px',
+                            }}
+                        >
+                            {displayMeetings.length > 0 ? (
+                                displayMeetings.map((meeting) =>
+                                    renderMeetingCard(meeting),
+                                )
+                            ) : (
+                                <EmptyState
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <p>
+                                        {activeFilter === 'regular'
+                                            ? '아직 모임정산이 없어요'
+                                            : '아직 간편정산이 없어요'}
+                                    </p>
+                                    <p>새로운 정산을 시작해보세요 ✨</p>
+                                </EmptyState>
+                            )}
+                        </motion.div>
                     ) : (
                         <EmptyState
                             initial={{ opacity: 0, y: 20 }}
