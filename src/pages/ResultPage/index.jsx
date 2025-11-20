@@ -9,6 +9,7 @@ import animationMoney from '../../assets/animations/money.json';
 import animationStart from '../../assets/animations/start.json';
 import { Link, useNavigate } from 'react-router-dom';
 import animationData from '../../assets/animations/check.json';
+import animationTime from '../../assets/animations/time.json';
 import {
     PaymentSkeleton,
     BillingSkeleton,
@@ -50,6 +51,80 @@ const LottieContainer = styled.div`
 const StartAnimation = styled.div`
     width: 120px;
     height: 120px;
+`;
+
+const ErrorContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 40px 24px;
+    text-align: center;
+`;
+
+const ErrorCard = styled.div`
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 48px 32px;
+    max-width: 380px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+`;
+
+const ErrorAnimationContainer = styled.div`
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ErrorTitle = styled.h2`
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+    margin: 0;
+    line-height: 1.5;
+`;
+
+const ErrorMessage = styled.p`
+    font-size: 16px;
+    font-weight: 500;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.6;
+`;
+
+const CountdownText = styled.span`
+    font-size: 14px;
+    font-weight: 600;
+    color: #3182f6;
+    margin-top: 8px;
+`;
+
+const EmptyStateButton = styled(Link)`
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 24px;
+    background: #3182f6;
+    color: white;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(49, 130, 246, 0.3);
+
+    &:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(49, 130, 246, 0.4);
+    }
 `;
 
 const BillingLine = styled.div`
@@ -208,6 +283,7 @@ function SharePage() {
     const [meetings, setMeetings] = useState([]);
     const [tipChack, setTipChack] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [countdown, setCountdown] = useState(3);
 
     const isMobile =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -241,9 +317,6 @@ function SharePage() {
 
                 if (error.response && error.response.status === 404) {
                     setApiRequestFailed(true);
-                    setTimeout(() => {
-                        navigate('/');
-                    }, 3000);
                 } else {
                     console.log('API 데이터 불러오기 실패');
                 }
@@ -254,24 +327,87 @@ function SharePage() {
         handleGetData();
     }, [meeting]);
 
+    useEffect(() => {
+        if (apiRequestFailed) {
+            setCountdown(3);
+            const countdownInterval = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(countdownInterval);
+                        navigate('/');
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+
+            const navigateTimer = setTimeout(() => {
+                clearInterval(countdownInterval);
+                navigate('/');
+            }, 3000);
+
+            return () => {
+                clearInterval(countdownInterval);
+                clearTimeout(navigateTimer);
+            };
+        }
+    }, [apiRequestFailed, navigate]);
+
     if (apiRequestFailed) {
         return (
-            <div>
-                <MeetingName>
-                    삭제된 정산내역입니다. <br></br> Nbbang페이지로 3초 뒤에
-                    넘어갑니다.
-                </MeetingName>
-            </div>
+            <ResultContaner>
+                <ErrorContainer>
+                    <ErrorCard>
+                        <ErrorAnimationContainer>
+                            <Lottie
+                                animationData={animationTime}
+                                loop={true}
+                                autoplay={true}
+                            />
+                        </ErrorAnimationContainer>
+                        <div>
+                            <ErrorTitle>삭제된 정산내역입니다</ErrorTitle>
+                            <ErrorMessage>
+                                해당 정산내역이 삭제되었거나
+                                <br />
+                                존재하지 않습니다
+                            </ErrorMessage>
+                            <CountdownText>
+                                {countdown}초 후 메인 페이지로 이동합니다
+                            </CountdownText>
+                        </div>
+                    </ErrorCard>
+                </ErrorContainer>
+            </ResultContaner>
         );
     }
 
     if (billingRequestFailed) {
         return (
-            <div>
-                <MeetingName>
-                    정산 내역이 없습니다. <br></br> 정산내역을 추가해주세요!
-                </MeetingName>
-            </div>
+            <ResultContaner>
+                <ErrorContainer>
+                    <ErrorCard>
+                        <ErrorAnimationContainer>
+                            <Lottie
+                                animationData={animationMoney}
+                                loop={true}
+                                autoplay={true}
+                            />
+                        </ErrorAnimationContainer>
+                        <div>
+                            <ErrorTitle>정산 내역이 없습니다</ErrorTitle>
+                            <ErrorMessage>
+                                아직 정산내역이 추가되지 않았어요
+                                <br />
+                                새로운 정산을 시작해보세요!
+                            </ErrorMessage>
+                        </div>
+                        <EmptyStateButton to="/signd">
+                            정산 시작하기
+                        </EmptyStateButton>
+                    </ErrorCard>
+                </ErrorContainer>
+            </ResultContaner>
         );
     }
 
