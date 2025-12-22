@@ -36,6 +36,26 @@ export const deleteUser = () => {
     return axiosData().delete(`/user`);
 };
 
+// guest
+// 게스트 로그인은 토큰 없이 호출 가능하므로 별도 axios 인스턴스 사용
+const axiosWithoutAuth = () =>
+    axios.create({
+        baseURL: 'https://api.nbbang.shop',
+        // baseURL: "http://localhost:8000",
+    });
+
+export const postGuestLogin = () => {
+    return axiosWithoutAuth().post('/user/guest');
+};
+
+export const getGuestInfo = () => {
+    return axiosData().get('/user/guest');
+};
+
+export const putGuestConvert = (data) => {
+    return axiosData().put('/user/guest', data);
+};
+
 //meeting
 
 export const getMeetingData = (query) => {

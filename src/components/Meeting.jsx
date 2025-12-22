@@ -12,6 +12,7 @@ import BillingNameModal from './modal/BillingNameModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { Plus, Users, Zap } from 'lucide-react';
 import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const Container = styled.div`
@@ -247,21 +248,20 @@ const IconButton = styled(motion.button)`
 `;
 
 const AddButton = styled.div`
-    position: absolute;
-    bottom: 32px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: calc(100% - 40px);
-    max-width: 420px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: space-between;
+    display: none;
 
-    @media (max-width: 768px) {
-        position: fixed;
-        bottom: 24px;
+    @media (min-width: 768px) {
+        position: absolute;
+        bottom: 32px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: calc(100% - 40px);
+        max-width: 420px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: space-between;
     }
 `;
 
@@ -342,18 +342,29 @@ const Meeting = ({ user }) => {
     const navigate = useNavigate();
     const [openMenuModal, setOpenMenuModal] = useState(false);
     const [openUserSettingModal, setUserSettingModal] = useState(false);
+    const [isFabOpen, setIsFabOpen] = useState(false);
     const [selectedMeetingId, setSelectedMeetingId] = useState(null);
     const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'regular', 'simple'
 
-    // 모임 목록과 간편 정산 분리
+    const getUserDisplayName = () => {
+        if (!user) return '게스트';
+        if (user.name) {
+            return user.name;
+        }
+        // 게스트 사용자이고 name이 null인 경우
+        if (user.type === 'guest' && user.id) {
+            return `게스트_${user.id}`;
+        }
+        return '게스트';
+    };
+
     const regularMeetings = meetings.filter((meeting) => !meeting.is_simple);
     const simpleMeetings = meetings.filter((meeting) => meeting.is_simple);
 
-    // 필터에 따른 표시할 목록
     const getDisplayMeetings = () => {
         if (activeFilter === 'regular') return regularMeetings;
         if (activeFilter === 'simple') return simpleMeetings;
-        return meetings; // 'all'
+        return meetings;
     };
 
     const displayMeetings = getDisplayMeetings();
@@ -486,7 +497,7 @@ const Meeting = ({ user }) => {
                 transition={{ duration: 0.5 }}
             >
                 <HeaderTop>
-                    <UserName>{user.name}님의 모임 👋</UserName>
+                    <UserName>{getUserDisplayName()}님의 모임 👋</UserName>
                     <SettingButton
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -502,6 +513,7 @@ const Meeting = ({ user }) => {
                     {openUserSettingModal && (
                         <UserSettingModal
                             setUserSettingModal={setUserSettingModal}
+                            user={user}
                         />
                     )}
                 </HeaderTop>
@@ -599,6 +611,89 @@ const Meeting = ({ user }) => {
                     }
                 />
             )}
+
+            {/* Mobile FAB (<768px) */}
+            <div
+                className="fixed bottom-6 right-6 z-50 md:hidden"
+                style={{ position: 'fixed' }}
+            >
+                <AnimatePresence>
+                    {isFabOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="flex flex-col gap-3"
+                            style={{
+                                position: 'absolute',
+                                bottom: 76,
+                                right: 0,
+                            }}
+                        >
+                            <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.05 }}
+                                onClick={() => {
+                                    handleAddBilling('simple');
+                                    setIsFabOpen(false);
+                                }}
+                                className="w-full flex items-center gap-3 bg-gradient-to-r from-[#F59E0B] to-[#D97706] text-white px-5 py-3.5 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                                style={{
+                                    boxShadow:
+                                        '0 4px 16px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                                }}
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <Zap className="w-5 h-5" />
+                                </div>
+                                <span className="text-[15px] font-semibold whitespace-nowrap">
+                                    간편 정산 만들기
+                                </span>
+                            </motion.button>
+
+                            <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                                onClick={() => {
+                                    handleAddBilling('billing');
+                                    setIsFabOpen(false);
+                                }}
+                                className="w-auto flex items-center gap-3 bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-white px-5 py-3.5 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                                style={{
+                                    boxShadow:
+                                        '0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                                }}
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <Users className="w-5 h-5" />
+                                </div>
+                                <span className="text-[15px] font-semibold whitespace-nowrap">
+                                    새로운 모임 만들기
+                                </span>
+                            </motion.button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setIsFabOpen((prev) => !prev)}
+                    className="w-16 h-16 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+                    style={{
+                        boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4)',
+                    }}
+                >
+                    <motion.div
+                        animate={{ rotate: isFabOpen ? 45 : 0 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <Plus className="w-7 h-7" strokeWidth={2.5} />
+                    </motion.div>
+                </motion.button>
+            </div>
+
             <AddButton>
                 <PrimaryButton
                     onClick={() => handleAddBilling('billing')}

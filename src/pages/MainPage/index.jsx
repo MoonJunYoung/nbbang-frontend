@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Meeting from '../../components/Meeting';
-import { getUserData, Token } from '../../api/api';
+import { getUserData, Token, postGuestLogin } from '../../api/api';
 import Cookies from 'js-cookie';
-import { sendEventToAmplitude } from '@/utils/amplitude';
+import { sendEventToAmplitude, AmplitudeSetUserId } from '@/utils/amplitude';
 
 const Container = styled.main`
     width: 100%;
@@ -14,7 +14,7 @@ const Container = styled.main`
 const MainPage = () => {
     const navigate = useNavigate();
     const authToken = Token();
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         console.log(

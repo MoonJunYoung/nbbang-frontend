@@ -38,6 +38,7 @@ const AuthComponent = ({
     const [SingUpLink] = useState(false);
     const [SginAgreement, setSginAgreement] = useState(false);
     const [toastPopUp, setToastPopUp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const containerVariants = {
@@ -89,6 +90,7 @@ const AuthComponent = ({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await AuthApiRequest({
                 ...formData,
@@ -120,6 +122,7 @@ const AuthComponent = ({
         } catch (error) {
             console.error('Auth error:', error.response);
             setToastPopUp(true);
+            setIsLoading(false);
         }
     };
 
@@ -328,9 +331,13 @@ const AuthComponent = ({
                                     >
                                         <SignInButton
                                             type="submit"
-                                            disabled={notAllow}
+                                            disabled={notAllow || isLoading}
                                         >
-                                            {title}
+                                            {isLoading
+                                                ? title === '로그인'
+                                                    ? '로그인 중...'
+                                                    : '회원가입 중...'
+                                                : title}
                                         </SignInButton>
                                     </motion.div>
                                 </AuthRequestContainer>

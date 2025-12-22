@@ -99,9 +99,10 @@ const SettingContainer = styled.form`
     width: 100%;
 `;
 
-const UserSetting = ({ setUserSettingModal }) => {
+const UserSetting = ({ setUserSettingModal, user }) => {
     const navigate = useNavigate();
     const [openModal, secondSetOpenModal] = useState(false);
+    const isGuest = user?.type === 'guest';
 
     const handleClick = () => {
         secondSetOpenModal(true);
@@ -109,6 +110,11 @@ const UserSetting = ({ setUserSettingModal }) => {
 
     const handleLogOut = () => {
         Cookies.remove('authToken', { path: '/' });
+        navigate('/signd');
+    };
+
+    const handleLogin = () => {
+        setUserSettingModal(false);
         navigate('/signd');
     };
 
@@ -120,10 +126,16 @@ const UserSetting = ({ setUserSettingModal }) => {
                         ×
                     </ModalClose>
                     <SettingContainer>
-                        <Button onClick={handleLogOut}>로그아웃</Button>
-                        <Button danger onClick={handleClick}>
-                            회원탈퇴
-                        </Button>
+                        {isGuest ? (
+                            <Button onClick={handleLogin}>로그인 하러가기</Button>
+                        ) : (
+                            <>
+                                <Button onClick={handleLogOut}>로그아웃</Button>
+                                <Button danger onClick={handleClick}>
+                                    회원탈퇴
+                                </Button>
+                            </>
+                        )}
                         {openModal && (
                             <ReSignModal
                                 secondSetOpenModal={secondSetOpenModal}
