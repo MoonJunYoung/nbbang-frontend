@@ -83,7 +83,9 @@ const FilterTabs = styled.div`
     }
 `;
 
-const FilterTab = styled(motion.button)`
+const FilterTab = styled(motion.button).withConfig({
+    shouldForwardProp: (prop) => prop !== 'active',
+})`
     padding: 10px 16px;
     border-radius: 12px;
     border: none;
@@ -107,7 +109,9 @@ const FilterTab = styled(motion.button)`
     }
 `;
 
-const FilterCount = styled.span`
+const FilterCount = styled.span.withConfig({
+    shouldForwardProp: (prop) => prop !== 'active',
+})`
     background: ${(props) =>
         props.active ? 'rgba(255,255,255,0.2)' : '#dee2e6'};
     color: ${(props) => (props.active ? '#ffffff' : '#495057')};
@@ -185,7 +189,11 @@ const MeetingDate = styled.span`
     letter-spacing: -0.2px;
 `;
 
-const MeetingTag = styled.span`
+const MeetingTag = styled.span.withConfig({
+    shouldForwardProp: (prop) => {
+        return prop !== 'bgColor' && prop !== 'textColor';
+    },
+})`
     font-size: 11px;
     font-weight: 600;
     padding: 4px 8px;

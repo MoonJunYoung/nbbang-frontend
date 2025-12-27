@@ -17,10 +17,6 @@ const MainPage = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        console.log(
-            'MainPage 토큰 상태:',
-            authToken ? '토큰 있음' : '토큰 없음',
-        );
         if (!authToken) {
             console.log('토큰이 없어서 로그인 페이지로 이동');
             navigate('/signd');

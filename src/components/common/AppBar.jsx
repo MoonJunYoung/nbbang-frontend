@@ -5,6 +5,15 @@ const AppBar = () => {
     const [shouldShow, setShouldShow] = useState(false);
 
     useEffect(() => {
+        // 앱바가 이미 닫혔는지 확인
+        const isDismissed =
+            localStorage.getItem('app_bar_dismissed') === 'true';
+        if (isDismissed) {
+            setHideAppBar(true);
+            setShouldShow(false);
+            return;
+        }
+
         const userAgent = navigator.userAgent.toLowerCase();
 
         // 안드로이드 체크
@@ -38,27 +47,54 @@ const AppBar = () => {
             'https://play.google.com/store/apps/details?id=nbbang.middle&hl=ko';
     };
 
+    const handleClose = () => {
+        localStorage.setItem('app_bar_dismissed', 'true');
+        setHideAppBar(true);
+    };
+
     if (hideAppBar || !shouldShow) return null;
 
     return (
         <div className="sticky top-0 z-40 shadow-md">
-            <div className="bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-white px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-start flex-col leading-tight">
-                        <span className="text-sm font-semibold md:text-base">
+            <div className="bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-white px-4 py-3 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="flex items-start flex-col leading-tight min-w-0">
+                        <span className="text-sm font-semibold md:text-base truncate">
                             앱에서 더 빠르게 정산하기
                         </span>
-                        <span className="text-[12px] text-blue-50 md:text-sm">
+                        <span className="text-[12px] text-blue-50 md:text-sm truncate">
                             원클릭 송금까지 한 번에
                         </span>
                     </div>
                 </div>
-                <button
-                    onClick={handleAppOpen}
-                    className="bg-white text-[#1D4ED8] rounded-full font-semibold px-3 py-2 text-[13px] md:text-xs shadow-sm hover:shadow transition"
-                >
-                    앱에서 열기
-                </button>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                        onClick={handleAppOpen}
+                        className="bg-white text-[#1D4ED8] rounded-full font-semibold px-3 py-2 text-[13px] md:text-xs shadow-sm hover:shadow transition whitespace-nowrap"
+                    >
+                        앱에서 열기
+                    </button>
+                    <button
+                        onClick={handleClose}
+                        className="text-white hover:text-blue-100 transition p-1 flex-shrink-0"
+                        aria-label="닫기"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     );

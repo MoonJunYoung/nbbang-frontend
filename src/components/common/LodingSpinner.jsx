@@ -32,7 +32,9 @@ const bounce = keyframes`
 `;
 
 // 메인 컨테이너
-const LoadingContainer = styled.div`
+const LoadingContainer = styled.div.withConfig({
+    shouldForwardProp: (prop) => prop !== 'fullScreen',
+})`
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const SocialLoginContainer = styled.div`
+export const SocialLoginContainer = styled.div.withConfig({
+    shouldForwardProp: (prop) => {
+        return prop !== 'backgroundColor' && prop !== 'borderColor' && prop !== 'gapSize';
+    },
+})`
     position: relative;
     margin-top: 10px;
     border-radius: 10px;
@@ -15,13 +19,19 @@ export const SocialLoginContainer = styled.div`
     cursor: pointer;
 `;
 
-export const SocialLoginIcon = styled.img`
+export const SocialLoginIcon = styled.img.withConfig({
+    shouldForwardProp: (prop) => prop !== 'imgWidth',
+})`
     width: ${(props) => props.imgWidth || '25px'};
     position: absolute;
     left: 50px;
 `;
 
-export const Button = styled.button`
+export const Button = styled.button.withConfig({
+    shouldForwardProp: (prop) => {
+        return prop !== 'textColor' && prop !== 'backgroundColor' && prop !== 'borderColor';
+    },
+})`
     color: ${(props) => props.textColor || 'white'};
     background: ${(props) => props.backgroundColor || '#03c75a'};
     border: 1px solid ${(props) => props.borderColor || '#03c75a'};
