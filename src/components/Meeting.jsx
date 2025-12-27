@@ -339,6 +339,7 @@ export const truncate = (str, n) => {
 
 const Meeting = ({ user }) => {
     const [meetings, setMeetings] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const [openMenuModal, setOpenMenuModal] = useState(false);
     const [openUserSettingModal, setUserSettingModal] = useState(false);
@@ -370,11 +371,14 @@ const Meeting = ({ user }) => {
     const displayMeetings = getDisplayMeetings();
 
     const handleGetData = async () => {
+        setIsLoading(true);
         try {
             const responseGetData = await getMeetingData('meeting');
             setMeetings(responseGetData.data);
         } catch (error) {
             console.log('Api 데이터 불러오기 실패');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -557,7 +561,77 @@ const Meeting = ({ user }) => {
                 transition={{ duration: 0.5, delay: 0.2 }}
             >
                 <AnimatePresence mode="wait">
-                    {meetings.length > 0 ? (
+                    {isLoading ? (
+                        <motion.div
+                            key="loading"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '8px',
+                            }}
+                        >
+                            {[1, 2, 3].map((index) => (
+                                <MeetingCard
+                                    key={index}
+                                    as="div"
+                                    style={{
+                                        pointerEvents: 'none',
+                                        cursor: 'default',
+                                    }}
+                                >
+                                    <MeetingInfo>
+                                        <MeetingHeader>
+                                            <div
+                                                className="bg-skeleton"
+                                                style={{
+                                                    width: '80px',
+                                                    height: '13px',
+                                                    borderRadius: '4px',
+                                                }}
+                                            />
+                                            <div
+                                                className="bg-skeleton"
+                                                style={{
+                                                    width: '60px',
+                                                    height: '20px',
+                                                    borderRadius: '8px',
+                                                }}
+                                            />
+                                        </MeetingHeader>
+                                        <div
+                                            className="bg-skeleton"
+                                            style={{
+                                                width: '150px',
+                                                height: '14px',
+                                                borderRadius: '4px',
+                                            }}
+                                        />
+                                    </MeetingInfo>
+                                    <ActionButtons>
+                                        <div
+                                            className="bg-skeleton"
+                                            style={{
+                                                width: '44px',
+                                                height: '44px',
+                                                borderRadius: '12px',
+                                            }}
+                                        />
+                                        <div
+                                            className="bg-skeleton"
+                                            style={{
+                                                width: '44px',
+                                                height: '44px',
+                                                borderRadius: '12px',
+                                            }}
+                                        />
+                                    </ActionButtons>
+                                </MeetingCard>
+                            ))}
+                        </motion.div>
+                    ) : meetings.length > 0 ? (
                         <motion.div
                             key={activeFilter}
                             initial={{ opacity: 0, y: 20 }}
@@ -591,6 +665,7 @@ const Meeting = ({ user }) => {
                         </motion.div>
                     ) : (
                         <EmptyState
+                            key="empty"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
