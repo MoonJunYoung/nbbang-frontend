@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import nbbang_Logo from '../../../public/images/nbbang_Logo.png';
 
 const KakaoContainer = styled.div`
     display: flex;
@@ -43,6 +42,9 @@ const KakaoShare = ({ meetingName }) => {
     };
 
     const shareKakao = () => {
+        // 카카오 공유 API는 절대 URL이 필요하므로 현재 도메인 기반으로 이미지 URL 생성
+        const imageUrl = `${window.location.origin}/kakao_feed.png`;
+
         window.Kakao.Link.sendDefault({
             objectType: 'feed',
             content: {
@@ -50,7 +52,7 @@ const KakaoShare = ({ meetingName }) => {
                 description: meetingName.is_simple
                     ? `${meetingName.name}의 간편정산결과 입니다.`
                     : `${meetingName.name}의 정산결과 입니다.`,
-                imageUrl: nbbang_Logo,
+                imageUrl: imageUrl,
                 link: {
                     webUrl: meetingName.share_link,
                     mobileWebUrl: meetingName.share_link,
