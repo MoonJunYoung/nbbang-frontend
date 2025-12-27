@@ -48,7 +48,7 @@ function App() {
             {amplitudeInitialized ? (
                 <>
                     <motion.div
-                        className="hidden lg:block fixed h-full w-[26.1rem] z-10"
+                        className="hidden xl:block fixed h-full w-[26.1rem] z-10"
                         style={{ left: 'calc(-35.1rem + 50vw)' }}
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -207,7 +207,7 @@ function App() {
                         </div>
                     </motion.div>
 
-                    <div className="relative z-30 bg-white min-h-svh lg:left-[16.1rem] lg:right-0">
+                    <div className="relative z-30 bg-white min-h-svh xl:left-[16.1rem] xl:right-0">
                         <AppBar />
                         <Router>
                             <Routes>

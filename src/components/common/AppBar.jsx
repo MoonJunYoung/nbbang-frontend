@@ -33,8 +33,9 @@ const AppBar = () => {
     }, []);
 
     const handleAppOpen = () => {
-        localStorage.setItem('app_installed', 'true');
-        setHideAppBar(true);
+        // Google Play Store 앱 페이지로 이동
+        window.location.href =
+            'https://play.google.com/store/apps/details?id=nbbang.middle&hl=ko';
     };
 
     if (hideAppBar || !shouldShow) return null;
