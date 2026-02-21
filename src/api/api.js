@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/env';
 
 export let Token = () => Cookies.get('authToken');
 
 const axiosData = () =>
     axios.create({
-        baseURL: 'https://api.nbbang.shop',
-        // baseURL: "http://localhost:8000",
+        baseURL: API_BASE_URL,
         headers: {
             Authorization: `Bearer ${Token()}`,
         },
@@ -40,8 +40,7 @@ export const deleteUser = () => {
 // 게스트 로그인은 토큰 없이 호출 가능하므로 별도 axios 인스턴스 사용
 const axiosWithoutAuth = () =>
     axios.create({
-        baseURL: 'https://api.nbbang.shop',
-        // baseURL: "http://localhost:8000",
+        baseURL: API_BASE_URL,
     });
 
 export const postGuestLogin = () => {

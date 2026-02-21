@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/env';
 import { Redirect } from './SocialRedirectApi';
 
 const GooglesRedirect = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = queryParams.get('access_token');
-    const apiUrl = 'https://api.nbbang.shop/user/google-login';
+    const apiUrl = `${API_BASE_URL}/user/google-login`;
 
     return (
         <>
@@ -24,7 +25,7 @@ const NaverRedirect = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = queryParams.get('code');
-    const apiUrl = 'https://api.nbbang.shop/user/naver-login';
+    const apiUrl = `${API_BASE_URL}/user/naver-login`;
 
     return (
         <>
@@ -42,7 +43,7 @@ const KakaoRedirect = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = queryParams.get('code');
-    const apiUrl = 'https://api.nbbang.shop/user/kakao-login';
+    const apiUrl = `${API_BASE_URL}/user/kakao-login`;
 
     return (
         <>

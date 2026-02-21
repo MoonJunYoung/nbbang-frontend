@@ -9,6 +9,27 @@ import { sendEventToAmplitude, AmplitudeSetUserId } from '@/utils/amplitude';
 const Container = styled.main`
     width: 100%;
     margin: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Footer = styled.footer`
+    margin-top: auto;
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #eee;
+`;
+
+const FooterLink = styled.a`
+    color: #666;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+        color: #333;
+    }
 `;
 
 const MainPage = () => {
@@ -51,6 +72,15 @@ const MainPage = () => {
     return (
         <Container>
             <Meeting user={user} />
+            <Footer>
+                <FooterLink
+                    href="https://nbbang.shop/user-protocol"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    이용약관 / 개인정보처리방침
+                </FooterLink>
+            </Footer>
         </Container>
     );
 };

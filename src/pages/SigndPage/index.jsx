@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-    NaverLogin,
     KakaoLogin,
     GoogleLogin,
 } from '../../components/socialLogin/SocialPlatformLogin';
@@ -14,6 +13,24 @@ import Cookies from 'js-cookie';
 const SigndContainer = styled.div`
     display: inline-block;
     position: relative;
+`;
+
+const Footer = styled.footer`
+    margin-top: 24px;
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #eee;
+`;
+
+const FooterLink = styled.a`
+    color: #666;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+        color: #333;
+    }
 `;
 
 const OAuthContainer = styled.div`
@@ -175,7 +192,6 @@ const SigndPage = () => {
                     </>
                 )}
                 <KakaoLogin />
-                <NaverLogin />
                 {navigator.userAgent.includes('KAKAOTALK') ? null : (
                     <GoogleLogin />
                 )}
@@ -206,6 +222,15 @@ const SigndPage = () => {
                     로그인하기
                 </Link>
             </SingnInLink>
+            <Footer>
+                <FooterLink
+                    href="https://nbbang.shop/user-protocol"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    이용약관 / 개인정보처리방침
+                </FooterLink>
+            </Footer>
         </SigndContainer>
     );
 };

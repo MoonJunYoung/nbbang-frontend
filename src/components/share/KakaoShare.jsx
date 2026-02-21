@@ -36,7 +36,7 @@ const KakaoShare = ({ meetingName }) => {
         if (window.Kakao) {
             const kakao = window.Kakao;
             if (!kakao.isInitialized()) {
-                kakao.init('904f6d1fcb87f1741d5c8cfad188ffc2');
+                kakao.init('ebc55685dac368b3c9a385a62da0c4dc');
             }
         }
     };
@@ -44,7 +44,6 @@ const KakaoShare = ({ meetingName }) => {
     const shareKakao = () => {
         // 카카오 공유 API는 절대 URL이 필요하므로 현재 도메인 기반으로 이미지 URL 생성
         const imageUrl = `${window.location.origin}/kakao_feed.png`;
-
         window.Kakao.Link.sendDefault({
             objectType: 'feed',
             content: {

@@ -1,5 +1,6 @@
 import {
     BrowserRouter as Router,
+    Navigate,
     Route,
     Routes,
     useSearchParams,
@@ -17,7 +18,6 @@ import AppBar from './components/common/AppBar';
 import {
     KakaoRedirect,
     GooglesRedirect,
-    NaverRedirect,
 } from './components/socialLogin/SocialPlatformRedirect';
 import SimpleSettlementResultPage from './pages/simpleSettlementResultPage';
 import QRCodeModal from './components/Modal/QRCodeModal';
@@ -218,7 +218,7 @@ function App() {
                                 />
                                 <Route
                                     path="/naver-redirect"
-                                    element={<NaverRedirect />}
+                                    element={<Navigate to="/signd" replace />}
                                 />
                                 <Route
                                     path="/google-redirect"
