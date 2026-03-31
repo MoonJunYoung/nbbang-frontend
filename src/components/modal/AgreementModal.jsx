@@ -200,7 +200,15 @@ const Agreement = ({ userData, navigate, apiUrl }) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                회원가입 이용약관
+                                이용약관
+                            </LinkStyle>
+                            <span style={{ margin: '0 4px' }}>및</span>
+                            <LinkStyle
+                                to="/privacy-policy"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                개인정보처리방침
                             </LinkStyle>
                         </TextBox>
                         <TermsOfUseComment>

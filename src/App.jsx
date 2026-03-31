@@ -11,6 +11,7 @@ import MainPage from './pages/mainPage';
 import BillingPage from './pages/billingPage';
 import ResultPage from './pages/resultPage';
 import UserProtocolPage from './pages/userProtocolPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import SignIn from './components/auth/SignIn';
 import SimpleSettlementPage from './pages/simpleSettlementPage';
 import SignUp from './components/auth/SignUp';
@@ -238,6 +239,10 @@ function App() {
                                 <Route
                                     path="/user-protocol"
                                     element={<UserProtocolPage />}
+                                />
+                                <Route
+                                    path="/privacy-policy"
+                                    element={<PrivacyPolicyPage />}
                                 />
                                 <Route
                                     path="/simple-settlement/:meetingId"

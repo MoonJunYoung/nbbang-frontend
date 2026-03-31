@@ -32,6 +32,11 @@ const FooterLink = styled.a`
     }
 `;
 
+const FooterDivider = styled.span`
+    margin: 0 6px;
+    color: #999;
+`;
+
 const MainPage = () => {
     const navigate = useNavigate();
     const authToken = Token();
@@ -78,7 +83,15 @@ const MainPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    이용약관 / 개인정보처리방침
+                    이용약관
+                </FooterLink>
+                <FooterDivider>/</FooterDivider>
+                <FooterLink
+                    href="https://nbbang.shop/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    개인정보처리방침
                 </FooterLink>
             </Footer>
         </Container>

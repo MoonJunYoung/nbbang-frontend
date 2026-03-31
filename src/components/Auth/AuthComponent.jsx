@@ -312,10 +312,22 @@ const AuthComponent = ({
                                                     )
                                                 }
                                             />
-                                            <LinkStyle to="/user-protocol">
-                                                회원가입 및 이용약관
-                                            </LinkStyle>
                                             <span>
+                                                <LinkStyle
+                                                    to="/user-protocol"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    이용약관
+                                                </LinkStyle>{' '}
+                                                및{' '}
+                                                <LinkStyle
+                                                    to="/privacy-policy"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    개인정보처리방침
+                                                </LinkStyle>
                                                 을 모두 확인하였으며, 이에
                                                 동의합니다.
                                             </span>
