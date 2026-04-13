@@ -7,14 +7,30 @@ const PrivacyPolicyContainer = styled.div`
     padding: 10px;
 `;
 
+/** Google Play 콘솔·스토어 등록 정보와 동일하게 유지 (검수 시 일치 필요) */
+const GOOGLE_PLAY_APP_TITLE = '엔빵 - 빠른 정산, 원클릭 송금';
+const GOOGLE_PLAY_DEVELOPER_NAME = '문준영';
+const GOOGLE_PLAY_PACKAGE_NAME = 'nbbang.middle';
+
 const PrivacyPolicyPage = () => {
     return (
         <PrivacyPolicyContainer>
             <Logo />
             <h1>개인정보처리방침</h1>
             <p>
-                “문준영”(이하 “개발자”)은 이용자의 개인정보를 중요시하며,
-                「개인정보 보호법」 등 관련 법령을 준수합니다.
+                본 방침은 Google Play 스토어에 등록된 모바일 앱
+                「{GOOGLE_PLAY_APP_TITLE}」(애플리케이션 ID:{' '}
+                {GOOGLE_PLAY_PACKAGE_NAME}) 및 이와 연계된 웹 서비스에
+                적용됩니다.
+            </p>
+            <p>
+                개인정보 처리에 관한 책임 주체 및 Google Play에 표시된
+                개발자명은 「{GOOGLE_PLAY_DEVELOPER_NAME}」입니다(이하
+                「개발자」).
+            </p>
+            <p>
+                개발자는 이용자의 개인정보를 중요시하며, 「개인정보 보호법」 등
+                관련 법령을 준수합니다.
             </p>
             <h2>1. 수집하는 개인정보 항목</h2>
             <p>개발자는 서비스 제공을 위해 다음의 개인정보를 수집합니다.</p>
@@ -85,7 +101,11 @@ const PrivacyPolicyPage = () => {
                 7일 전에 공지합니다.
             </p>
             <h2>부칙</h2>
-            <p>본 개인정보처리방침은 2024년 5월 1일부터 시행합니다.</p>
+            <p>
+                본 개인정보처리방침은 2024년 5월 1일부터 시행하였으며, 2026년 4월
+                13일 Google Play 스토어 등록 정보(앱명·개발자) 명시를 반영하여
+                개정되었습니다.
+            </p>
         </PrivacyPolicyContainer>
     );
 };
