@@ -129,7 +129,7 @@ const MeetingList = styled(motion.div)`
     overflow-x: hidden;
     gap: 8px;
     margin-top: 10px;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
     &::-webkit-scrollbar {
         display: none;
     }
