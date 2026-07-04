@@ -54,4 +54,4 @@ rm -f /tmp/nbbang-dist-config.json /tmp/nbbang-dist-config-updated.json
 
 echo ""
 echo "Done. CloudFront 배포 업데이트가 진행 중입니다 (보통 수 분 소요)."
-echo "배포 완료 후 nbbang.shop 접속 시 nbbang.cloud?migrated=1 로 리다이렉트됩니다."
+echo "배포 완료 후 nbbang.shop 접속 시 nbbang.cloud 로 리다이렉트됩니다."

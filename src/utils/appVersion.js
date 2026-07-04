@@ -1,6 +1,3 @@
-export const APP_UPDATE_SESSION_KEY = 'nbbang-app-update-required';
-export const MIGRATED_PARAM = 'migrated';
-
 export const isNbbangAppWebView = () =>
     typeof window !== 'undefined' && !!window.ReactNativeWebView;
 
@@ -23,26 +20,15 @@ export const compareSemver = (a, b) => {
     return 0;
 };
 
-export const isAppUpdateRequired = ({ searchParams, minVersion }) => {
+export const isAppUpdateRequired = ({ minVersion }) => {
     if (!isNbbangAppWebView()) {
         return false;
     }
 
     const detected = getAppVersionFromUserAgent();
-    if (detected) {
-        const needsUpdate = compareSemver(detected, minVersion) < 0;
-        if (!needsUpdate) {
-            sessionStorage.removeItem(APP_UPDATE_SESSION_KEY);
-        }
-        return needsUpdate;
+    if (!detected) {
+        return true;
     }
 
-    return (
-        searchParams.get(MIGRATED_PARAM) === '1' ||
-        sessionStorage.getItem(APP_UPDATE_SESSION_KEY) === 'true'
-    );
-};
-
-export const markAppUpdateRequired = () => {
-    sessionStorage.setItem(APP_UPDATE_SESSION_KEY, 'true');
+    return compareSemver(detected, minVersion) < 0;
 };

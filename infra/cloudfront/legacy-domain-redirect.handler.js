@@ -8,13 +8,9 @@ function handler(event) {
 
     var uri = request.uri;
     var qs = request.querystring;
-    var parts = ['migrated=1'];
+    var parts = [];
 
     for (var key in qs) {
-        if (key === 'migrated') {
-            continue;
-        }
-
         var q = qs[key];
         if (q.multiValue) {
             for (var i = 0; i < q.multiValue.length; i++) {
@@ -33,12 +29,14 @@ function handler(event) {
         }
     }
 
+    var queryString = parts.length > 0 ? '?' + parts.join('&') : '';
+
     return {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
         headers: {
             location: {
-                value: 'https://nbbang.cloud' + uri + '?' + parts.join('&'),
+                value: 'https://nbbang.cloud' + uri + queryString,
             },
         },
     };

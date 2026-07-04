@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -9,51 +8,14 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { MIN_APP_VERSION, PLAY_STORE_URL } from '@/config/env';
-import {
-    isAppUpdateRequired,
-    markAppUpdateRequired,
-    MIGRATED_PARAM,
-} from '@/utils/appVersion';
+import { isAppUpdateRequired } from '@/utils/appVersion';
 
 export default function AppUpdateRequiredModal() {
     const [open, setOpen] = useState(false);
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const removeMigratedParam = () => {
-        if (searchParams.get(MIGRATED_PARAM) !== '1') {
-            return;
-        }
-
-        const params = new URLSearchParams(searchParams);
-        params.delete(MIGRATED_PARAM);
-        const qs = params.toString();
-
-        navigate(
-            { pathname: location.pathname, search: qs ? `?${qs}` : '' },
-            { replace: true },
-        );
-    };
 
     useEffect(() => {
-        const updateRequired = isAppUpdateRequired({
-            searchParams,
-            minVersion: MIN_APP_VERSION,
-        });
-
-        if (!updateRequired) {
-            setOpen(false);
-            return;
-        }
-
-        if (searchParams.get(MIGRATED_PARAM) === '1') {
-            markAppUpdateRequired();
-            removeMigratedParam();
-        }
-
-        setOpen(true);
-    }, [searchParams]);
+        setOpen(isAppUpdateRequired({ minVersion: MIN_APP_VERSION }));
+    }, []);
 
     const handleUpdate = () => {
         window.location.href = PLAY_STORE_URL;

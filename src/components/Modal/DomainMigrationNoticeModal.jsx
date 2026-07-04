@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -8,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { isNbbangAppWebView, MIGRATED_PARAM } from '@/utils/appVersion';
+import { isNbbangAppWebView } from '@/utils/appVersion';
 
 const STORAGE_KEY = 'nbbang-domain-migration-notified';
 
@@ -17,24 +16,6 @@ const isLegacyReferrer = () =>
 
 export default function DomainMigrationNoticeModal() {
     const [open, setOpen] = useState(false);
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const removeMigratedParam = () => {
-        if (searchParams.get(MIGRATED_PARAM) !== '1') {
-            return;
-        }
-
-        const params = new URLSearchParams(searchParams);
-        params.delete(MIGRATED_PARAM);
-        const qs = params.toString();
-
-        navigate(
-            { pathname: location.pathname, search: qs ? `?${qs}` : '' },
-            { replace: true },
-        );
-    };
 
     useEffect(() => {
         if (isNbbangAppWebView()) {
@@ -45,18 +26,14 @@ export default function DomainMigrationNoticeModal() {
             return;
         }
 
-        const fromRedirect = searchParams.get(MIGRATED_PARAM) === '1';
-        const fromReferrer = isLegacyReferrer();
-
-        if (fromRedirect || fromReferrer) {
+        if (isLegacyReferrer()) {
             setOpen(true);
         }
-    }, [searchParams]);
+    }, []);
 
     const handleConfirm = () => {
         localStorage.setItem(STORAGE_KEY, 'true');
         setOpen(false);
-        removeMigratedParam();
     };
 
     return (

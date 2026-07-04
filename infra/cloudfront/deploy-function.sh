@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/config.env"
 
 HANDLER_FILE="${SCRIPT_DIR}/legacy-domain-redirect.handler.js"
-FUNCTION_CONFIG="Comment=nbbang.shop to nbbang.cloud redirect with migrated=1,Runtime=cloudfront-js-2.0"
+FUNCTION_CONFIG="Comment=nbbang.shop to nbbang.cloud redirect,Runtime=cloudfront-js-2.0"
 
 if [[ ! -f "${HANDLER_FILE}" ]]; then
     echo "Handler file not found: ${HANDLER_FILE}" >&2
