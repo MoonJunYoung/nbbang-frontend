@@ -22,6 +22,8 @@ import {
 } from './components/socialLogin/SocialPlatformRedirect';
 import SimpleSettlementResultPage from './pages/simpleSettlementResultPage';
 import QRCodeModal from './components/Modal/QRCodeModal';
+import DomainMigrationNoticeModal from './components/Modal/DomainMigrationNoticeModal';
+import AppUpdateRequiredModal from './components/Modal/AppUpdateRequiredModal';
 import { AmplitudeSetUserId, initializeAmplitude } from './utils/amplitude';
 import { useEffect, useState } from 'react';
 import LoadingSpinner from './components/common/LodingSpinner';
@@ -211,6 +213,8 @@ function App() {
                     <div className="relative z-30 bg-white min-h-svh xl:left-[16.1rem] xl:right-0">
                         <AppBar />
                         <Router>
+                            <DomainMigrationNoticeModal />
+                            <AppUpdateRequiredModal />
                             <Routes>
                                 <Route path="/signd" element={<SigndPage />} />
                                 <Route

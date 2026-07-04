@@ -5,3 +5,10 @@
  */
 export const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL ?? 'https://api.nbbang.cloud';
+
+export const MIN_APP_VERSION =
+    import.meta.env.VITE_MIN_APP_VERSION ?? '1.1.0';
+
+export const PLAY_STORE_URL =
+    import.meta.env.VITE_PLAY_STORE_URL ??
+    'https://play.google.com/store/apps/details?id=nbbang.middle&hl=ko';
