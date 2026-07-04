@@ -210,7 +210,7 @@ handleSubmit() {
 **카카오 로그인:**
 
 ```javascript
-socialLoginUrl: 'https://kauth.kakao.com/oauth/authorize?client_id=3d14355e2c9679326b4c15d249b82bc5&redirect_uri=https://nbbang.shop/kakao-redirect&response_type=code'
+socialLoginUrl: 'https://kauth.kakao.com/oauth/authorize?client_id=3d14355e2c9679326b4c15d249b82bc5&redirect_uri=https://nbbang.cloud/kakao-redirect&response_type=code'
 - 배경색: #FEE500 (노란색)
 - 텍스트: 검정색
 ```
@@ -218,13 +218,13 @@ socialLoginUrl: 'https://kauth.kakao.com/oauth/authorize?client_id=3d14355e2c967
 **네이버 로그인:**
 
 ```javascript
-socialLoginUrl: 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=QND4X2NgUTIuoNUvS2uz&redirect_uri=https://nbbang.shop/naver-redirect';
+socialLoginUrl: 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=QND4X2NgUTIuoNUvS2uz&redirect_uri=https://nbbang.cloud/naver-redirect';
 ```
 
 **구글 로그인:**
 
 ```javascript
-socialLoginUrl: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=...&client_id=...&redirect_uri=https://nbbang.shop/google-redirect'
+socialLoginUrl: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=...&client_id=...&redirect_uri=https://nbbang.cloud/google-redirect'
 - 배경색: 흰색
 - 텍스트: 검정색
 ```
@@ -255,7 +255,7 @@ socialLoginUrl: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=toke
 
 ```javascript
 - URL 파라미터에서 code 추출
-- API URL: https://api.nbbang.shop/user/{kakao|naver}-login
+- API URL: https://api.nbbang.cloud/user/{kakao|naver}-login
 - POST 요청: { token: code }
 ```
 
@@ -263,7 +263,7 @@ socialLoginUrl: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=toke
 
 ```javascript
 - URL 해시에서 access_token 추출
-- API URL: https://api.nbbang.shop/user/google-login
+- API URL: https://api.nbbang.cloud/user/google-login
 - POST 요청: { token: access_token }
 ```
 
@@ -354,7 +354,7 @@ Token(); // Cookies.get('authToken')
 
 ```javascript
 axiosData() {
-  baseURL: 'https://api.nbbang.shop'
+  baseURL: 'https://api.nbbang.cloud'
   headers: {
     Authorization: `Bearer ${Token()}`
   }
@@ -365,7 +365,7 @@ axiosData() {
 
 ```javascript
 axiosWithoutAuth() {
-  baseURL: 'https://api.nbbang.shop'
+  baseURL: 'https://api.nbbang.cloud'
   // headers 없음
 }
 ```

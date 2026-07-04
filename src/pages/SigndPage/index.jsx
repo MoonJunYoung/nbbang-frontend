@@ -229,7 +229,7 @@ const SigndPage = () => {
             </SingnInLink>
             <Footer>
                 <FooterLink
-                    href="https://nbbang.shop/user-protocol"
+                    href="/user-protocol"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -237,7 +237,7 @@ const SigndPage = () => {
                 </FooterLink>
                 <FooterDivider>/</FooterDivider>
                 <FooterLink
-                    href="https://nbbang.shop/privacy-policy"
+                    href="/privacy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
                 >

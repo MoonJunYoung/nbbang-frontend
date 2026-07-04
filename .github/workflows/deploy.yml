@@ -58,9 +58,9 @@ jobs:
             - name: Upload to S3 (Singapore Region for main)
               if: github.ref == 'refs/heads/main'
               run: |
-                  aws s3 sync ./dist s3://nbbang-front  --delete
+                  aws s3 sync ./dist s3://nbbang-cloud-front --delete
 
             - name: Invalidate CloudFront cache for main
               if: github.ref == 'refs/heads/main'
               run: |
-                  aws cloudfront create-invalidation --distribution-id E18PPJ750YULTV --paths "/*"
+                  aws cloudfront create-invalidation --distribution-id EONE61TPS2GBW --paths "/*"
