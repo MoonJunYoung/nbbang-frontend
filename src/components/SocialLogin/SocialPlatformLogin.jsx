@@ -2,7 +2,7 @@ import React from 'react';
 import { SocialLoginForm } from './SocialLoginForm';
 
 const OAUTH_REDIRECT_BASE =
-    import.meta.env.VITE_OAUTH_REDIRECT_BASE_URL ?? 'https://nbbang.shop';
+    import.meta.env.VITE_OAUTH_REDIRECT_BASE_URL ?? 'https://nbbang.cloud';
 
 const KakaoLogin = () => {
     const kakaoProps = {

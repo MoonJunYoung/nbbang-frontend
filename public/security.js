@@ -4,8 +4,8 @@
 
     // 프로덕션 환경 체크
     const isProduction =
-        window.location.hostname === 'nbbang.shop' ||
-        window.location.hostname === 'www.nbbang.shop';
+        window.location.hostname === 'nbbang.cloud' ||
+        window.location.hostname === 'www.nbbang.cloud';
 
     // 개발 환경에서는 실행하지 않음
     if (!isProduction) {
