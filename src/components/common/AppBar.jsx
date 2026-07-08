@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
+import { isNbbangAppWebView } from '@/utils/appVersion';
 
 const AppBar = () => {
     const [hideAppBar, setHideAppBar] = useState(false);
     const [shouldShow, setShouldShow] = useState(false);
 
     useEffect(() => {
+        if (isNbbangAppWebView()) {
+            setHideAppBar(true);
+            setShouldShow(false);
+            return;
+        }
+
         // 앱바가 이미 닫혔는지 확인
         const isDismissed =
             localStorage.getItem('app_bar_dismissed') === 'true';
