@@ -11,8 +11,31 @@ import { isNbbangAppWebView } from '@/utils/appVersion';
 
 const STORAGE_KEY = 'nbbang-domain-migration-notified';
 
-const isLegacyReferrer = () =>
-    /nbbang\.shop/i.test(document.referrer ?? '');
+const isLegacyMigration = () => {
+    if (/nbbang\.shop/i.test(document.referrer ?? '')) {
+        return true;
+    }
+
+    return (
+        new URLSearchParams(window.location.search).get('from_legacy_domain') ===
+        '1'
+    );
+};
+
+const removeLegacyDomainParam = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('from_legacy_domain')) {
+        return;
+    }
+
+    params.delete('from_legacy_domain');
+    const newSearch = params.toString();
+    const newUrl =
+        window.location.pathname +
+        (newSearch ? `?${newSearch}` : '') +
+        window.location.hash;
+    window.history.replaceState({}, '', newUrl);
+};
 
 export default function DomainMigrationNoticeModal() {
     const [open, setOpen] = useState(false);
@@ -26,13 +49,14 @@ export default function DomainMigrationNoticeModal() {
             return;
         }
 
-        if (isLegacyReferrer()) {
+        if (isLegacyMigration()) {
             setOpen(true);
         }
     }, []);
 
     const handleConfirm = () => {
         localStorage.setItem(STORAGE_KEY, 'true');
+        removeLegacyDomainParam();
         setOpen(false);
     };
 

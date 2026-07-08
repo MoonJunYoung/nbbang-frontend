@@ -29,7 +29,9 @@ function handler(event) {
         }
     }
 
-    var queryString = parts.length > 0 ? '?' + parts.join('&') : '';
+    parts.push('from_legacy_domain=1');
+
+    var queryString = '?' + parts.join('&');
 
     return {
         statusCode: 301,
