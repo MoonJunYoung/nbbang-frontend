@@ -32,3 +32,15 @@ export const isAppUpdateRequired = ({ minVersion }) => {
 
     return compareSemver(detected, minVersion) < 0;
 };
+
+/** 앱 WebView에서 Play Store 네이티브 열기를 지원하는 최소 버전 (App.js openPlayStore) */
+export const PLAY_STORE_NATIVE_MIN_VERSION = '1.1.2';
+
+export const canOpenPlayStoreNatively = () => {
+    const detected = getAppVersionFromUserAgent();
+    if (!detected) {
+        return false;
+    }
+
+    return compareSemver(detected, PLAY_STORE_NATIVE_MIN_VERSION) >= 0;
+};
