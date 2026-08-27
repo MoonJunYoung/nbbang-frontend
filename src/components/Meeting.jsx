@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserSettingModal from './modal/UserSettingModal';
 import styled from 'styled-components';
@@ -7,12 +7,14 @@ import {
     postMeetingrData,
     deleteMeetingData,
     PostSimpleSettlementData,
+    searchMeetings,
 } from '../api/api';
 import BillingNameModal from './modal/BillingNameModal';
+import DeleteMeetingConfirmModal from './modal/DeleteMeetingConfirmModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { Plus, Users, Zap } from 'lucide-react';
+import { Plus, Users, Zap, Search } from 'lucide-react';
 import { sendEventToAmplitude } from '@/utils/amplitude';
 
 const Container = styled.div`
@@ -70,6 +72,31 @@ const SettingButton = styled(motion.button)`
     &:active {
         transform: translateY(0);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+`;
+
+const SearchBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f1f3f5;
+    border-radius: 12px;
+    color: #8b95a1;
+`;
+
+const SearchInput = styled.input`
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #191f28;
+    letter-spacing: -0.2px;
+
+    &::placeholder {
+        color: #8b95a1;
     }
 `;
 
@@ -353,7 +380,11 @@ const Meeting = ({ user }) => {
     const [openUserSettingModal, setUserSettingModal] = useState(false);
     const [isFabOpen, setIsFabOpen] = useState(false);
     const [selectedMeetingId, setSelectedMeetingId] = useState(null);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [pendingDeleteId, setPendingDeleteId] = useState(null);
     const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'regular', 'simple'
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
     const getUserDisplayName = () => {
         if (!user) return '게스트';
@@ -377,12 +408,18 @@ const Meeting = ({ user }) => {
     };
 
     const displayMeetings = getDisplayMeetings();
+    const isSearching = debouncedSearchQuery.length > 0;
 
-    const handleGetData = async () => {
+    const handleGetData = async (query = debouncedSearchQuery) => {
         setIsLoading(true);
         try {
-            const responseGetData = await getMeetingData('meeting');
-            setMeetings(responseGetData.data);
+            if (query) {
+                const response = await searchMeetings(query);
+                setMeetings(response.data);
+            } else {
+                const responseGetData = await getMeetingData('meeting');
+                setMeetings(responseGetData.data);
+            }
         } catch (error) {
             console.log('Api 데이터 불러오기 실패');
         } finally {
@@ -391,13 +428,22 @@ const Meeting = ({ user }) => {
     };
 
     useEffect(() => {
-        handleGetData();
-    }, []);
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery.trim());
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     useEffect(() => {
-        if (!openMenuModal) {
-            handleGetData();
+        handleGetData(debouncedSearchQuery);
+    }, [debouncedSearchQuery]);
+
+    const prevOpenMenuModalRef = useRef(false);
+    useEffect(() => {
+        if (prevOpenMenuModalRef.current && !openMenuModal) {
+            handleGetData(debouncedSearchQuery);
         }
+        prevOpenMenuModalRef.current = openMenuModal;
     }, [openMenuModal]);
 
     const handleAddBilling = async (meetingType) => {
@@ -491,7 +537,8 @@ const Meeting = ({ user }) => {
                         }}
                         onClick={(e) => {
                             e.preventDefault();
-                            handelDeleteBilling(meeting.id);
+                            setPendingDeleteId(meeting.id);
+                            setDeleteConfirmOpen(true);
                         }}
                     >
                         <RiDeleteBinLine size={18} />
@@ -529,6 +576,17 @@ const Meeting = ({ user }) => {
                         />
                     )}
                 </HeaderTop>
+
+                <SearchBox>
+                    <Search size={18} />
+                    <SearchInput
+                        type="search"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="모임명, 결제 장소, 멤버로 검색"
+                        aria-label="모임명, 결제 장소, 멤버로 검색"
+                    />
+                </SearchBox>
 
                 <FilterTabs>
                     <FilterTab
@@ -663,11 +721,15 @@ const Meeting = ({ user }) => {
                                     transition={{ duration: 0.5 }}
                                 >
                                     <p>
-                                        {activeFilter === 'regular'
-                                            ? '아직 모임정산이 없어요'
-                                            : '아직 간편정산이 없어요'}
+                                        {isSearching
+                                            ? '검색 결과가 없어요'
+                                            : activeFilter === 'regular'
+                                              ? '아직 모임정산이 없어요'
+                                              : '아직 간편정산이 없어요'}
                                     </p>
-                                    <p>새로운 정산을 시작해보세요 ✨</p>
+                                    {!isSearching && (
+                                        <p>새로운 정산을 시작해보세요 ✨</p>
+                                    )}
                                 </EmptyState>
                             )}
                         </motion.div>
@@ -678,8 +740,14 @@ const Meeting = ({ user }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <p>아직 등록된 모임이 없어요</p>
-                            <p>새로운 모임을 시작해보세요 ✨</p>
+                            {isSearching ? (
+                                <p>검색 결과가 없어요</p>
+                            ) : (
+                                <>
+                                    <p>아직 등록된 모임이 없어요</p>
+                                    <p>새로운 모임을 시작해보세요 ✨</p>
+                                </>
+                            )}
                         </EmptyState>
                     )}
                 </AnimatePresence>
@@ -692,6 +760,23 @@ const Meeting = ({ user }) => {
                     MainMeetingName={
                         meetings.find((m) => m.id === selectedMeetingId)?.name
                     }
+                />
+            )}
+
+            {deleteConfirmOpen && pendingDeleteId && (
+                <DeleteMeetingConfirmModal
+                    meetingName={
+                        meetings.find((m) => m.id === pendingDeleteId)?.name
+                    }
+                    onClose={() => {
+                        setDeleteConfirmOpen(false);
+                        setPendingDeleteId(null);
+                    }}
+                    onConfirm={async () => {
+                        await handelDeleteBilling(pendingDeleteId);
+                        setDeleteConfirmOpen(false);
+                        setPendingDeleteId(null);
+                    }}
                 />
             )}
 

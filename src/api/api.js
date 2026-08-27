@@ -61,6 +61,12 @@ export const getMeetingData = (query) => {
     return axiosData().get(query);
 };
 
+export const searchMeetings = (q) => {
+    return axiosData().get('/meeting/search', {
+        params: { q },
+    });
+};
+
 export const postMeetingrData = (query) => {
     return axiosData().post(query);
 };
