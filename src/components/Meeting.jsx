@@ -10,7 +10,7 @@ import {
     searchMeetings,
 } from '../api/api';
 import BillingNameModal from './modal/BillingNameModal';
-import DeleteMeetingConfirmModal from './modal/DeleteMeetingConfirmModal';
+import DeleteMeetingConfirmModal from './Modal/DeleteMeetingConfirmModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { RiDeleteBinLine } from 'react-icons/ri';
