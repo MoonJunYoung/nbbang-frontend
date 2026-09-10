@@ -1,41 +1,81 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Copy, CheckCircle2 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import {
-    Dialog,
-    DialogContent,
-    DialogClose,
-} from '@/components/ui/dialog';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const RemittanceQRModal = ({ open, onOpenChange, url, title }) => (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="p-6 max-w-sm mx-auto text-center bg-white">
-            <p className="text-xl font-bold text-slate-900">{title}</p>
-            <p className="text-sm text-slate-500 mt-1 mb-4">
-                휴대폰으로 QR을 스캔해 송금하세요
-            </p>
-            <div className="flex flex-col items-center justify-center">
-                {url && (
-                    <QRCodeCanvas
-                        value={url}
-                        size={180}
-                        level="M"
-                        className="border border-slate-200 p-3 rounded-xl"
+const RemittanceQRModal = ({ open, onOpenChange, url, title }) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!open) return undefined;
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') onOpenChange(false);
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [open, onOpenChange]);
+
+    if (!mounted) return null;
+
+    return createPortal(
+        <AnimatePresence>
+            {open && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <motion.div
+                        key="remittance-qr-backdrop"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute inset-0 bg-black/40"
+                        onClick={() => onOpenChange(false)}
+                        aria-hidden="true"
                     />
-                )}
-            </div>
-            <DialogClose asChild>
-                <button
-                    type="button"
-                    className="w-full text-white font-bold bg-slate-900 px-2 py-3 mt-5 rounded-xl"
-                >
-                    확인
-                </button>
-            </DialogClose>
-        </DialogContent>
-    </Dialog>
-);
+                    <motion.div
+                        key="remittance-qr-content"
+                        role="dialog"
+                        aria-modal="true"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="relative z-10 w-full max-w-sm border bg-white p-6 shadow-xl rounded-2xl text-center"
+                    >
+                        <p className="text-xl font-bold text-slate-900">
+                            {title}
+                        </p>
+                        <p className="text-sm text-slate-500 mt-1 mb-4">
+                            휴대폰으로 QR을 스캔해 송금하세요
+                        </p>
+                        <div className="flex flex-col items-center justify-center">
+                            {url && (
+                                <QRCodeCanvas
+                                    value={url}
+                                    size={180}
+                                    level="M"
+                                    className="border border-slate-200 p-3 rounded-xl bg-white"
+                                />
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => onOpenChange(false)}
+                            className="w-full text-white font-bold bg-slate-900 px-2 py-3 mt-5 rounded-xl"
+                        >
+                            확인
+                        </button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>,
+        document.body,
+    );
+};
 
 /**
  * 송금 버튼 UI.
