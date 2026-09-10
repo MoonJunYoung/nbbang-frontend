@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Copy,
-    CheckCircle2,
     Users,
     Receipt,
     Sparkles,
@@ -13,6 +11,7 @@ import {
 } from 'lucide-react';
 import ToastPopUp from '@/components/common/ToastPopUp';
 import { ImageGallery } from '@/components/Modal/ImageModal';
+import RemittanceQRSection from '@/components/remittance/RemittanceQRSection';
 import {
     PaymentSkeleton,
     BillingSkeleton,
@@ -658,120 +657,31 @@ function SharePage() {
                                                     </div>
                                                 )}
 
-                                                {/* Mobile Remittance Buttons */}
-                                                {showRemittance && isMobile && (
-                                                    <div className="mt-4 pt-4 border-t border-slate-200">
-                                                        <p className="text-xs text-slate-600 mb-2 flex items-center gap-1">
-                                                            <span className="w-1 h-1 bg-red-500 rounded-full" />
-                                                            바로 송금하기
-                                                        </p>
-                                                        <div className="flex gap-2">
-                                                            {member.tipCheck
-                                                                ? member.tipped_kakao_deposit_link && (
-                                                                      <motion.a
-                                                                          href={
-                                                                              member.tipped_kakao_deposit_link
-                                                                          }
-                                                                          whileTap={{
-                                                                              scale: 0.95,
-                                                                          }}
-                                                                          className="flex-1 flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#FEE500]/90 text-slate-900 px-4 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
-                                                                      >
-                                                                          <img
-                                                                              src="/images/kakao 2.png"
-                                                                              alt="kakao"
-                                                                              className="w-5 h-5  flex items-center justify-center text-[#FEE500] text-xs font-bold"
-                                                                          />
-
-                                                                          <span className="text-sm font-semibold">
-                                                                              카카오송금
-                                                                          </span>
-                                                                      </motion.a>
-                                                                  )
-                                                                : member.kakao_deposit_link && (
-                                                                      <motion.a
-                                                                          href={
-                                                                              member.kakao_deposit_link
-                                                                          }
-                                                                          whileTap={{
-                                                                              scale: 0.95,
-                                                                          }}
-                                                                          className="flex-1 flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#FEE500]/90 text-slate-900 px-4 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
-                                                                      >
-                                                                          <img
-                                                                              className="w-5 h-5  flex items-center justify-center text-[#FEE500] text-xs font-bold"
-                                                                              src="/images/kakao 2.png"
-                                                                              alt="kakao"
-                                                                          />
-                                                                          <span className="text-sm font-semibold">
-                                                                              카카오송금
-                                                                          </span>
-                                                                      </motion.a>
-                                                                  )}
-
-                                                            {member.tipCheck
-                                                                ? member.tipped_toss_deposit_link && (
-                                                                      <motion.a
-                                                                          href={
-                                                                              member.tipped_toss_deposit_link
-                                                                          }
-                                                                          whileTap={{
-                                                                              scale: 0.95,
-                                                                          }}
-                                                                          className="flex-1 flex items-center justify-center gap-2 bg-[#0050FF] hover:bg-[#0050FF]/90 text-white px-4 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
-                                                                      >
-                                                                          <img
-                                                                              className="w-5 h-5  flex items-center justify-center text-[#0050FF] text-xs font-bold"
-                                                                              src="/images/result_toss.png"
-                                                                              alt="toss"
-                                                                          />
-                                                                          <span className="text-sm font-semibold">
-                                                                              토스송금
-                                                                          </span>
-                                                                      </motion.a>
-                                                                  )
-                                                                : member.toss_deposit_link && (
-                                                                      <motion.a
-                                                                          href={
-                                                                              member.toss_deposit_link
-                                                                          }
-                                                                          whileTap={{
-                                                                              scale: 0.95,
-                                                                          }}
-                                                                          className="flex-1 flex items-center justify-center gap-2 bg-[#0050FF] hover:bg-[#0050FF]/90 text-white px-4 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
-                                                                      >
-                                                                          <img
-                                                                              className="w-5 h-5  flex items-center justify-center text-[#0050FF] text-xs font-bold"
-                                                                              src="/images/result_toss.png"
-                                                                              alt="toss"
-                                                                          />
-                                                                          <span className="text-sm font-semibold">
-                                                                              토스송금
-                                                                          </span>
-                                                                      </motion.a>
-                                                                  )}
-
-                                                            {member.deposit_copy_text && (
-                                                                <motion.button
-                                                                    whileTap={{
-                                                                        scale: 0.95,
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        handleCopyAccount(
-                                                                            member.deposit_copy_text,
-                                                                        )
-                                                                    }
-                                                                    className="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-3 rounded-xl transition-all shadow-sm"
-                                                                >
-                                                                    {copiedAccount ? (
-                                                                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                                                    ) : (
-                                                                        <Copy className="w-5 h-5" />
-                                                                    )}
-                                                                </motion.button>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                                {showRemittance && (
+                                                    <RemittanceQRSection
+                                                        isMobile={isMobile}
+                                                        kakaoLink={
+                                                            member.tipCheck
+                                                                ? member.tipped_kakao_deposit_link
+                                                                : member.kakao_deposit_link
+                                                        }
+                                                        tossLink={
+                                                            member.tipCheck
+                                                                ? member.tipped_toss_deposit_link
+                                                                : member.toss_deposit_link
+                                                        }
+                                                        depositCopyText={
+                                                            member.tipCheck
+                                                                ? member.tipped_deposit_copy_text
+                                                                : member.deposit_copy_text
+                                                        }
+                                                        onCopyAccount={
+                                                            handleCopyAccount
+                                                        }
+                                                        copiedAccount={
+                                                            copiedAccount
+                                                        }
+                                                    />
                                                 )}
                                             </div>
                                         </motion.div>

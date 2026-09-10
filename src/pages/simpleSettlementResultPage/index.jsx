@@ -5,6 +5,7 @@ import LoadingSpinner from '@/components/common/LodingSpinner';
 import SlideCheckbox from '@/components/common/SlideCheckBox';
 import ToastPopUp from '@/components/common/ToastPopUp';
 import { ImageGallery } from '@/components/Modal/ImageModal';
+import RemittanceQRSection from '@/components/remittance/RemittanceQRSection';
 
 const SettlementDetail = ({ label, value, unit }) => (
     <div className="flex items-center justify-between">
@@ -78,12 +79,23 @@ const SimpleSettlementResultPage = () => {
         );
     }
 
-    const DepositInformationCopy = async (deposit_copy_text) => {
-        await navigator.clipboard.writeText(deposit_copy_text);
+    const DepositInformationCopy = async (text) => {
+        await navigator.clipboard.writeText(text);
         if (isApple) {
             setOpenToast(true);
         }
     };
+
+    const activeKakaoLink = tipCheck
+        ? tipped_kakao_deposit_link
+        : kakao_deposit_link;
+    const activeTossLink = tipCheck
+        ? tipped_toss_deposit_link
+        : toss_deposit_link;
+    const activeDepositCopyText = tipCheck
+        ? tipped_deposit_copy_text
+        : deposit_copy_text;
+    const canRemit = simple_member_amount > 0;
 
     return (
         <div className="relative flex flex-col items-center h-screen">
@@ -142,13 +154,9 @@ const SimpleSettlementResultPage = () => {
                     </div>
                     {deposit_copy_text && (
                         <div
-                            className="flex items-center justify-between gap-2 py-1"
+                            className="flex items-center justify-between gap-2 py-1 cursor-pointer"
                             onClick={() =>
-                                DepositInformationCopy(
-                                    tipCheck
-                                        ? tipped_deposit_copy_text
-                                        : deposit_copy_text,
-                                )
+                                DepositInformationCopy(activeDepositCopyText)
                             }
                         >
                             <span className="text-gray-400 font-bold">
@@ -162,48 +170,13 @@ const SimpleSettlementResultPage = () => {
                         </div>
                     )}
                 </div>
-                {isMobile && (
-                    <div className="flex justify-center items-center gap-4 my-10">
-                        {simple_member_amount > 0 && kakao_deposit_link && (
-                            <a
-                                href={
-                                    tipCheck
-                                        ? kakao_deposit_link
-                                        : tipped_kakao_deposit_link
-                                }
-                                className="w-full flex items-center justify-center gap-2 bg-[#fee502] rounded-2xl pl-5 pr-8 py-4"
-                            >
-                                <img
-                                    className="w-8"
-                                    alt="kakao"
-                                    src="/images/kakao 2.png"
-                                />
-                                <span className="whitespace-nowrap font-bold text-sm">
-                                    카카오 송금
-                                </span>
-                            </a>
-                        )}
-                        {simple_member_amount > 0 &&
-                            tipped_toss_deposit_link && (
-                                <a
-                                    href={
-                                        tipCheck
-                                            ? tipped_toss_deposit_link
-                                            : toss_deposit_link
-                                    }
-                                    className="w-full flex items-center justify-center gap-2 bg-[#0050ff] rounded-2xl pl-5 pr-8 py-4"
-                                >
-                                    <img
-                                        className="w-8"
-                                        alt="Toss"
-                                        src="/images/result_toss.png"
-                                    />
-                                    <span className="text-white font-bold whitespace-nowrap text-sm">
-                                        토스 송금
-                                    </span>
-                                </a>
-                            )}
-                    </div>
+                {canRemit && (activeKakaoLink || activeTossLink) && (
+                    <RemittanceQRSection
+                        variant="simple"
+                        isMobile={isMobile}
+                        kakaoLink={activeKakaoLink}
+                        tossLink={activeTossLink}
+                    />
                 )}
                 {openToast && (
                     <ToastPopUp
